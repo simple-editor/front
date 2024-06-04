@@ -1,13 +1,17 @@
 import styled from "@emotion/styled";
 
-interface IProps {
+interface IProps extends IIconProps {
   title: string;
 }
 
-const ToolBarItem = ({ title }: IProps) => {
+interface IIconProps {
+  icon: string;
+}
+
+const ToolBarItem = ({ title, icon }: IProps) => {
   return (
     <Wrapper>
-      <Icon>아이콘</Icon>
+      <Icon icon={icon}>아이콘</Icon>
       <Title>{title}</Title>
     </Wrapper>
   );
@@ -27,12 +31,12 @@ const Wrapper = styled.div`
   background-color: #1b1b1b;
 `;
 
-const Icon = styled.i`
+const Icon = styled.i<IIconProps>`
   display: block;
   width: 24px;
   height: 24px;
   font-size: 0;
-  border: 1px solid red;
+  background-image: ${(props) => `url(${props.icon})`};
 `;
 
 const Title = styled.span`

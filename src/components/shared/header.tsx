@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <Wrapper>
       <GNBContainer>
-        <Logo>SIMPLE</Logo>
+        <Logo></Logo>
         <Button size="small" title="로그인" />
       </GNBContainer>
     </Wrapper>

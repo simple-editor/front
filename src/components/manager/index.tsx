@@ -4,18 +4,14 @@ const Manager = () => {
   return (
     <Wrapper>
       <TopToolBarContainer>
-        <CenteredItem>
-          <RedoUndoButtonGroup>
-            <RedoUndoIconButton>↻</RedoUndoIconButton>
-            <RedoUndoIconButton>↻</RedoUndoIconButton>
-          </RedoUndoButtonGroup>
-        </CenteredItem>
-        <RightItem>
-          <FileButtonGroup>
-            <FileIconButton />
-            <FileIconButton />
-          </FileButtonGroup>
-        </RightItem>
+        <RedoUndoButtonGroup>
+          <RedoUndoIconButton>↻</RedoUndoIconButton>
+          <RedoUndoIconButton>↻</RedoUndoIconButton>
+        </RedoUndoButtonGroup>
+        <RightButtonGroup>
+          <LibrayIconButton />
+          <FileIconButton />
+        </RightButtonGroup>
       </TopToolBarContainer>
     </Wrapper>
   );
@@ -31,30 +27,22 @@ const Wrapper = styled.div`
 `;
 
 const TopToolBarContainer = styled.div`
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-`;
-
-const CenteredItem = styled.div`
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const RightItem = styled.div`
-  display: flex;
   justify-content: flex-end;
-  align-items: center;
 `;
 
 const RedoUndoButtonGroup = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   border-radius: 30px; /* 둥근 테두리 */
   overflow: hidden; /* 자식 요소가 부모의 테두리를 넘지 않도록 */
   border: 1px solid ${({ theme }) => theme.colors.gray30};
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const RedoUndoIconButton = styled.button`
@@ -75,13 +63,13 @@ const RedoUndoIconButton = styled.button`
   }
 `;
 
-const FileButtonGroup = styled.div`
+const RightButtonGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 10px; /* 버튼 사이의 간격 */
 `;
 
-const FileIconButton = styled.button`
+const RightBaseIcon = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,4 +84,16 @@ const FileIconButton = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray10};
   }
+
+  background-repeat: no-repeat;
+  background-size: 32px 32px;
+  background-position: center;
+`;
+
+const FileIconButton = styled(RightBaseIcon)`
+  background-image: url("/icons/download.svg");
+`;
+
+const LibrayIconButton = styled(RightBaseIcon)`
+  background-image: url("/icons/folder-down.svg");
 `;
