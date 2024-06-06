@@ -1,12 +1,8 @@
 import styled from "@emotion/styled";
 
-interface IButtonProps {
-  isActive: boolean;
-}
-
-const DrawPanel = () => {
+const TextPanel = () => {
   return (
-    <Wrapper>
+    <>
       <ColorPicker>
         <span>색상</span>
         <ColorCircle />
@@ -22,25 +18,14 @@ const DrawPanel = () => {
         </ThicknessSelect>
       </ThicknessPicker>
       <ToolPicker>
-        <span>도구</span>
-        <ToolButtonGroup>
-          <ToolButton isActive={true}>✏️</ToolButton>
-          <ToolButton isActive={false}>🧽</ToolButton>
-        </ToolButtonGroup>
+        <span>추가</span>
+        <BaseIcon>✏️</BaseIcon>
       </ToolPicker>
-    </Wrapper>
+    </>
   );
 };
 
-export default DrawPanel;
-
-const Wrapper = styled.section`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-`;
-
+export default TextPanel;
 const ColorPicker = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,28 +65,23 @@ const ToolPicker = styled.div`
   color: ${({ theme }) => theme.colors.gray70};
 `;
 
-const ToolButtonGroup = styled.div`
-  display: flex;
-  border: 1px solid ${({ theme }) => theme.colors.gray30};
-  border-radius: 20px;
-  overflow: hidden;
-`;
-
-const ToolButton = styled.button<IButtonProps>`
+const BaseIcon = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
-  background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.gray20 : theme.colors.white};
-  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors.gray30};
   cursor: pointer;
   font-size: 1.5rem; /* 아이콘 크기 조정 */
   color: ${({ theme }) => theme.colors.gray100};
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray10};
   }
-  &:not(:last-child) {
-    border-right: 1px solid ${({ theme }) => theme.colors.gray30}; /* 버튼 사이의 경계선 */
-  }
+
+  background-repeat: no-repeat;
+  background-size: 32px 32px;
+  background-position: center;
 `;
