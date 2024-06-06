@@ -1,25 +1,26 @@
 import styled from "@emotion/styled";
-import ToolBarItem from "../shared/toolbar-item";
-styled;
-const SideBar = () => {
+import SidebarItem from "../shared/toolbar-item";
+
+const Toolbar = () => {
   return (
     <Wrapper>
       {list.map((item) => (
-        <ToolBarItem
+        <SidebarItem
           title={item.title}
           key={item.title}
           icon={item.icon}
-        ></ToolBarItem>
+        ></SidebarItem>
       ))}
     </Wrapper>
   );
 };
 
-export default SideBar;
+export default Toolbar;
 
 const Wrapper = styled.nav`
   position: absolute;
   top: 50%;
+  transform: translateY(-50%);
 `;
 
 const list = [

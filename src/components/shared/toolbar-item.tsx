@@ -8,7 +8,7 @@ interface IIconProps {
   icon: string;
 }
 
-const ToolBarItem = ({ title, icon }: IProps) => {
+const ToolbarItem = ({ title, icon }: IProps) => {
   return (
     <Wrapper>
       <Icon icon={icon}>아이콘</Icon>
@@ -17,7 +17,7 @@ const ToolBarItem = ({ title, icon }: IProps) => {
   );
 };
 
-export default ToolBarItem;
+export default ToolbarItem;
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,6 +29,7 @@ const Wrapper = styled.div`
   gap: 4px;
   flex-shrink: 0;
   background-color: #1b1b1b;
+  cursor: pointer;
 `;
 
 const Icon = styled.i<IIconProps>`

@@ -1,19 +1,22 @@
+import styled from "@emotion/styled";
 import Canvas from "../components/canvas";
 import Manager from "../components/manager";
-import Button from "../components/shared/button";
-import Header from "../components/shared/header";
-import SideBar from "../components/sidebar";
+import Toolbar from "../components/toolbar";
+import Panel from "../components/panel/indext";
 
 const HomePage = () => {
   return (
-    <div>
-      <Button title="타이틀" size="small" />
-      <SideBar />
-      <Header />
+    <Main>
+      <Toolbar />
       <Manager />
       <Canvas />
-    </div>
+      <Panel />
+    </Main>
   );
 };
 
 export default HomePage;
+
+const Main = styled.main`
+  position: relative;
+`;
