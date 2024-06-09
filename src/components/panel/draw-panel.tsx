@@ -1,12 +1,11 @@
 import styled from "@emotion/styled";
-
-interface IButtonProps {
-  isActive: boolean;
-}
+import IconButtonRadius from "../shared/icon-button-radius";
+import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
+import EraserSvg from "@/assets/icons/eraser.svg?react";
 
 const DrawPanel = () => {
   return (
-    <Wrapper>
+    <>
       <ColorPicker>
         <span>색상</span>
         <ColorCircle />
@@ -24,22 +23,15 @@ const DrawPanel = () => {
       <ToolPicker>
         <span>도구</span>
         <ToolButtonGroup>
-          <ToolButton isActive={true}>✏️</ToolButton>
-          <ToolButton isActive={false}>🧽</ToolButton>
+          <IconButtonRadius size="small" icon={<CustomPencilSvg />} />
+          <IconButtonRadius size="small" icon={<CustomEraserSvg />} />
         </ToolButtonGroup>
       </ToolPicker>
-    </Wrapper>
+    </>
   );
 };
 
 export default DrawPanel;
-
-const Wrapper = styled.section`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-`;
 
 const ColorPicker = styled.div`
   display: flex;
@@ -86,22 +78,18 @@ const ToolButtonGroup = styled.div`
   border-radius: 20px;
   overflow: hidden;
 `;
-
-const ToolButton = styled.button<IButtonProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.gray20 : theme.colors.white};
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem; /* 아이콘 크기 조정 */
-  color: ${({ theme }) => theme.colors.gray100};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray10};
+const CustomPencilSvg = styled(PencilSvg)`
+  width: 18px;
+  height: 18px;
+  & path {
+    fill: black;
   }
-  &:not(:last-child) {
-    border-right: 1px solid ${({ theme }) => theme.colors.gray30}; /* 버튼 사이의 경계선 */
+`;
+
+const CustomEraserSvg = styled(EraserSvg)`
+  width: 18px;
+  height: 18px;
+  & path {
+    fill: black;
   }
 `;

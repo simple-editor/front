@@ -1,16 +1,18 @@
 import styled from "@emotion/styled";
-
+import downloadSvg from "@/assets/icons/download.svg";
+import folderSvg from "@/assets/icons/folder-down.svg";
+import redoUndoSvg from "@/assets/icons/arrow-rotate-left.svg";
 const Manager = () => {
   return (
     <Wrapper>
       <TopToolBarContainer>
         <RedoUndoButtonGroup>
-          <RedoUndoIconButton>↻</RedoUndoIconButton>
-          <RedoUndoIconButton>↻</RedoUndoIconButton>
+          <UndoButton />
+          <RedoButton />
         </RedoUndoButtonGroup>
         <RightButtonGroup>
-          <LibrayIconButton />
           <FileIconButton />
+          <LibrayIconButton />
         </RightButtonGroup>
       </TopToolBarContainer>
     </Wrapper>
@@ -45,15 +47,15 @@ const RedoUndoButtonGroup = styled.div`
   transform: translateX(-50%);
 `;
 
-const RedoUndoIconButton = styled.button`
+const RedoUndoIconBase = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
+  width: 72px;
+  height: 72px;
   background-color: ${({ theme }) => theme.colors.white};
   border: none;
   cursor: pointer;
-  font-size: 1.5rem; /* 아이콘 크기 조정 */
   color: ${({ theme }) => theme.colors.gray100};
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray10};
@@ -61,6 +63,17 @@ const RedoUndoIconButton = styled.button`
   &:first-of-type {
     border-right: 1px solid ${({ theme }) => theme.colors.gray30}; /* 버튼 사이의 경계선 */
   }
+  background-repeat: no-repeat;
+  background-size: 32px 32px;
+  background-position: center;
+`;
+
+const UndoButton = styled(RedoUndoIconBase)`
+  background-image: url(${redoUndoSvg});
+`;
+const RedoButton = styled(RedoUndoIconBase)`
+  background-image: url(${redoUndoSvg});
+  transform: scaleX(-1);
 `;
 
 const RightButtonGroup = styled.div`
@@ -91,9 +104,8 @@ const RightBaseIcon = styled.button`
 `;
 
 const FileIconButton = styled(RightBaseIcon)`
-  background-image: url("/icons/download.svg");
+  background-image: url(${downloadSvg});
 `;
-
 const LibrayIconButton = styled(RightBaseIcon)`
-  background-image: url("/icons/folder-down.svg");
+  background-image: url(${folderSvg});
 `;

@@ -8,7 +8,7 @@ const TextPanel = () => {
         <ColorCircle />
       </ColorPicker>
       <ThicknessPicker>
-        <span>두께</span>
+        <span>폰트</span>
         <ThicknessSelect>
           <option value="xs">Extra small</option>
           <option value="sm">Small</option>
@@ -17,6 +17,7 @@ const TextPanel = () => {
           <option value="xl">Extra large</option>
         </ThicknessSelect>
       </ThicknessPicker>
+      
       <ToolPicker>
         <span>추가</span>
         <BaseIcon>✏️</BaseIcon>
@@ -26,6 +27,7 @@ const TextPanel = () => {
 };
 
 export default TextPanel;
+
 const ColorPicker = styled.div`
   display: flex;
   flex-direction: column;
@@ -52,10 +54,11 @@ const ThicknessPicker = styled.div`
 
 const ThicknessSelect = styled.select`
   font-size: 1rem;
-  padding: 5px 10px;
+  padding: 0px 16px;
   border: 1px solid ${({ theme }) => theme.colors.gray50};
   border-radius: 20px;
-  width: 150px;
+  width: 140px;
+  height: 40px;
 `;
 
 const ToolPicker = styled.div`

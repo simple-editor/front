@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useBoundStore } from "../../store/use-bound-store";
 
 interface IProps extends IIconProps {
   title: string;
@@ -8,9 +9,20 @@ interface IIconProps {
   icon: string;
 }
 
+interface IIsActiveProps {
+  isActive: boolean;
+}
 const ToolbarItem = ({ title, icon }: IProps) => {
+  const activeTool = useBoundStore((state) => state.activeTool);
+  const setActvieTool = useBoundStore((state) => state.setActiveTool);
+  const isActive = activeTool === title;
+
+  const handleClick = () => {
+    setActvieTool(title);
+  };
+
   return (
-    <Wrapper>
+    <Wrapper isActive={isActive} onClick={handleClick}>
       <Icon icon={icon}>아이콘</Icon>
       <Title>{title}</Title>
     </Wrapper>
@@ -19,7 +31,7 @@ const ToolbarItem = ({ title, icon }: IProps) => {
 
 export default ToolbarItem;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<IIsActiveProps>`
   display: flex;
   width: 72px;
   height: 72px;
@@ -28,8 +40,12 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
-  background-color: #1b1b1b;
+  background-color: ${(props) =>
+    props.isActive ? props.theme.colors.gray80 : "#1b1b1b"};
   cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.gray80};
+  }
 `;
 
 const Icon = styled.i<IIconProps>`

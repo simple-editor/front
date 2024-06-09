@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import Button from "./button";
-
+import TestSVG from "@/assets/icons/logo.svg?react";
 const Header = () => {
   return (
     <Wrapper>
       <GNBContainer>
-        <Logo></Logo>
+        <Logo />
         <Button size="small" title="로그인" />
       </GNBContainer>
     </Wrapper>
@@ -29,10 +29,7 @@ const GNBContainer = styled.div`
   margin: auto;
 `;
 
-const Logo = styled.div`
+const Logo = styled(TestSVG)`
   width: 110px;
   height: 22px;
-  background-image: url("/images/logo.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
 `;
