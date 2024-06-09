@@ -1,15 +1,17 @@
 import styled from "@emotion/styled";
-import SidebarItem from "../shared/toolbar-item";
+import pencil from "@/assets/icons/sidebar-pencil.svg";
+import text from "@/assets/icons/sidebar-text.svg";
+import smail from "@/assets/icons/sidebar-smail.svg";
+import frame from "@/assets/icons/sidebar-maximise.svg";
+import filter from "@/assets/icons/sidebar-filter.svg";
+import crop from "@/assets/icons/sidebar-crop.svg";
+import ToolbarItem from "@/components/shared/toolbar-item";
 
 const Toolbar = () => {
   return (
     <Wrapper>
       {list.map((item) => (
-        <SidebarItem
-          title={item.title}
-          key={item.title}
-          icon={item.icon}
-        ></SidebarItem>
+        <ToolbarItem title={item.title} key={item.title} icon={item.icon} />
       ))}
     </Wrapper>
   );
@@ -26,26 +28,26 @@ const Wrapper = styled.nav`
 const list = [
   {
     title: "그리기",
-    icon: "/icons/sidebar-pencil.svg",
+    icon: pencil,
   },
   {
     title: "텍스트",
-    icon: "/icons/sidebar-text.svg",
+    icon: text,
   },
   {
     title: "이모지",
-    icon: "/icons/sidebar-smail.svg",
+    icon: smail,
   },
   {
     title: "프레임",
-    icon: "/icons/sidebar-maximise.svg",
+    icon: frame,
   },
   {
     title: "필터",
-    icon: "/icons/sidebar-filter.svg",
+    icon: filter,
   },
   {
     title: "자르기",
-    icon: "/icons/sidebar-crop.svg",
+    icon: crop,
   },
 ];

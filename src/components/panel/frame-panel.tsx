@@ -8,10 +8,12 @@ const FramePanel = () => {
   return (
     <Panel>
       {frames.map((frame, index) => (
-        <Frame key={index} selected={frame.selected}>
+        <div>
           <FrameName>{frame.name}</FrameName>
-          <FrameContent>{frame.content}</FrameContent>
-        </Frame>
+          <Frame key={index} selected={frame.selected}>
+            <FrameContent>{frame.content}</FrameContent>
+          </Frame>
+        </div>
       ))}
     </Panel>
   );
@@ -20,17 +22,20 @@ const FramePanel = () => {
 export default FramePanel;
 const Panel = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 16px;
   border-radius: 8px;
+  gap: 40px;
 `;
 
 const Frame = styled.div<ISelectedProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100px;
-  height: 120px;
+  width: 68px;
+  height: 68px;
+  box-sizing: border-box;
+  padding: 0px 15px 0px 14px;
   border: 2px solid ${(props) => (props.selected ? "#00c3ff" : "#ddd")};
   border-radius: 8px;
   background-color: #fff;
@@ -45,6 +50,7 @@ const FrameName = styled.div`
   margin-top: 8px;
   font-size: 14px;
   color: #333;
+  text-align: center;
 `;
 
 const FrameContent = styled.div`
