@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Button from "../shared/button";
+import Button from "../../shared/ui/button";
 
 const Canvas = () => {
   return (

@@ -1,27 +1,28 @@
 import styled from "@emotion/styled";
-import IconButtonRadius from "../shared/icon-button-radius";
+import IconButtonRadius from "../../shared/ui/icon-button-radius";
 import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import EraserSvg from "@/assets/icons/eraser.svg?react";
+import DropDown from "@/shared/ui/drop-down";
+import { useState } from "react";
 
+const data = ["Extra small", "Small", "Medium", "Large", "Extra large"];
 const DrawPanel = () => {
+  const [selected, setSelected] = useState("Medium");
+  const handleClick = (item: string) => {
+    setSelected(item);
+  };
   return (
     <>
       <ColorPicker>
-        <span>색상</span>
+        <SubTitle>색상</SubTitle>
         <ColorCircle />
       </ColorPicker>
       <ThicknessPicker>
-        <span>두께</span>
-        <ThicknessSelect>
-          <option value="xs">Extra small</option>
-          <option value="sm">Small</option>
-          <option value="md">Medium</option>
-          <option value="lg">Large</option>
-          <option value="xl">Extra large</option>
-        </ThicknessSelect>
+        <SubTitle>두께</SubTitle>
+        <DropDown data={data} selected={selected} onClick={handleClick} />
       </ThicknessPicker>
       <ToolPicker>
-        <span>도구</span>
+        <SubTitle>도구</SubTitle>
         <ToolButtonGroup>
           <IconButtonRadius size="small" icon={<CustomPencilSvg />} />
           <IconButtonRadius size="small" icon={<CustomEraserSvg />} />
@@ -32,6 +33,10 @@ const DrawPanel = () => {
 };
 
 export default DrawPanel;
+
+const SubTitle = styled.span`
+  ${(props) => props.theme.textStyles.smallText2}
+`;
 
 const ColorPicker = styled.div`
   display: flex;
@@ -55,14 +60,6 @@ const ThicknessPicker = styled.div`
   flex-direction: column;
   align-items: center;
   color: ${({ theme }) => theme.colors.gray70};
-`;
-
-const ThicknessSelect = styled.select`
-  font-size: 1rem;
-  padding: 5px 10px;
-  border: 1px solid ${({ theme }) => theme.colors.gray50};
-  border-radius: 20px;
-  width: 150px;
 `;
 
 const ToolPicker = styled.div`
