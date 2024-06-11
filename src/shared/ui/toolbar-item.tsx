@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { useBoundStore } from "../../store/use-bound-store";
+import { useBoundStore } from "../store/use-bound-store";
 
 interface IProps extends IIconProps {
   title: string;
 }
 
 interface IIconProps {
-  icon: string;
+  icon: React.ReactNode;
 }
 
 interface IIsActiveProps {
@@ -23,7 +23,7 @@ const ToolbarItem = ({ title, icon }: IProps) => {
 
   return (
     <Wrapper isActive={isActive} onClick={handleClick}>
-      <Icon icon={icon}>아이콘</Icon>
+      {icon}
       <Title>{title}</Title>
     </Wrapper>
   );
@@ -46,14 +46,6 @@ const Wrapper = styled.div<IIsActiveProps>`
   &:hover {
     background-color: ${(props) => props.theme.colors.gray80};
   }
-`;
-
-const Icon = styled.i<IIconProps>`
-  display: block;
-  width: 24px;
-  height: 24px;
-  font-size: 0;
-  background-image: ${(props) => `url(${props.icon})`};
 `;
 
 const Title = styled.span`

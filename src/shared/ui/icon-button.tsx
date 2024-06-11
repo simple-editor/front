@@ -6,16 +6,20 @@ interface IEventProps extends IProps {
 }
 
 interface IProps {
-  icon: string;
+  icon: React.ReactNode;
   size: "small" | "large";
 }
 
 const IconButton = ({ icon, size, onClick }: IEventProps) => {
-  return <Wrapper icon={icon} size={size} onClick={onClick}></Wrapper>;
+  return (
+    <Wrapper size={size} onClick={onClick}>
+      {icon}
+    </Wrapper>
+  );
 };
 
 export default IconButton;
-const Wrapper = styled.button<IProps>`
+const Wrapper = styled.button<{ size: "small" | "large" }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,11 +33,6 @@ const Wrapper = styled.button<IProps>`
     background-color: ${({ theme }) => theme.colors.gray10};
   }
 
-  background-repeat: no-repeat;
-  background-size: 32px 32px;
-  background-position: center;
-
-  background-image: ${(props) => `url(${props.icon})`};
   ${(props) => (props.size === "small" ? smallSizes : largeSizes)}
 `;
 

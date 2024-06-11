@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { useBoundStore } from "../../store/use-bound-store";
+import { useBoundStore } from "../../shared/store/use-bound-store";
 import DrawPanel from "./draw-panel";
 import TextPanel from "./text-panel";
 import FramePanel from "./frame-panel";

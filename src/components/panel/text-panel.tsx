@@ -1,26 +1,32 @@
+import DropDown from "@/shared/ui/drop-down";
+import IconButton from "@/shared/ui/icon-button";
 import styled from "@emotion/styled";
+import { useState } from "react";
+import TextSvg from "@/assets/icons/sidebar-text.svg?react";
+const data = ["Extra small", "Small", "Medium", "Large", "Extra large"];
 
 const TextPanel = () => {
+  const [selected, setSelected] = useState("Medium");
+  const handleClick = (item: string) => {
+    setSelected(item);
+  };
   return (
     <>
       <ColorPicker>
-        <span>색상</span>
+        <SubTitle>색상</SubTitle>
         <ColorCircle />
       </ColorPicker>
       <ThicknessPicker>
-        <span>폰트</span>
-        <ThicknessSelect>
-          <option value="xs">Extra small</option>
-          <option value="sm">Small</option>
-          <option value="md">Medium</option>
-          <option value="lg">Large</option>
-          <option value="xl">Extra large</option>
-        </ThicknessSelect>
+        <SubTitle>폰트</SubTitle>
+        <DropDown data={data} selected={selected} onClick={handleClick} />
       </ThicknessPicker>
-      
+      <ThicknessPicker>
+        <SubTitle>사이즈</SubTitle>
+        <DropDown data={data} selected={selected} onClick={handleClick} />
+      </ThicknessPicker>
       <ToolPicker>
-        <span>추가</span>
-        <BaseIcon>✏️</BaseIcon>
+        <SubTitle>추가</SubTitle>
+        <IconButton size="small" icon={<TextIcon />} />
       </ToolPicker>
     </>
   );
@@ -45,20 +51,15 @@ const ColorCircle = styled.div`
   margin-bottom: 5px;
 `;
 
+const SubTitle = styled.span`
+  ${(props) => props.theme.textStyles.smallText2}
+`;
+
 const ThicknessPicker = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   color: ${({ theme }) => theme.colors.gray70};
-`;
-
-const ThicknessSelect = styled.select`
-  font-size: 1rem;
-  padding: 0px 16px;
-  border: 1px solid ${({ theme }) => theme.colors.gray50};
-  border-radius: 20px;
-  width: 140px;
-  height: 40px;
 `;
 
 const ToolPicker = styled.div`
@@ -68,23 +69,10 @@ const ToolPicker = styled.div`
   color: ${({ theme }) => theme.colors.gray70};
 `;
 
-const BaseIcon = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.white};
-  border: 1px solid ${({ theme }) => theme.colors.gray30};
-  cursor: pointer;
-  font-size: 1.5rem; /* 아이콘 크기 조정 */
-  color: ${({ theme }) => theme.colors.gray100};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray10};
+const TextIcon = styled(TextSvg)`
+  width: 18px;
+  height: 18px;
+  & path {
+    fill: black;
   }
-
-  background-repeat: no-repeat;
-  background-size: 32px 32px;
-  background-position: center;
 `;
