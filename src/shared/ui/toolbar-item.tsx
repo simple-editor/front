@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useBoundStore } from "../store/use-bound-store";
+import useToolbarStore from "@/shared/store/toolbar-store";
 
 interface IProps extends IIconProps {
   title: string;
@@ -13,8 +13,8 @@ interface IIsActiveProps {
   isActive: boolean;
 }
 const ToolbarItem = ({ title, icon }: IProps) => {
-  const activeTool = useBoundStore((state) => state.activeTool);
-  const setActvieTool = useBoundStore((state) => state.setActiveTool);
+  const activeTool = useToolbarStore((state) => state.activeTool);
+  const setActvieTool = useToolbarStore((state) => state.setActiveTool);
   const isActive = activeTool === title;
 
   const handleClick = () => {

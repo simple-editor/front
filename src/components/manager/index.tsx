@@ -2,13 +2,17 @@ import styled from "@emotion/styled";
 import downloadSvg from "@/assets/icons/download.svg";
 import folderSvg from "@/assets/icons/folder-down.svg";
 import redoUndoSvg from "@/assets/icons/arrow-rotate-left.svg";
+import useHistoryStore from "@/shared/store/history-store";
 const Manager = () => {
+  const undo = useHistoryStore((state) => state.undo);
+  const redo = useHistoryStore((state) => state.redo);
+
   return (
     <Wrapper>
       <TopToolBarContainer>
         <RedoUndoButtonGroup>
-          <UndoButton />
-          <RedoButton />
+          <UndoButton onClick={undo} />
+          <RedoButton onClick={redo} />
         </RedoUndoButtonGroup>
         <RightButtonGroup>
           <FileIconButton />

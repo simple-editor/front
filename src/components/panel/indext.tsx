@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
-
-import { useBoundStore } from "../../shared/store/use-bound-store";
 import DrawPanel from "./draw-panel";
 import TextPanel from "./text-panel";
 import FramePanel from "./frame-panel";
 import CropPanel from "./crop-panel";
 import EmojiPanel from "./emoji-panel";
+import useToolbarStore from "@/shared/store/toolbar-store";
 
 const Panel = () => {
-  const activeTool = useBoundStore((state) => state.activeTool);
+  const activeTool = useToolbarStore((state) => state.activeTool);
 
   const renderToolbar = () => {
     switch (activeTool) {
