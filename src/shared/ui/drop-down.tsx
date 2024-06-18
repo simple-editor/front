@@ -1,15 +1,21 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import ArrowDownSvg from "@/assets/icons/arrow-down.svg?react";
+
+interface IDropDownData {
+  title: string;
+  value: string | number;
+}
+
 interface IDropDownProps {
-  data: string[];
-  selected: string;
-  onClick: (item: string) => void;
+  data: IDropDownData[];
+  selected: IDropDownData;
+  onClick: (item: IDropDownData) => void;
 }
 
 const DropDown = ({ data, selected, onClick }: IDropDownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const filter = data.filter((item) => item !== selected);
+  const filter = data.filter((item) => item.title !== selected.title);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -17,13 +23,13 @@ const DropDown = ({ data, selected, onClick }: IDropDownProps) => {
   return (
     <DropdownContainer>
       <DropdownButton onClick={toggleDropdown}>
-        {selected} <ArrowIcon />
+        {selected.title} <ArrowIcon />
       </DropdownButton>
       {isOpen && (
         <DropdownMenu onClick={toggleDropdown}>
           {filter.map((item, index) => (
             <DropdownItem key={index} onClick={() => onClick(item)}>
-              {item}
+              {item.title}
             </DropdownItem>
           ))}
         </DropdownMenu>

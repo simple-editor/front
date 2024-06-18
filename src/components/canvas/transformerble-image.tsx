@@ -3,12 +3,19 @@ import { useEffect, useRef } from "react";
 import { Image, Transformer } from "react-konva";
 import useImage from "use-image";
 
+interface IProps {
+  image: Konva.ShapeConfig;
+  isSelected: boolean;
+  onSelect: () => void;
+  onChange: (newImage: Konva.ShapeConfig) => void;
+}
+
 const TransformerbleImage = ({
   image,
   isSelected,
   onSelect,
   onChange,
-}: any) => {
+}: IProps) => {
   const [img] = useImage(image.src);
   const shapeRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);
@@ -28,7 +35,7 @@ const TransformerbleImage = ({
         {...image}
         x={image.x}
         y={image.y}
-        draggable
+        draggable={false}
         onClick={onSelect}
         onTap={onSelect}
         ref={shapeRef}
@@ -48,7 +55,7 @@ const TransformerbleImage = ({
           // we will reset it back
           node.scaleX(1);
           node.scaleY(1);
-          console.log(node.width() * scaleX);
+
           onChange({
             ...image,
             x: node.x(),

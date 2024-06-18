@@ -8,13 +8,15 @@ import TransformableImage from "@/components/canvas/transformerble-image";
 import { v4 as uuidv4 } from "uuid";
 import useHistoryStore from "@/shared/store/history-store";
 import DrawingLayer from "@/components/canvas/drawing-layer";
+import useToolbarStore from "@/shared/store/toolbar-store";
 
 const Canvas = () => {
   const stageRef = useRef<Konva.Stage>(null);
   const groupRef = useRef(null); // 그룹 참조를 위한 ref
-  const { shapes, setShapes } = useHistoryStore((state) => state);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const inputRef = useRef(null);
+  const { shapes, setShapes } = useHistoryStore((state) => state);
+  const activeTool = useToolbarStore((state) => state.activeTool);
   const { onDrawStart, onDrawiong, onDrawEnd, currentLine } = useDrawing(
     shapes,
     setShapes
@@ -24,14 +26,15 @@ const Canvas = () => {
     if (event.target === stageRef.current) {
       setSelectedId(null);
     }
-    onDrawStart(event);
+
+    if (activeTool === "그리기") onDrawStart(event);
   };
   const handleMouseMove = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    onDrawiong(event);
+    if (activeTool === "그리기") onDrawiong(event);
   };
 
   const handleMouseUp = () => {
-    onDrawEnd();
+    if (activeTool === "그리기") onDrawEnd();
   };
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -64,12 +67,12 @@ const Canvas = () => {
 
     setShapes(find);
   };
-  const handleDragOver = (event) => {
+  const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
   };
 
-  const handleDrop = (event) => {
+  const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -82,8 +85,8 @@ const Canvas = () => {
 
       img.onload = () => {
         const stage = stageRef.current;
-        const stageWidth = stage.width();
-        const stageHeight = stage.height();
+        const stageWidth = stage!.width();
+        const stageHeight = stage!.height();
         const aspectRatio = img.width / img.height;
 
         let newWidth, newHeight;
@@ -127,7 +130,7 @@ const Canvas = () => {
           <CustomButton
             size="large"
             title="JPG 또는 JPGE 이미지 불러오기"
-            onClick={() => inputRef.current.click()}
+            onClick={() => inputRef.current!.click()}
           />
           <Description>또는 여기로 끌어놓기</Description>
         </Box>
@@ -149,7 +152,7 @@ const Canvas = () => {
         onMouseUp={handleMouseUp}
       >
         <Layer>
-          <Group draggable ref={groupRef}>
+          <Group ref={groupRef}>
             {shapes.map((shape) => {
               switch (shape.type) {
                 case "image":
@@ -158,7 +161,7 @@ const Canvas = () => {
                       key={shape.id}
                       image={shape}
                       isSelected={shape.id === selectedId}
-                      onSelect={() => handleSelect(shape.id)}
+                      onSelect={() => handleSelect(String(shape.id))}
                       onChange={handleChange}
                     />
                   );

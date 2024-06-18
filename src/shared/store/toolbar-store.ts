@@ -3,12 +3,28 @@ type TypeTool = "그리기" | "텍스트" | "이모지" | "프레임" | "필터"
 export interface IToolbar extends IPanel {
   activeTool: TypeTool | string;
   setActiveTool: (tool: TypeTool) => void;
+  setPanels: <T extends TypeTool>(
+    tool: T,
+    settings: Partial<IPanel["panels"][T]>
+  ) => void;
+}
+
+interface ILineTools {
+  type: string;
+  strokeWidthTitle: string;
+  strokeWidthValue: number;
+  strokeColor: string;
+}
+
+interface ITextTools {
+  fontSize: number;
+  color: string;
 }
 
 export interface IPanel {
-  toolSettings: {
-    그리기: { type: string; strokeWidth: number; stroke: string };
-    텍스트: { fontSize: number; stroke: string };
+  panels: {
+    그리기: ILineTools;
+    텍스트: ITextTools;
     이모지?: object;
     프레임?: object;
     필터?: object;
@@ -16,18 +32,26 @@ export interface IPanel {
   };
 }
 
+type ToolSettings = ILineTools | ITextTools;
+
 const useToolbarStore = create<IToolbar>()((set) => ({
-  activeTool: "draw",
+  activeTool: "그리기",
   setActiveTool: (tool: TypeTool) => set({ activeTool: tool }),
-  toolSettings: {
-    그리기: { type: "pen", strokeWidth: 2, stroke: "black" },
-    텍스트: { fontSize: 16, stroke: "#000000" },
+  panels: {
+    그리기: {
+      type: "pen",
+      strokeWidthTitle: "Medium",
+      strokeWidthValue: 4,
+      strokeColor: "black",
+    },
+    텍스트: { fontSize: 16, color: "#000000" },
   },
-  setToolSettings: (tool: TypeTool, settings: IPanel) =>
+
+  setPanels: (tool: TypeTool, settings: Partial<ToolSettings>) =>
     set((state) => ({
-      toolSettings: {
-        ...state.toolSettings,
-        [tool]: { ...state.toolSettings[tool], ...settings },
+      panels: {
+        ...state.panels,
+        [tool]: { ...state.panels[tool], ...settings },
       },
     })),
 }));

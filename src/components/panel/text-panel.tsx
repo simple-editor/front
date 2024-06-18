@@ -3,26 +3,45 @@ import IconButton from "@/shared/ui/icon-button";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
+import { ColorResult, SketchPicker } from "react-color";
 const data = ["Extra small", "Small", "Medium", "Large", "Extra large"];
 
 const TextPanel = () => {
-  const [selected, setSelected] = useState("Medium");
+  const [isActive, setIsActive] = useState(false);
+  const [color, setColor] = useState("#000");
+  const [fontSize, setFontSize] = useState("Medium");
+  const [fontFamily, setFontFamily] = useState("");
   const handleClick = (item: string) => {
-    setSelected(item);
+    setFontSize(item);
   };
+
+  const handleChangeComplete = (color: ColorResult) => {
+    setColor(color.hex);
+  };
+
+
+  const updateFontSize = () => {
+    
+  }
   return (
     <>
-      <ColorPicker>
+      <ColorPickerWrapper>
         <SubTitle>색상</SubTitle>
-        <ColorCircle />
-      </ColorPicker>
+        <ColorCircle onClick={() => setIsActive(!isActive)} />
+        {isActive && (
+          <CustomColorPicker
+            color={color}
+            onChangeComplete={handleChangeComplete}
+          />
+        )}
+      </ColorPickerWrapper>
       <ThicknessPicker>
         <SubTitle>폰트</SubTitle>
-        <DropDown data={data} selected={selected} onClick={handleClick} />
+        <DropDown data={data} selected={fontSize} onClick={handleClick} />
       </ThicknessPicker>
       <ThicknessPicker>
         <SubTitle>사이즈</SubTitle>
-        <DropDown data={data} selected={selected} onClick={handleClick} />
+        <DropDown data={data} selected={fontFamily} onClick={handleClick} />
       </ThicknessPicker>
       <ToolPicker>
         <SubTitle>추가</SubTitle>
@@ -34,7 +53,8 @@ const TextPanel = () => {
 
 export default TextPanel;
 
-const ColorPicker = styled.div`
+const ColorPickerWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,6 +69,12 @@ const ColorCircle = styled.div`
   border: 2px solid ${({ theme }) => theme.colors.white};
   box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.gray30};
   margin-bottom: 5px;
+  cursor: pointer;
+`;
+
+const CustomColorPicker = styled(SketchPicker)`
+  position: absolute;
+  top: -300px;
 `;
 
 const SubTitle = styled.span`
