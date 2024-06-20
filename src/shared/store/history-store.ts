@@ -1,7 +1,7 @@
 import Konva from "konva";
 import { create } from "zustand";
 
-type IShapeState = Konva.ShapeConfig[];
+export type IShapeState = Konva.ShapeConfig[];
 
 interface IHistoryState {
   shapes: IShapeState;

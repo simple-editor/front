@@ -18,7 +18,7 @@ const DrawPanel = () => {
   const activeTool = useToolbarStore((state) => state.activeTool);
   const setPanels = useToolbarStore((state) => state.setPanels);
   const toolType = useToolbarStore((state) => state.panels.그리기.type);
-
+  
   const handleSelectToolType = (type: "pen" | "eraser") => {
     setPanels("그리기", { type: type });
   };

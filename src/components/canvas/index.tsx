@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 import Konva from "konva";
 import useDrawing from "@/shared/hooks/use-dwaring";
 import TransformableImage from "@/components/canvas/transformerble-image";
-import { v4 as uuidv4 } from "uuid";
 import useHistoryStore from "@/shared/store/history-store";
 import DrawingLayer from "@/components/canvas/drawing-layer";
 import useToolbarStore from "@/shared/store/toolbar-store";
+import useFileUpload from "@/shared/hooks/use-file-upload";
 
 const Canvas = () => {
   const stageRef = useRef<Konva.Stage>(null);
@@ -17,10 +17,17 @@ const Canvas = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { shapes, setShapes } = useHistoryStore((state) => state);
   const activeTool = useToolbarStore((state) => state.activeTool);
+  
   const { onDrawStart, onDrawiong, onDrawEnd, currentLine } = useDrawing(
     shapes,
     setShapes
   );
+
+  const { handleDragUploadEnd, handleDragUploadStart } = useFileUpload({
+    shapes,
+    setShapes,
+    stageRef,
+  }); //이미지 드래그 업로드
 
   const handleMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.target === stageRef.current) {
@@ -36,23 +43,7 @@ const Canvas = () => {
   const handleMouseUp = () => {
     if (activeTool === "그리기") onDrawEnd();
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      const url = URL.createObjectURL(file);
-      const newImage = {
-        id: uuidv4(),
-        type: "image",
-        src: url,
-        x: 50,
-        y: 50,
-        width: 100,
-        height: 100,
-      };
-      setShapes([...shapes, newImage]);
-    }
-  };
+
   const handleSelect = (id: string) => {
     setSelectedId(id);
   };
@@ -67,63 +58,18 @@ const Canvas = () => {
 
     setShapes(find);
   };
-  const handleDragOver = (event: React.DragEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleDrop = (event: React.DragEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const files = event.dataTransfer.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      const url = URL.createObjectURL(file);
-      const img = new window.Image();
-      img.src = url;
-
-      img.onload = () => {
-        const stage = stageRef.current;
-        const stageWidth = stage!.width();
-        const stageHeight = stage!.height();
-        const aspectRatio = img.width / img.height;
-
-        let newWidth, newHeight;
-        if (stageWidth / stageHeight > aspectRatio) {
-          newHeight = stageHeight;
-          newWidth = stageHeight * aspectRatio;
-        } else {
-          newWidth = stageWidth;
-          newHeight = stageWidth / aspectRatio;
-        }
-
-        const x = (stageWidth - newWidth) / 2;
-        const y = (stageHeight - newHeight) / 2;
-
-        const newImage = {
-          id: uuidv4(),
-          type: "image",
-          src: url,
-          x,
-          y,
-          width: newWidth,
-          height: newHeight,
-        };
-        setShapes([...shapes, newImage]);
-      };
-    }
-  };
 
   return (
-    <WorkAreaContainer onDragOver={handleDragOver} onDrop={handleDrop}>
+    <WorkAreaContainer
+      onDragOver={handleDragUploadStart}
+      onDrop={handleDragUploadEnd}
+    >
       {shapes.length === 0 && (
         <Box>
           <input
             type="file"
             accept="image/*"
             ref={inputRef}
-            onChange={handleFileChange}
             style={{ display: "none" }}
           />
 
