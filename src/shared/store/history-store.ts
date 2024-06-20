@@ -11,6 +11,7 @@ interface IHistoryState {
 
 interface IHistoryAction {
   setShapes: (newShapes: IShapeState) => void;
+  updateShape: (updatedShape: Konva.ShapeConfig) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -25,6 +26,15 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
     set((state) => {
       const newHistroy = [...state.history, state.shapes];
       return { shapes: newShapes, history: newHistroy, future: [] };
+    }),
+
+  updateShape: (updatedShape: Konva.ShapeConfig) =>
+    set((state) => {
+      const newShapes = state.shapes.map((shape) =>
+        shape.id === updatedShape.id ? updatedShape : shape
+      );
+      const newHistory = [...state.history, state.shapes];
+      return { shapes: newShapes, history: newHistory, future: [] };
     }),
 
   undo: () =>

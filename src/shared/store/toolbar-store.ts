@@ -17,8 +17,9 @@ interface ILineTools {
 }
 
 interface ITextTools {
-  fontSize: number;
-  color: string;
+  fontSizeTitle: string;
+  fontSizeValue: number;
+  strokeColor: string;
 }
 
 export interface IPanel {
@@ -44,7 +45,11 @@ const useToolbarStore = create<IToolbar>()((set) => ({
       strokeWidthValue: 4,
       strokeColor: "black",
     },
-    텍스트: { fontSize: 16, color: "#000000" },
+    텍스트: {
+      fontSizeTitle: "Medium",
+      fontSizeValue: 16,
+      strokeColor: "#000000",
+    },
   },
 
   setPanels: (tool: TypeTool, settings: Partial<ToolSettings>) =>
