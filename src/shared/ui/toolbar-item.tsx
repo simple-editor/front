@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useBoundStore } from "../store/use-bound-store";
+import useToolbarStore from "@/shared/store/toolbar-store";
 
 interface IProps extends IIconProps {
   title: string;
@@ -9,20 +9,20 @@ interface IIconProps {
   icon: React.ReactNode;
 }
 
-interface IIsActiveProps {
-  isActive: boolean;
+interface IActiveProps {
+  isSelected: boolean;
 }
 const ToolbarItem = ({ title, icon }: IProps) => {
-  const activeTool = useBoundStore((state) => state.activeTool);
-  const setActvieTool = useBoundStore((state) => state.setActiveTool);
-  const isActive = activeTool === title;
+  const activeTool = useToolbarStore((state) => state.activeTool);
+  const setActvieTool = useToolbarStore((state) => state.setActiveTool);
+  const isSelected = activeTool === title;
 
   const handleClick = () => {
     setActvieTool(title);
   };
 
   return (
-    <Wrapper isActive={isActive} onClick={handleClick}>
+    <Wrapper onClick={handleClick} isSelected={isSelected}>
       {icon}
       <Title>{title}</Title>
     </Wrapper>
@@ -31,7 +31,7 @@ const ToolbarItem = ({ title, icon }: IProps) => {
 
 export default ToolbarItem;
 
-const Wrapper = styled.div<IIsActiveProps>`
+const Wrapper = styled.div<IActiveProps>`
   display: flex;
   width: 72px;
   height: 72px;
@@ -41,7 +41,7 @@ const Wrapper = styled.div<IIsActiveProps>`
   gap: 4px;
   flex-shrink: 0;
   background-color: ${(props) =>
-    props.isActive ? props.theme.colors.gray80 : "#1b1b1b"};
+    props.isSelected ? props.theme.colors.gray80 : "#1b1b1b"};
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.colors.gray80};

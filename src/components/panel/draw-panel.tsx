@@ -4,13 +4,34 @@ import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import EraserSvg from "@/assets/icons/eraser.svg?react";
 import DropDown from "@/shared/ui/drop-down";
 import { useState } from "react";
+import useToolbarStore from "@/shared/store/toolbar-store";
 
-const data = ["Extra small", "Small", "Medium", "Large", "Extra large"];
+const lineSizes = [
+  { title: "Extra small", value: 1 },
+  { title: "Small", value: 2 },
+  { title: "Medium", value: 4 },
+  { title: "Large", value: 8 },
+  { title: "Extra large", value: 16 },
+];
 const DrawPanel = () => {
-  const [selected, setSelected] = useState("Medium");
-  const handleClick = (item: string) => {
-    setSelected(item);
+  const [selected, setSelected] = useState(lineSizes[2]);
+  const activeTool = useToolbarStore((state) => state.activeTool);
+  const setPanels = useToolbarStore((state) => state.setPanels);
+  const toolType = useToolbarStore((state) => state.panels.그리기.type);
+  
+  const handleSelectToolType = (type: "pen" | "eraser") => {
+    setPanels("그리기", { type: type });
   };
+
+  const handleDropDown = (item: { title: string; value: number | string }) => {
+    if (typeof item.value === "number") {
+      setPanels("그리기", {
+        strokeWidthTitle: item.title,
+        strokeWidthValue: item.value,
+      });
+    }
+  };
+
   return (
     <>
       <ColorPicker>
@@ -19,13 +40,27 @@ const DrawPanel = () => {
       </ColorPicker>
       <ThicknessPicker>
         <SubTitle>두께</SubTitle>
-        <DropDown data={data} selected={selected} onClick={handleClick} />
+        <DropDown
+          data={lineSizes}
+          selected={selected}
+          onClick={handleDropDown}
+        />
       </ThicknessPicker>
       <ToolPicker>
         <SubTitle>도구</SubTitle>
         <ToolButtonGroup>
-          <IconButtonRadius size="small" icon={<CustomPencilSvg />} />
-          <IconButtonRadius size="small" icon={<CustomEraserSvg />} />
+          <IconButtonRadius
+            isActive={toolType === "pen"}
+            size="small"
+            onClick={() => handleSelectToolType("pen")}
+            icon={<CustomPencilSvg />}
+          />
+          <IconButtonRadius
+            isActive={toolType === "eraser"}
+            size="small"
+            onClick={() => handleSelectToolType("eraser")}
+            icon={<CustomEraserSvg />}
+          />
         </ToolButtonGroup>
       </ToolPicker>
     </>

@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 
 interface IProps extends IWrapperProps {
   title: string;
+  onClick?: () => void;
 }
 
 interface IWrapperProps {
@@ -12,8 +13,12 @@ interface IThemeProps {
   theme: Theme;
 }
 
-const Button = ({ title, size }: IProps) => {
-  return <Wrapper size={size}>{title}</Wrapper>;
+const Button = ({ title, size, onClick }: IProps) => {
+  return (
+    <Wrapper size={size} onClick={onClick}>
+      {title}
+    </Wrapper>
+  );
 };
 
 export default Button;
@@ -39,4 +44,5 @@ const Wrapper = styled.button<IWrapperProps>`
   border-radius: 8px;
   color: #fff;
   ${(props) => (props.size === "small" ? smallSizes : largeSizes)};
+  cursor: pointer;
 `;

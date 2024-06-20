@@ -2,23 +2,20 @@ import Konva from "konva";
 import { Line } from "react-konva";
 
 interface IProps {
-  lines: Konva.ShapeConfig[];
+  line: Konva.ShapeConfig;
 }
 
-const DrawingLayer = ({ lines }: IProps) => {
+const DrawingLayer = ({ line }: IProps) => {
   return (
     <>
-      {lines.map((line, index) => (
-        <Line
-          key={index}
-          points={line.points}
-          stroke={line.stroke}
-          strokeWidth={line.strokeWidth}
-          tension={0.5}
-          lineCap="round"
-          lineJoin="round"
-        />
-      ))}
+      <Line
+        points={line.points}
+        stroke={line.stroke}
+        strokeWidth={line.strokeWidth}
+        tension={0.5}
+        lineCap="round"
+        lineJoin="round"
+      />
     </>
   );
 };

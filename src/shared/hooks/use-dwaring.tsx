@@ -1,59 +1,62 @@
+import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-const useDrawing = () => {
-  const [lines, setLines] = useState<Konva.ShapeConfig[]>([]);
+const useDrawing = (shapes, setShapes) => {
   const [isDrawing, setIsDrawing] = useState(false);
+  const [currentLine, setCurrentLine] = useState<Konva.ShapeConfig | null>(
+    null
+  );
+
+  const { panels } = useToolbarStore((state) => state);
 
   const startDrawing = () => setIsDrawing(true);
   const stopDrawing = () => setIsDrawing(false);
 
-  const addLine = (line: Konva.ShapeConfig) => {
-    setLines((prevLines) => [...prevLines, line]);
-  };
-
-  const updateLastLine = (point: Konva.LineConfig["points"]) => {
-    setLines((prevLines) => {
-      const updatedLines = [...prevLines];
-      const lastLine = updatedLines[updatedLines.length - 1];
-      lastLine.points = lastLine.points.concat(point);
-      return updatedLines;
-    });
-  };
-
-  const handleDrawMouseDown = (
-    tool: string,
-    strokeColor: string,
-    strokeWidth: number,
-    event: any
-  ) => {
+  const onDrawStart = (event: Konva.KonvaEventObject<MouseEvent>) => {
     startDrawing();
     const stage = event.target.getStage();
-    const point = stage.getPointerPosition();
-    addLine({
-      points: [point.x, point.y],
-      stroke: tool === "eraser" ? "white" : strokeColor,
-      strokeWidth: strokeWidth,
-    });
+
+    const point = stage!.getPointerPosition();
+    const update = {
+      id: uuidv4(),
+      type: "line",
+      x: 0,
+      y: 0,
+      points: [point!.x, point!.y],
+      stroke:
+        panels.그리기.type === "eraser" ? "white" : panels.그리기.strokeColor,
+      strokeWidth: panels.그리기.strokeWidthValue,
+    };
+    setCurrentLine(update);
   };
 
-  const handleDrawMouseMove = (event: any) => {
+  const onDrawiong = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (!isDrawing) return;
 
     const stage = event.target.getStage();
-    const point = stage.getPointerPosition();
-    updateLastLine([point.x, point.y]);
+    const point = stage!.getPointerPosition();
+    const updatedLine = {
+      ...currentLine,
+      points: [...currentLine!.points, point!.x, point!.y],
+    };
+    setCurrentLine(updatedLine);
   };
 
-  const handleDrawMouseUp = () => {
+  const onDrawEnd = () => {
     stopDrawing();
+    if (currentLine) {
+      setShapes([...shapes, currentLine]);
+      setCurrentLine(null);
+    }
   };
 
   return {
-    lines,
-    handleDrawMouseDown,
-    handleDrawMouseMove,
-    handleDrawMouseUp,
+    currentLine,
+    onDrawStart,
+    onDrawEnd,
+    onDrawiong,
   };
 };
 
