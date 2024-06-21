@@ -63,7 +63,7 @@ const SignUp = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log(data);
     // 회원가입 로직 추가
   };
