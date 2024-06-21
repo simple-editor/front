@@ -3,7 +3,6 @@ import IconButtonRadius from "../../shared/ui/icon-button-radius";
 import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import EraserSvg from "@/assets/icons/eraser.svg?react";
 import DropDown from "@/shared/ui/drop-down";
-import { useState } from "react";
 import useToolbarStore from "@/shared/store/toolbar-store";
 
 const lineSizes = [
@@ -14,11 +13,9 @@ const lineSizes = [
   { title: "Extra large", value: 16 },
 ];
 const DrawPanel = () => {
-  const [selected, setSelected] = useState(lineSizes[2]);
-  const activeTool = useToolbarStore((state) => state.activeTool);
   const setPanels = useToolbarStore((state) => state.setPanels);
-  const toolType = useToolbarStore((state) => state.panels.그리기.type);
-  
+  const drawPanel = useToolbarStore((state) => state.panels.그리기);
+
   const handleSelectToolType = (type: "pen" | "eraser") => {
     setPanels("그리기", { type: type });
   };
@@ -42,7 +39,10 @@ const DrawPanel = () => {
         <SubTitle>두께</SubTitle>
         <DropDown
           data={lineSizes}
-          selected={selected}
+          selected={{
+            title: drawPanel.strokeWidthTitle,
+            value: drawPanel.strokeWidthValue,
+          }}
           onClick={handleDropDown}
         />
       </ThicknessPicker>
@@ -50,13 +50,13 @@ const DrawPanel = () => {
         <SubTitle>도구</SubTitle>
         <ToolButtonGroup>
           <IconButtonRadius
-            isActive={toolType === "pen"}
+            isActive={drawPanel.type === "pen"}
             size="small"
             onClick={() => handleSelectToolType("pen")}
             icon={<CustomPencilSvg />}
           />
           <IconButtonRadius
-            isActive={toolType === "eraser"}
+            isActive={drawPanel.type === "eraser"}
             size="small"
             onClick={() => handleSelectToolType("eraser")}
             icon={<CustomEraserSvg />}

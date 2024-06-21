@@ -11,9 +11,9 @@ export const useTransformer = <T extends Konva.Shape>({
   transformer: React.MutableRefObject<Konva.Transformer>;
 }) => {
   useEffect(() => {
-    if (isSelected) {
+    if (isSelected && transformer.current && ref.current) {
       transformer.current.nodes([ref.current]);
-      transformer.current.getLayer().batchDraw();
+      transformer.current.getLayer()?.batchDraw();
     }
-  }, [isSelected]);
+  }, [isSelected, ref, transformer]);
 };

@@ -24,7 +24,7 @@ const TransformerbleImage = ({
     if (isSelected && trRef.current && shapeRef.current) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
+      trRef.current.getLayer()!.batchDraw();
     }
   }, [isSelected]);
 
@@ -46,7 +46,7 @@ const TransformerbleImage = ({
             y: e.target.y(),
           });
         }}
-        onTransformEnd={(e) => {
+        onTransformEnd={() => {
           const node = shapeRef.current;
           if (!node) return;
           const scaleX = node.scaleX();
