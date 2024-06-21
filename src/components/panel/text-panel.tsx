@@ -4,25 +4,55 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
 import { ColorResult, SketchPicker } from "react-color";
-const data = ["Extra small", "Small", "Medium", "Large", "Extra large"];
-
+import useToolbarStore from "@/shared/store/toolbar-store";
+import useHistoryStore from "@/shared/store/history-store";
+const fontSizes = [
+  { title: "Extra small", value: 8 },
+  { title: "Small", value: 12 },
+  { title: "Medium", value: 16 },
+  { title: "Large", value: 24 },
+  { title: "Extra large", value: 32 },
+];
 const TextPanel = () => {
   const [isActive, setIsActive] = useState(false);
   const [color, setColor] = useState("#000");
-  const [fontSize, setFontSize] = useState("Medium");
-  const [fontFamily, setFontFamily] = useState("");
-  const handleClick = (item: string) => {
-    setFontSize(item);
+  const { setShapes, shapes } = useHistoryStore((state) => state);
+  const setPanels = useToolbarStore((state) => state.setPanels);
+  const panels = useToolbarStore((state) => state.panels);
+  const selectedDropDwonItem = {
+    title: panels.텍스트.fontSizeTitle,
+    value: panels.텍스트.fontSizeValue,
   };
 
   const handleChangeComplete = (color: ColorResult) => {
     setColor(color.hex);
   };
 
+  const handleDropDown = (item: { title: string; value: number | string }) => {
+    if (typeof item.value === "number") {
+      setPanels("텍스트", {
+        fontSizeTitle: item.title,
+        fontSizeValue: item.value,
+      });
+    }
+  };
 
-  const updateFontSize = () => {
-    
-  }
+  const handleAddText = () => {
+    const stage = document.getElementById("stage");
+    const stageWidth = stage!.offsetWidth;
+    const stageHeight = stage!.offsetHeight;
+    const newText = {
+      id: `text${shapes.length + 1}`,
+      type: "text",
+      x: stageWidth / 2,
+      y: stageHeight / 2,
+      text: "Edit me!",
+      fontSize: panels.텍스트.fontSizeValue,
+      draggable: true,
+    };
+    setShapes([...shapes, newText]);
+  };
+
   return (
     <>
       <ColorPickerWrapper>
@@ -36,14 +66,14 @@ const TextPanel = () => {
         )}
       </ColorPickerWrapper>
       <ThicknessPicker>
-        <SubTitle>폰트</SubTitle>
-        <DropDown data={data} selected={fontSize} onClick={handleClick} />
-      </ThicknessPicker>
-      <ThicknessPicker>
         <SubTitle>사이즈</SubTitle>
-        <DropDown data={data} selected={fontFamily} onClick={handleClick} />
+        <DropDown
+          data={fontSizes}
+          selected={selectedDropDwonItem}
+          onClick={handleDropDown}
+        />
       </ThicknessPicker>
-      <ToolPicker>
+      <ToolPicker onClick={handleAddText}>
         <SubTitle>추가</SubTitle>
         <IconButton size="small" icon={<TextIcon />} />
       </ToolPicker>

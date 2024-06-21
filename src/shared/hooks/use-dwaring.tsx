@@ -3,7 +3,7 @@ import Konva from "konva";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const useDrawing = (shapes, setShapes) => {
+const useDrawing = ({ shapes, setShapes }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentLine, setCurrentLine] = useState<Konva.ShapeConfig | null>(
     null

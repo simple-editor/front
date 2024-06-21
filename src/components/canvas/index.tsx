@@ -9,19 +9,20 @@ import useHistoryStore from "@/shared/store/history-store";
 import DrawingLayer from "@/components/canvas/drawing-layer";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import useFileUpload from "@/shared/hooks/use-file-upload";
+import TextEdit from "./text-edit";
 
 const Canvas = () => {
   const stageRef = useRef<Konva.Stage>(null);
   const groupRef = useRef(null); // 그룹 참조를 위한 ref
   const inputRef = useRef<HTMLInputElement>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { shapes, setShapes } = useHistoryStore((state) => state);
   const activeTool = useToolbarStore((state) => state.activeTool);
-  
-  const { onDrawStart, onDrawiong, onDrawEnd, currentLine } = useDrawing(
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
+
+  const { onDrawStart, onDrawiong, onDrawEnd, currentLine } = useDrawing({
     shapes,
-    setShapes
-  );
+    setShapes,
+  });
 
   const { handleDragUploadEnd, handleDragUploadStart } = useFileUpload({
     shapes,
@@ -83,9 +84,15 @@ const Canvas = () => {
       )}
 
       <Stage
+        id="stage"
         ref={stageRef}
         width={1440}
         height={704}
+        onClick={(e) => {
+          if (e.currentTarget._id === e.target._id) {
+            setSelectedId(null);
+          }
+        }}
         style={{
           position: "absolute",
           top: 0,
@@ -116,7 +123,14 @@ const Canvas = () => {
                 case "line":
                   return <DrawingLayer line={shape} key={shape.id} />;
                 case "text":
-                  return null;
+                  return (
+                    <TextEdit
+                      shape={shape}
+                      updateShape={updateShape}
+                      isSelected={shape.id === selectedId}
+                      onSelect={handleSelect}
+                    />
+                  );
                 // 다른 shape 타입도 추가 가능
                 default:
                   return null;
