@@ -1,19 +1,29 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import ArrowDownSvg from "@/assets/icons/arrow-down.svg?react";
+import { CSSObject, SerializedStyles } from "@emotion/react";
 
 interface IDropDownData {
   title: string;
   value: string | number;
 }
 
-interface IDropDownProps {
+interface IDropDownProps extends IStyles {
   data: IDropDownData[];
   selected: IDropDownData;
   onClick: (item: IDropDownData) => void;
 }
 
-const DropDown = ({ data, selected, onClick }: IDropDownProps) => {
+interface IStyles {
+  customStyles?: SerializedStyles | CSSObject;
+}
+
+const DropDown = ({
+  data,
+  selected,
+  onClick,
+  customStyles,
+}: IDropDownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const filter = data.filter((item) => item.title !== selected.title);
   const toggleDropdown = () => {
@@ -21,7 +31,7 @@ const DropDown = ({ data, selected, onClick }: IDropDownProps) => {
   };
 
   return (
-    <DropdownContainer>
+    <DropdownContainer customStyles={customStyles}>
       <DropdownButton onClick={toggleDropdown}>
         {selected.title} <ArrowIcon />
       </DropdownButton>
@@ -39,10 +49,11 @@ const DropDown = ({ data, selected, onClick }: IDropDownProps) => {
 };
 
 export default DropDown;
-const DropdownContainer = styled.div`
+const DropdownContainer = styled.div<IStyles>`
   position: relative;
   display: inline-block;
   width: 140px;
+  ${(props) => props.customStyles}
 `;
 
 const DropdownButton = styled.button`
@@ -60,6 +71,7 @@ const DropdownButton = styled.button`
 
 const DropdownMenu = styled.div`
   position: absolute;
+  width: 100%;
   bottom: 100%; /* 아이템이 위로 향하게 설정 */
   left: 0;
   background-color: white;
@@ -71,7 +83,7 @@ const DropdownMenu = styled.div`
 `;
 
 const DropdownItem = styled.div`
-  width: 140px;
+  width: 100%;
   height: 40px;
   padding: 12px 16px;
   cursor: pointer;
