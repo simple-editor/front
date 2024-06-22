@@ -1,25 +1,26 @@
-import { css } from "@emotion/react";
+import { CSSObject, css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 interface IEventProps extends IProps {
   onClick?: () => void;
+  icon: React.ReactNode;
 }
 
 interface IProps {
-  icon: React.ReactNode;
   size: "small" | "large";
+  styles: CSSObject;
 }
 
-const IconButton = ({ icon, size, onClick }: IEventProps) => {
+const IconButton = ({ icon, size, onClick, styles }: IEventProps) => {
   return (
-    <Wrapper size={size} onClick={onClick}>
+    <Wrapper size={size} onClick={onClick} styles={styles} type="button">
       {icon}
     </Wrapper>
   );
 };
 
 export default IconButton;
-const Wrapper = styled.button<{ size: "small" | "large" }>`
+const Wrapper = styled.button<IProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,8 +33,8 @@ const Wrapper = styled.button<{ size: "small" | "large" }>`
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray10};
   }
-
   ${(props) => (props.size === "small" ? smallSizes : largeSizes)}
+  ${(props) => props.styles} // 커스텀 스타일
 `;
 
 const smallSizes = css`

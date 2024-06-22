@@ -1,9 +1,10 @@
-import { css } from "@emotion/react";
+import { CSSObject, css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 interface ISizeProps {
   size: "small" | "large";
   isActive?: boolean;
+  styles: CSSObject;
 }
 
 interface IProps extends ISizeProps {
@@ -11,10 +12,21 @@ interface IProps extends ISizeProps {
   onClick: () => void;
 }
 
-const IconButtonRadius = ({ size, icon, isActive, onClick }: IProps) => {
+const IconButtonRadius = ({
+  size,
+  icon,
+  isActive,
+  onClick,
+  styles,
+}: IProps) => {
   return (
     <>
-      <Wrapper size={size} isActive={isActive} onClick={onClick}>
+      <Wrapper
+        size={size}
+        isActive={isActive}
+        onClick={onClick}
+        styles={styles}
+      >
         {icon}
       </Wrapper>
     </>
@@ -40,7 +52,7 @@ const Wrapper = styled.button<ISizeProps>`
   &:first-of-type {
     border-right: 1px solid ${({ theme }) => theme.colors.gray30}; /* 버튼 사이의 경계선 */
   }
-
+  ${(props) => props.styles}
   ${(props) => (props.size === "small" ? smallSizes : largeSizes)}
 `;
 
