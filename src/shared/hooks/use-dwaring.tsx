@@ -2,19 +2,19 @@ import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { IShapeBase } from "@/components/canvas/types";
 
-const useDrawing = ({ shapes, setShapes }: any) => {
+const useDrawing = ({ shapes, setShapes }: IShapeBase) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentLine, setCurrentLine] = useState<Konva.ShapeConfig | null>(
     null
   );
-
   const { panels } = useToolbarStore((state) => state);
 
   const startDrawing = () => setIsDrawing(true);
   const stopDrawing = () => setIsDrawing(false);
 
-  const onDrawStart = (event: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleDrawStart = (event: Konva.KonvaEventObject<MouseEvent>) => {
     startDrawing();
     const stage = event.target.getStage();
 
@@ -32,7 +32,7 @@ const useDrawing = ({ shapes, setShapes }: any) => {
     setCurrentLine(update);
   };
 
-  const onDrawiong = (event: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleDrawiong = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (!isDrawing) return;
 
     const stage = event.target.getStage();
@@ -44,7 +44,7 @@ const useDrawing = ({ shapes, setShapes }: any) => {
     setCurrentLine(updatedLine);
   };
 
-  const onDrawEnd = () => {
+  const handleDrawEnd = () => {
     stopDrawing();
     if (currentLine) {
       setShapes([...shapes, currentLine]);
@@ -54,9 +54,9 @@ const useDrawing = ({ shapes, setShapes }: any) => {
 
   return {
     currentLine,
-    onDrawStart,
-    onDrawEnd,
-    onDrawiong,
+    handleDrawStart,
+    handleDrawEnd,
+    handleDrawiong,
   };
 };
 

@@ -3,7 +3,6 @@ import Button from "@/shared/ui/button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
 import Svg from "@/assets/icons/close.svg?react";
 import IconButton from "@/shared/ui/icon-button";
 // 유효성 검사 스키마 정의

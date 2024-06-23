@@ -5,7 +5,7 @@ interface IProps {
   line: Konva.ShapeConfig;
 }
 
-const DrawingLayer = ({ line }: IProps) => {
+const FreeDrawing = ({ line }: IProps) => {
   return (
     <>
       <Line
@@ -20,4 +20,4 @@ const DrawingLayer = ({ line }: IProps) => {
   );
 };
 
-export default DrawingLayer;
+export default FreeDrawing

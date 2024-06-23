@@ -6,10 +6,10 @@ import Konva from "konva";
 import useDrawing from "@/shared/hooks/use-dwaring";
 import TransformableImage from "@/components/canvas/transformerble-image";
 import useHistoryStore from "@/shared/store/history-store";
-import DrawingLayer from "@/components/canvas/drawing-layer";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import useFileUpload from "@/shared/hooks/use-file-upload";
-import TextEdit from "./text-edit";
+import EditableText from "@/components/canvas/editable-text";
+import FreeDrawing from "@/components/canvas/free-drawing";
 
 const Canvas = () => {
   const stageRef = useRef<Konva.Stage>(null);
@@ -19,10 +19,11 @@ const Canvas = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
 
-  const { onDrawStart, onDrawiong, onDrawEnd, currentLine } = useDrawing({
-    shapes,
-    setShapes,
-  });
+  const { handleDrawStart, handleDrawEnd, handleDrawiong, currentLine } =
+    useDrawing({
+      shapes,
+      setShapes,
+    });
 
   const { handleDragUploadEnd, handleDragUploadStart } = useFileUpload({
     shapes,
@@ -35,14 +36,14 @@ const Canvas = () => {
       setSelectedId(null);
     }
 
-    if (activeTool === "그리기") onDrawStart(event);
+    if (activeTool === "그리기") handleDrawStart(event);
   };
   const handleMouseMove = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    if (activeTool === "그리기") onDrawiong(event);
+    if (activeTool === "그리기") handleDrawiong(event);
   };
 
   const handleMouseUp = () => {
-    if (activeTool === "그리기") onDrawEnd();
+    if (activeTool === "그리기") handleDrawEnd();
   };
 
   const handleSelect = (id: string) => {
@@ -83,7 +84,7 @@ const Canvas = () => {
         </Box>
       )}
 
-      <Stage
+      <CustomStage
         id="stage"
         ref={stageRef}
         width={1440}
@@ -92,13 +93,6 @@ const Canvas = () => {
           if (e.currentTarget._id === e.target._id) {
             setSelectedId(null);
           }
-        }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -121,10 +115,10 @@ const Canvas = () => {
                 case "circle":
                   return null;
                 case "line":
-                  return <DrawingLayer line={shape} key={shape.id} />;
+                  return <FreeDrawing line={shape} key={shape.id} />;
                 case "text":
                   return (
-                    <TextEdit
+                    <EditableText
                       shape={shape}
                       updateShape={updateShape}
                       isSelected={shape.id === selectedId}
@@ -139,7 +133,7 @@ const Canvas = () => {
             {currentLine && <Line {...{ ...currentLine }} />}
           </Group>
         </Layer>
-      </Stage>
+      </CustomStage>
     </WorkAreaContainer>
   );
 };
@@ -171,3 +165,11 @@ const Box = styled.div`
 `;
 
 const CustomButton = styled(Button)``;
+
+const CustomStage = styled(Stage)`
+  position: "absolute";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;

@@ -10,7 +10,7 @@ interface IProps {
   updateShape: (updatedShape: Konva.ShapeConfig) => void;
 }
 
-const TextEdit = ({ isSelected, onSelect, updateShape, shape }: IProps) => {
+const EditableText = ({ isSelected, onSelect, updateShape, shape }: IProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [points, setPoints] = useState({
     x: shape.x,
@@ -106,4 +106,4 @@ const TextEdit = ({ isSelected, onSelect, updateShape, shape }: IProps) => {
   );
 };
 
-export default TextEdit;
+export default EditableText;
