@@ -8,7 +8,7 @@ interface IEventProps extends IProps {
 
 interface IProps {
   size: "small" | "large";
-  styles: CSSObject;
+  styles?: CSSObject;
 }
 
 const IconButton = ({ icon, size, onClick, styles }: IEventProps) => {

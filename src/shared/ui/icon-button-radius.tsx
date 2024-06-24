@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 interface ISizeProps {
   size: "small" | "large";
   isActive?: boolean;
-  styles: CSSObject;
+  styles?: CSSObject;
 }
 
 interface IProps extends ISizeProps {

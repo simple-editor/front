@@ -17,11 +17,11 @@ const TextPanel = () => {
   const [isActive, setIsActive] = useState(false);
   const [color, setColor] = useState("#000");
   const { setShapes, shapes } = useHistoryStore((state) => state);
-  const setPanels = useToolbarStore((state) => state.setPanels);
-  const panels = useToolbarStore((state) => state.panels);
+  const { setTextTools, text: textTools } = useToolbarStore((state) => state);
+
   const selectedDropDwonItem = {
-    title: panels.텍스트.fontSizeTitle,
-    value: panels.텍스트.fontSizeValue,
+    title: textTools.fontSizeTitle,
+    value: textTools.fontSizeValue,
   };
 
   const handleChangeComplete = (color: ColorResult) => {
@@ -30,7 +30,7 @@ const TextPanel = () => {
 
   const handleDropDown = (item: { title: string; value: number | string }) => {
     if (typeof item.value === "number") {
-      setPanels("텍스트", {
+      setTextTools({
         fontSizeTitle: item.title,
         fontSizeValue: item.value,
       });
@@ -47,7 +47,7 @@ const TextPanel = () => {
       x: stageWidth / 2,
       y: stageHeight / 2,
       text: "Edit me!",
-      fontSize: panels.텍스트.fontSizeValue,
+      fontSize: textTools.fontSizeValue,
       draggable: true,
     };
     setShapes([...shapes, newText]);
