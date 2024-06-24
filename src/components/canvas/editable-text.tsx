@@ -2,22 +2,22 @@ import Konva from "konva";
 import { useCallback, useEffect, useState } from "react";
 import { Text } from "react-konva";
 import EditableTextInput from "./editable-text-Input";
+import useHistoryStore from "@/shared/store/history-store";
 
 interface IProps {
   shape: Konva.ShapeConfig;
   isSelected: boolean;
-  onSelect: (id: string) => void;
-  updateShape: (updatedShape: Konva.ShapeConfig) => void;
+  onSelect: () => void;
 }
 
-const TextEdit = ({ isSelected, onSelect, updateShape, shape }: IProps) => {
+const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [points, setPoints] = useState({
     x: shape.x,
     y: shape.y,
   });
   const [textValue, setTextValue] = useState(shape.text);
-
+  const updateShape = useHistoryStore((state) => state.updateShape);
   const { id } = shape;
 
   //텍스트가 편집을 on/Off가 필요한 이벤트가 필요함.
@@ -35,7 +35,7 @@ const TextEdit = ({ isSelected, onSelect, updateShape, shape }: IProps) => {
   const handleTextEdit = () => {
     if (typeof id === "string") {
       setIsEdit(true);
-      onSelect(id);
+      onSelect();
       setTextValue(shape.text);
     }
   };
@@ -106,4 +106,4 @@ const TextEdit = ({ isSelected, onSelect, updateShape, shape }: IProps) => {
   );
 };
 
-export default TextEdit;
+export default EditableText;

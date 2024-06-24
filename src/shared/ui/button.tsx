@@ -1,4 +1,4 @@
-import { Theme, css } from "@emotion/react";
+import { CSSObject, Theme, css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 interface IProps extends IWrapperProps {
@@ -8,14 +8,15 @@ interface IProps extends IWrapperProps {
 
 interface IWrapperProps {
   size: "small" | "large";
+  styles?: CSSObject;
 }
 interface IThemeProps {
   theme: Theme;
 }
 
-const Button = ({ title, size, onClick }: IProps) => {
+const Button = ({ title, size, onClick, styles }: IProps) => {
   return (
-    <Wrapper size={size} onClick={onClick}>
+    <Wrapper size={size} onClick={onClick} styles={styles}>
       {title}
     </Wrapper>
   );
@@ -45,4 +46,5 @@ const Wrapper = styled.button<IWrapperProps>`
   color: #fff;
   ${(props) => (props.size === "small" ? smallSizes : largeSizes)};
   cursor: pointer;
+  ${(props) => props.styles}// 커스텀 스타일
 `;

@@ -1,9 +1,9 @@
 import { create } from "zustand";
-type TypeTool = "그리기" | "텍스트" | "이모지" | "프레임" | "필터" | "자르기";
+type DrawAction = "그리기" | "텍스트" | "이모지" | "프레임" | "필터" | "자르기";
 export interface IToolbar extends IPanel {
-  activeTool: TypeTool | string;
-  setActiveTool: (tool: TypeTool | string) => void;
-  setPanels: <T extends TypeTool>(
+  activeTool: DrawAction | string;
+  setActiveTool: (tool: DrawAction | string) => void;
+  setPanels: <T extends DrawAction>(
     tool: T,
     settings: Partial<IPanel["panels"][T]>
   ) => void;
@@ -52,7 +52,7 @@ const useToolbarStore = create<IToolbar>()((set) => ({
     },
   },
 
-  setPanels: (tool: TypeTool, settings: Partial<ToolSettings>) =>
+  setPanels: (tool: DrawAction, settings: Partial<ToolSettings>) =>
     set((state) => ({
       panels: {
         ...state.panels,

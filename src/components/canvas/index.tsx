@@ -1,28 +1,23 @@
 import styled from "@emotion/styled";
 import Button from "../../shared/ui/button";
-import { Stage, Layer, Group, Line } from "react-konva";
-import { useRef, useState } from "react";
+import { Stage } from "react-konva";
+import { useEffect, useRef, useState } from "react";
 import Konva from "konva";
-import useDrawing from "@/shared/hooks/use-dwaring";
-import TransformableImage from "@/components/canvas/transformerble-image";
 import useHistoryStore from "@/shared/store/history-store";
-import DrawingLayer from "@/components/canvas/drawing-layer";
-import useToolbarStore from "@/shared/store/toolbar-store";
 import useFileUpload from "@/shared/hooks/use-file-upload";
-import TextEdit from "./text-edit";
+import useSelectStore from "@/shared/store/select-store";
+import CanvasLayer from "@/components/canvas/canvas-layer";
+import useMouseEventHandler from "@/shared/hooks/use-mouse-event-handler";
 
 const Canvas = () => {
   const stageRef = useRef<Konva.Stage>(null);
-  const groupRef = useRef(null); // 그룹 참조를 위한 ref
   const inputRef = useRef<HTMLInputElement>(null);
-  const activeTool = useToolbarStore((state) => state.activeTool);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
+  const { shapes, setShapes } = useHistoryStore((state) => state);
+  const image = shapes.find((shape) => shape.type === "image");
+  const cancelSelection = useSelectStore((state) => state.cancelSelection);
 
-  const { onDrawStart, onDrawiong, onDrawEnd, currentLine } = useDrawing({
-    shapes,
-    setShapes,
-  });
+  const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
+    useMouseEventHandler({ shapes, setShapes });
 
   const { handleDragUploadEnd, handleDragUploadStart } = useFileUpload({
     shapes,
@@ -30,24 +25,6 @@ const Canvas = () => {
     stageRef,
   }); //이미지 드래그 업로드
 
-  const handleMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    if (event.target === stageRef.current) {
-      setSelectedId(null);
-    }
-
-    if (activeTool === "그리기") onDrawStart(event);
-  };
-  const handleMouseMove = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    if (activeTool === "그리기") onDrawiong(event);
-  };
-
-  const handleMouseUp = () => {
-    if (activeTool === "그리기") onDrawEnd();
-  };
-
-  const handleSelect = (id: string) => {
-    setSelectedId(id);
-  };
   const handleChange = (newImage: Konva.ShapeConfig) => {
     const find = shapes.map((shape) => {
       if (shape.id === newImage.id) {
@@ -59,9 +36,43 @@ const Canvas = () => {
 
     setShapes(find);
   };
+  useEffect(() => {
+    const stage = stageRef.current;
+    const layer = stage?.children[0];
+
+    if (image && layer) {
+      // 클립 영역 설정
+
+      layer.clip({
+        x: image.x as number,
+        y: image.y as number,
+        width: image.width as number,
+        height: image.height as number,
+      });
+    }
+  }, [image]);
+
+  const handleDragEnd = (e) => {
+    const shape = e.target;
+    const { x, y, width, height } = shape.getClientRect();
+    // 이미지 영역 밖으로 나갔는지 체크
+    if (
+      x < 0 ||
+      y < 0 ||
+      x + width > image.width ||
+      y + height > image.height
+    ) {
+      // 투명화 처리
+      shape.opacity(0);
+    } else {
+      // 원래 투명도로 복원
+      shape.opacity(1);
+    }
+    shape.getLayer().batchDraw();
+  };
 
   return (
-    <WorkAreaContainer
+    <CanvasWrapper
       onDragOver={handleDragUploadStart}
       onDrop={handleDragUploadEnd}
     >
@@ -83,69 +94,33 @@ const Canvas = () => {
         </Box>
       )}
 
-      <Stage
+      <CustomStage
         id="stage"
         ref={stageRef}
         width={1440}
         height={704}
         onClick={(e) => {
           if (e.currentTarget._id === e.target._id) {
-            setSelectedId(null);
+            cancelSelection();
           }
-        }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onDragEnd={handleDragEnd}
       >
-        <Layer>
-          <Group ref={groupRef}>
-            {shapes.map((shape) => {
-              switch (shape.type) {
-                case "image":
-                  return (
-                    <TransformableImage
-                      key={shape.id}
-                      image={shape}
-                      isSelected={shape.id === selectedId}
-                      onSelect={() => handleSelect(String(shape.id))}
-                      onChange={handleChange}
-                    />
-                  );
-                case "circle":
-                  return null;
-                case "line":
-                  return <DrawingLayer line={shape} key={shape.id} />;
-                case "text":
-                  return (
-                    <TextEdit
-                      shape={shape}
-                      updateShape={updateShape}
-                      isSelected={shape.id === selectedId}
-                      onSelect={handleSelect}
-                    />
-                  );
-                // 다른 shape 타입도 추가 가능
-                default:
-                  return null;
-              }
-            })}
-            {currentLine && <Line {...{ ...currentLine }} />}
-          </Group>
-        </Layer>
-      </Stage>
-    </WorkAreaContainer>
+        <CanvasLayer
+          shapes={shapes}
+          handleChange={handleChange}
+          currentLine={currentLine}
+        />
+      </CustomStage>
+    </CanvasWrapper>
   );
 };
 
 export default Canvas;
-const WorkAreaContainer = styled.div`
+const CanvasWrapper = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.colors.gray10};
   border: 1px solid ${({ theme }) => theme.colors.gray30};
@@ -171,3 +146,10 @@ const Box = styled.div`
 `;
 
 const CustomButton = styled(Button)``;
+
+const CustomStage = styled(Stage)`
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+`;

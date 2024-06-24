@@ -1,12 +1,24 @@
 import styled from "@emotion/styled";
 import Button from "./button";
 import TestSVG from "@/assets/icons/logo.svg?react";
+import { useOverlay } from "@/shared/hooks/use-oveylay/use-overlay";
+import SignIn from "@/components/sign-in";
+
 const Header = () => {
+  const overlay = useOverlay();
   return (
     <Wrapper>
       <GNBContainer>
         <Logo />
-        <Button size="small" title="로그인" />
+        <Button
+          size="small"
+          title="로그인"
+          onClick={() => {
+            overlay.open(({ isOpen, close }) => {
+              return <SignIn open={isOpen} onClose={close} />;
+            });
+          }}
+        />
       </GNBContainer>
     </Wrapper>
   );
