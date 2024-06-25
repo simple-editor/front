@@ -7,7 +7,7 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
   const [currentLine, setCurrentLine] = useState<Konva.ShapeConfig | null>(
     null
   );
-  const { activeTool, panels } = useToolbarStore((state) => state);
+  const { activeTool, line: lineTools } = useToolbarStore((state) => state);
 
   const isPaintRef = useRef(false);
   const currentShapeRef = useRef<string>();
@@ -21,7 +21,7 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
     const id = uuidv4();
     currentShapeRef.current = id;
 
-    const drawType = panels.그리기.type;
+    const { type, strokeColor, strokeWidthValue } = lineTools;
     switch (activeTool) {
       case "그리기": {
         const update = {
@@ -30,8 +30,8 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
           x: 0,
           y: 0,
           points: [x, y],
-          stroke: drawType === "eraser" ? "white" : panels.그리기.strokeColor,
-          strokeWidth: panels.그리기.strokeWidthValue,
+          stroke: type === "eraser" ? "white" : strokeColor,
+          strokeWidth: strokeWidthValue,
         };
         setCurrentLine(update);
       }

@@ -13,16 +13,16 @@ const lineSizes = [
   { title: "Extra large", value: 16 },
 ];
 const DrawPanel = () => {
-  const setPanels = useToolbarStore((state) => state.setPanels);
-  const drawPanel = useToolbarStore((state) => state.panels.그리기);
+  const setLineTools = useToolbarStore((state) => state.setLineTools);
+  const lineTools = useToolbarStore((state) => state.line);
 
   const handleSelectToolType = (type: "pen" | "eraser") => {
-    setPanels("그리기", { type: type });
+    setLineTools({ type: type });
   };
 
   const handleDropDown = (item: { title: string; value: number | string }) => {
     if (typeof item.value === "number") {
-      setPanels("그리기", {
+      setLineTools({
         strokeWidthTitle: item.title,
         strokeWidthValue: item.value,
       });
@@ -40,8 +40,8 @@ const DrawPanel = () => {
         <DropDown
           data={lineSizes}
           selected={{
-            title: drawPanel.strokeWidthTitle,
-            value: drawPanel.strokeWidthValue,
+            title: lineTools.strokeWidthTitle,
+            value: lineTools.strokeWidthValue,
           }}
           onClick={handleDropDown}
         />
@@ -50,13 +50,13 @@ const DrawPanel = () => {
         <SubTitle>도구</SubTitle>
         <ToolButtonGroup>
           <IconButtonRadius
-            isActive={drawPanel.type === "pen"}
+            isActive={lineTools.type === "pen"}
             size="small"
             onClick={() => handleSelectToolType("pen")}
             icon={<CustomPencilSvg />}
           />
           <IconButtonRadius
-            isActive={drawPanel.type === "eraser"}
+            isActive={lineTools.type === "eraser"}
             size="small"
             onClick={() => handleSelectToolType("eraser")}
             icon={<CustomEraserSvg />}

@@ -9,5 +9,4 @@ export interface IShapeBase {
 export interface ICanvasLayerProps {
   shapes: IShapeState;
   currentLine: Konva.ShapeConfig | null;
-  handleChange: (newImage: Konva.ShapeConfig) => void;
 }

@@ -1,30 +1,23 @@
-import { Layer, Line } from "react-konva";
-import TransformableImage from "@/components/canvas/transformerble-image";
 import EditableText from "@/components/canvas/editable-text";
 import FreeDrawing from "@/components/canvas/free-drawing";
-
 import useSelectStore from "@/shared/store/select-store";
 import { ICanvasLayerProps } from "@/components/canvas/types";
+import UploadedImage from "./uploaded-image";
 
-const CanvasLayer = ({
-  shapes,
-  currentLine,
-  handleChange,
-}: ICanvasLayerProps) => {
+const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
   const { selectedId, setSelectedId } = useSelectStore((state) => state);
 
   return (
-    <Layer>
+    <>
       {shapes.map((shape) => {
         switch (shape.type) {
           case "image":
             return (
-              <TransformableImage
+              <UploadedImage
                 key={shape.id}
                 image={shape}
                 isSelected={shape.id === selectedId}
                 onSelect={() => setSelectedId(String(shape.id))}
-                onChange={handleChange}
               />
             );
           case "line":
@@ -43,8 +36,7 @@ const CanvasLayer = ({
             return null;
         }
       })}
-      {currentLine && <Line {...{ ...currentLine }} />}
-    </Layer>
+    </>
   );
 };
 
