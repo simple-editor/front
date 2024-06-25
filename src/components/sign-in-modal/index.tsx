@@ -5,6 +5,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Svg from "@/assets/icons/close.svg?react";
 import IconButton from "@/shared/ui/icon-button";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/react";
+
 // 유효성 검사 스키마 정의
 const schema = yup.object().shape({
   username: yup
@@ -17,7 +25,13 @@ const schema = yup.object().shape({
     .min(6, "비밀번호는 최소 6자 이상이어야 합니다."),
 });
 
-const SignIn = ({ onClose, open }: { open: boolean; onClose: () => void }) => {
+const SignInModal = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   const {
     register,
     handleSubmit,
@@ -34,65 +48,61 @@ const SignIn = ({ onClose, open }: { open: boolean; onClose: () => void }) => {
   };
 
   return (
-    <Wrapper>
-      <TitleSection>
-        <Title>로그인 및 회원가입</Title>
-      </TitleSection>
-      <ContentSection onSubmit={handleSubmit(onSubmit)}>
-        <FormInputSection>
-          <InputLabel>아이디</InputLabel>
-          <Input {...register("username")} />
-          {errors.username && (
-            <ErrorMessage>{errors.username.message}</ErrorMessage>
-          )}
-        </FormInputSection>
-        <FormInputSection>
-          <InputLabel>비밀번호</InputLabel>
-          <Input type="password" {...register("password")} />
-          {errors.password && (
-            <ErrorMessage>{errors.password.message}</ErrorMessage>
-          )}
-        </FormInputSection>
-        <NavSection>
-          <span>회원가입 |</span> <span>비밀번호 재설정</span>
-        </NavSection>
-        <LoginSection>
-          <Button title="로그인" size="small" styles={{ width: "100%" }} />
-        </LoginSection>
-        <CloseSection>
-          <CloseButton
-            size="small"
-            onClick={onClose}
-            icon={<Svg />}
-            styles={{ width: "40px", height: "40px" }}
-          />
-        </CloseSection>
-      </ContentSection>
+    <Wrapper onClose={onClose} isOpen={isOpen}>
+      <ModalOverlay />
+      <ModalContent>
+        <TitleSection>
+          <Title>로그인 및 회원가입</Title>
+        </TitleSection>
+        <ModalBody>
+          <ContentSection onSubmit={handleSubmit(onSubmit)}>
+            <FormInputSection>
+              <InputLabel>아이디</InputLabel>
+              <Input {...register("username")} />
+              {errors.username && (
+                <ErrorMessage>{errors.username.message}</ErrorMessage>
+              )}
+            </FormInputSection>
+            <FormInputSection>
+              <InputLabel>비밀번호</InputLabel>
+              <Input type="password" {...register("password")} />
+              {errors.password && (
+                <ErrorMessage>{errors.password.message}</ErrorMessage>
+              )}
+            </FormInputSection>
+            <NavSection>
+              <span>회원가입 |</span> <span>비밀번호 재설정</span>
+            </NavSection>
+            <LoginSection>
+              <Button title="로그인" size="small" styles={{ width: "100%" }} />
+            </LoginSection>
+            <CloseSection>
+              <CloseButton
+                size="small"
+                onClick={onClose}
+                icon={<Svg />}
+                styles={{ width: "40px", height: "40px" }}
+              />
+            </CloseSection>
+          </ContentSection>
+        </ModalBody>
+      </ModalContent>
     </Wrapper>
   );
 };
 
-export default SignIn;
+export default SignInModal;
 const ErrorMessage = styled.span`
   display: block;
   margin-top: 8px;
   color: red;
   font-size: 12px;
 `;
-const Wrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  background-color: #ffff;
-  border-radius: 20px;
+const Wrapper = styled(Modal)`
   width: 400px;
-  box-sizing: border-box;
-  margin: auto;
 `;
 
-const TitleSection = styled.section`
+const TitleSection = styled(ModalHeader)`
   text-align: center;
   padding: 16px;
 `;

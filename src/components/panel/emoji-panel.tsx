@@ -1,25 +1,21 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import styled from "@emotion/styled";
-import { useReducer } from "react";
+
 import IconButton from "../../shared/ui/icon-button";
 import EmojiSvg from "@/assets/icons/sidebar-smail.svg?react";
+
 const EmojiPanel = () => {
-  const [isOpen, toggleIsOpen] = useReducer((state) => {
-    return !state;
-  }, false);
   return (
     <>
       <ToolPicker>
         <SubTitle>추가</SubTitle>
-        <IconButton size="small" icon={<Emogji />} onClick={toggleIsOpen} />
+        <IconButton size="small" icon={<Emogji />} />
       </ToolPicker>
 
-      {isOpen && (
-        <CustomPicker>
-          <Picker data={data} onEmojiSelect={console.log} />
-        </CustomPicker>
-      )}
+      <CustomPicker>
+        <Picker data={data} onEmojiSelect={console.log} />
+      </CustomPicker>
     </>
   );
 };

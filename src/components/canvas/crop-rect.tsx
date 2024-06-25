@@ -1,9 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import useHistoryStore from "@/shared/store/history-store";
+import useToolbarStore from "@/shared/store/toolbar-store";
+import { useRef, useEffect } from "react";
 import { Rect, Transformer, Group } from "react-konva";
-
-const CropRect = ({ crop, onChange, imageBounds, onClick }) => {
-  const shapeRef = useRef();
-  const trRef = useRef();
+import { v4 as uuidv4 } from "uuid";
+const CropRect = ({ imageBounds, isRender }) => {
+  const { crop, setCropTools } = useToolbarStore((state) => state);
+  const { shapes, setShapes } = useHistoryStore((state) => state);
+  const shapeRef = useRef(null);
+  const trRef = useRef(null);
 
   useEffect(() => {
     if (trRef.current) {
@@ -11,6 +15,8 @@ const CropRect = ({ crop, onChange, imageBounds, onClick }) => {
       trRef.current.getLayer().batchDraw();
     }
   }, []);
+
+  if (!isRender) return <></>;
 
   const handleDragMove = (e) => {
     const { x, y } = e.target.position();
@@ -22,7 +28,7 @@ const CropRect = ({ crop, onChange, imageBounds, onClick }) => {
       imageBounds.y,
       Math.min(y, imageBounds.y + imageBounds.height - crop.height)
     );
-    onChange({ ...crop, x: newX, y: newY });
+    setCropTools({ ...crop, x: newX, y: newY });
   };
 
   const handleTransform = (e) => {
@@ -43,7 +49,7 @@ const CropRect = ({ crop, onChange, imageBounds, onClick }) => {
       Math.min(node.y(), imageBounds.y + imageBounds.height - newHeight)
     );
 
-    onChange({
+    setCropTools({
       x: newX,
       y: newY,
       width: newWidth,
@@ -63,11 +69,21 @@ const CropRect = ({ crop, onChange, imageBounds, onClick }) => {
     return { x: newX, y: newY };
   };
 
+  const handleDoubleClick = () => {
+    if (crop && imageBounds) {
+      setShapes([
+        ...shapes,
+        {
+          id: uuidv4(),
+          type: "crop",
+          ...crop,
+        },
+      ]);
+    }
+  };
+
   return (
     <Group>
-      {/* Overlay rect */}
-
-      {/* Crop area */}
       <Rect
         ref={shapeRef}
         x={crop.x}
@@ -75,15 +91,16 @@ const CropRect = ({ crop, onChange, imageBounds, onClick }) => {
         width={crop.width}
         height={crop.height}
         stroke="blue"
+        strokeWidth={2}
         fill="#000"
-        opacity={0.7}
+        opacity={0.3}
         draggable
         dragBoundFunc={dragBoundFunc}
         onDragMove={handleDragMove}
         onTransformEnd={handleTransform}
-        onDblClick={onClick}
+        onDblClick={handleDoubleClick}
       />
-      <Transformer ref={trRef} boundBoxFunc={(oldBox, newBox) => newBox} />
+      <Transformer ref={trRef} boundBoxFunc={(_oldbox, newBox) => newBox} />
     </Group>
   );
 };

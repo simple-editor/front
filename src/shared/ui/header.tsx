@@ -1,25 +1,18 @@
 import styled from "@emotion/styled";
 import Button from "./button";
 import TestSVG from "@/assets/icons/logo.svg?react";
-import { useOverlay } from "@/shared/hooks/use-oveylay/use-overlay";
-import SignIn from "@/components/sign-in";
+import SignInModal from "@/components/sign-in-modal";
+import { useDisclosure } from "@chakra-ui/react";
 
 const Header = () => {
-  const overlay = useOverlay();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Wrapper>
       <GNBContainer>
         <Logo />
-        <Button
-          size="small"
-          title="로그인"
-          onClick={() => {
-            overlay.open(({ isOpen, close }) => {
-              return <SignIn open={isOpen} onClose={close} />;
-            });
-          }}
-        />
+        <Button size="small" title="로그인" onClick={onOpen} />
       </GNBContainer>
+      <SignInModal isOpen={isOpen} onClose={onClose} />;
     </Wrapper>
   );
 };

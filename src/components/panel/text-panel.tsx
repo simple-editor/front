@@ -1,7 +1,7 @@
 import DropDown from "@/shared/ui/drop-down";
 import IconButton from "@/shared/ui/icon-button";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
 import { ColorResult, SketchPicker } from "react-color";
 import useToolbarStore from "@/shared/store/toolbar-store";
@@ -14,8 +14,10 @@ const fontSizes = [
   { title: "Extra large", value: 32 },
 ];
 const TextPanel = () => {
-  const [isActive, setIsActive] = useState(false);
   const [color, setColor] = useState("#000");
+  const [isOpen, toggleIsOpen] = useReducer((state) => {
+    return !state;
+  }, false);
   const { setShapes, shapes } = useHistoryStore((state) => state);
   const { setTextTools, text: textTools } = useToolbarStore((state) => state);
 
@@ -57,8 +59,8 @@ const TextPanel = () => {
     <>
       <ColorPickerWrapper>
         <SubTitle>색상</SubTitle>
-        <ColorCircle onClick={() => setIsActive(!isActive)} />
-        {isActive && (
+        <ColorCircle onClick={toggleIsOpen} />
+        {isOpen && (
           <CustomColorPicker
             color={color}
             onChangeComplete={handleChangeComplete}

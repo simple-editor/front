@@ -7,15 +7,9 @@ interface IProps {
   image: Konva.ShapeConfig;
   isSelected: boolean;
   onSelect: () => void;
-  onChange: (newImage: Konva.ShapeConfig) => void;
 }
 
-const TransformerbleImage = ({
-  image,
-  isSelected,
-  onSelect,
-  onChange,
-}: IProps) => {
+const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
   const [img] = useImage(image.src);
   const shapeRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);
@@ -44,4 +38,4 @@ const TransformerbleImage = ({
   );
 };
 
-export default TransformerbleImage;
+export default UploadedImage;

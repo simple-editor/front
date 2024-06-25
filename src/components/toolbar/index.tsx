@@ -2,8 +2,6 @@ import styled from "@emotion/styled";
 import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
 import SmailSvg from "@/assets/icons/sidebar-smail.svg?react";
-import FrameSvg from "@/assets/icons/sidebar-maximise.svg?react";
-import FilterSvg from "@/assets/icons/sidebar-filter.svg?react";
 import CropSvg from "@/assets/icons/sidebar-crop.svg?react";
 import ToolbarItem from "@/shared/ui/toolbar-item";
 
@@ -37,14 +35,6 @@ const list = [
   {
     title: "이모지",
     icon: <SmailSvg />,
-  },
-  {
-    title: "프레임",
-    icon: <FrameSvg />,
-  },
-  {
-    title: "필터",
-    icon: <FilterSvg />,
   },
   {
     title: "자르기",

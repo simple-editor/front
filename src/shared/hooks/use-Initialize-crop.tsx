@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import useToolbarStore from "../store/toolbar-store";
 
-const useCrop = ({ imageShape }) => {
-  const crop = useToolbarStore((state) => state.crop);
+const useInitializeCrop = ({ imageShape }) => {
   const setCropTools = useToolbarStore((state) => state.setCropTools);
-  const [croppedWidth, setCroppedWidth] = useState(null);
-  const [croppedHeight, setCroppedHeight] = useState(null);
 
   useEffect(() => {
     const initializeCrop = () => {
@@ -13,8 +10,8 @@ const useCrop = ({ imageShape }) => {
         setCropTools({
           x: imageShape.x,
           y: imageShape.y,
-          width: imageShape.width,
-          height: imageShape.height,
+          width: imageShape.width / 2,
+          height: imageShape.height / 2,
         });
       }
     };
@@ -22,7 +19,7 @@ const useCrop = ({ imageShape }) => {
       initializeCrop();
     }
   }, [imageShape, setCropTools]);
-  return { crop, setCropTools };
+  return;
 };
 
-export default useCrop;
+export default useInitializeCrop

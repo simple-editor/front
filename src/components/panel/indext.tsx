@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import DrawPanel from "./draw-panel";
 import TextPanel from "./text-panel";
-import FramePanel from "./frame-panel";
 import CropPanel from "./crop-panel";
 import EmojiPanel from "./emoji-panel";
 import useToolbarStore from "@/shared/store/toolbar-store";
@@ -17,10 +16,6 @@ const Panel = () => {
         return <TextPanel />;
       case "이모지":
         return <EmojiPanel />;
-      case "프레임":
-        return <FramePanel />;
-      case "필터":
-        return <FramePanel />;
       case "자르기":
         return <CropPanel />;
       default:
