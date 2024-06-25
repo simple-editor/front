@@ -1,24 +1,28 @@
 import useHistoryStore from "@/shared/store/history-store";
 import useToolbarStore from "@/shared/store/toolbar-store";
+import Konva from "konva";
 import { useRef, useEffect } from "react";
 import { Rect, Transformer, Group } from "react-konva";
 import { v4 as uuidv4 } from "uuid";
-const CropRect = ({ imageBounds, isRender }) => {
+const CropRect = ({ imageBounds, isRender }: any) => {
   const { crop, setCropTools } = useToolbarStore((state) => state);
   const { shapes, setShapes } = useHistoryStore((state) => state);
-  const shapeRef = useRef(null);
-  const trRef = useRef(null);
+  const shapeRef = useRef<Konva.Rect>(null);
+  const trRef = useRef<Konva.Transformer>(null);
 
   useEffect(() => {
-    if (trRef.current) {
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
+    if (trRef.current && shapeRef.current) {
+      const layer = trRef.current.getLayer();
+      if (layer) {
+        trRef.current.nodes([shapeRef.current]);
+        layer.batchDraw();
+      }
     }
   }, []);
 
   if (!isRender) return <></>;
 
-  const handleDragMove = (e) => {
+  const handleDragMove = (e: any) => {
     const { x, y } = e.target.position();
     const newX = Math.max(
       imageBounds.x,
@@ -31,8 +35,8 @@ const CropRect = ({ imageBounds, isRender }) => {
     setCropTools({ ...crop, x: newX, y: newY });
   };
 
-  const handleTransform = (e) => {
-    const node = shapeRef.current;
+  const handleTransform = () => {
+    const node = shapeRef.current as Konva.Rect;
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
     node.scaleX(1);
@@ -57,7 +61,7 @@ const CropRect = ({ imageBounds, isRender }) => {
     });
   };
 
-  const dragBoundFunc = (pos) => {
+  const dragBoundFunc = (pos: any) => {
     const newX = Math.max(
       imageBounds.x,
       Math.min(pos.x, imageBounds.x + imageBounds.width - crop.width)
