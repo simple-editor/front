@@ -8,15 +8,16 @@ interface IProps extends IWrapperProps {
 
 interface IWrapperProps {
   size: "small" | "large";
+  color?: "white" | "black";
   styles?: CSSObject;
 }
 interface IThemeProps {
   theme: Theme;
 }
 
-const Button = ({ title, size, onClick, styles }: IProps) => {
+const Button = ({ title, size, onClick, styles, color = "black" }: IProps) => {
   return (
-    <Wrapper size={size} onClick={onClick} styles={styles}>
+    <Wrapper size={size} onClick={onClick} styles={styles} color={color}>
       {title}
     </Wrapper>
   );
@@ -34,17 +35,27 @@ const largeSizes = (props: IThemeProps) => css`
   font-size: 22px;
   ${props.theme.textStyles.h5}
 `;
+
+const white = (props: IThemeProps) => css`
+  border-color: ${props.theme.colors.gray30};
+  background: #fff;
+  color: #000;
+`;
+
 const Wrapper = styled.button<IWrapperProps>`
   display: inline-flex;
   padding: 0px 20px;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  border: 1px solid;
   background-color: ${({ theme }) => theme.colors.gray100};
-  border: none;
   border-radius: 8px;
   color: #fff;
   ${(props) => (props.size === "small" ? smallSizes : largeSizes)};
   cursor: pointer;
-  ${(props) => props.styles}// 커스텀 스타일
+  ${(props) => props.styles} // 커스텀 스타일
+  ${(props) => (props.size === "small" ? smallSizes : largeSizes)}
+  cursor: pointer;
+  ${(props) => props.color === "white" && white};
 `;

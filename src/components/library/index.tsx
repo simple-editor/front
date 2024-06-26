@@ -1,3 +1,4 @@
+import ConfirmModal from "@/components/library/confirm-modal";
 import Button from "@/shared/ui/button";
 import {
   Box,
@@ -9,6 +10,11 @@ import {
   Stack,
   Text,
   SimpleGrid,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 const Library = () => {
@@ -32,6 +38,7 @@ const Library = () => {
 export default Library;
 
 const CardComponent = () => {
+  const { onClose, onOpen, isOpen } = useDisclosure();
   return (
     <Card maxW="sm">
       <CardBody>
@@ -46,9 +53,24 @@ const CardComponent = () => {
             <Text color="blue.600" textStyle="smallText2">
               만료시간
             </Text>
-            <Text color="blue.600" textStyle="smallText2">
-              다운로드
-            </Text>
+            <Menu>
+              <MenuButton
+                px={4}
+                py={2}
+                transition="all 0.2s"
+                borderRadius="md"
+                borderWidth="1px"
+              >
+                File
+              </MenuButton>
+              <MenuList>
+                <ConfirmModal onClose={onClose} isOpen={isOpen} />
+                <MenuItem onClick={onOpen} color="white">
+                  New File
+                </MenuItem>
+                <MenuItem>New Window</MenuItem>
+              </MenuList>
+            </Menu>
           </Stack>
         </Stack>
       </CardBody>

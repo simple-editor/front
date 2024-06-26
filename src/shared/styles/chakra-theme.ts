@@ -1,6 +1,24 @@
-import { extendTheme } from "@chakra-ui/react";
+import { MenuButton, MenuItem, extendTheme } from "@chakra-ui/react";
 
 const chakraTheme = extendTheme({
+  components: {
+    MenuItem: {
+      baseStyle: {
+        _hover: {
+          bg: "inherit", // Hover 상태에서 배경색을 변경하지 않음
+          boxShadow: "none", // Hover 상태에서 그림자 효과를 제거함
+        },
+        _active: {
+          bg: "inherit", // Hover 상태에서 배경색을 변경하지 않음
+          boxShadow: "none", // Hover 상태에서 그림자 효과를 제거함
+        },
+        _focus: {
+          bg: "inherit", // Hover 상태에서 배경색을 변경하지 않음
+          boxShadow: "none", // Hover 상태에서 그림자 효과를 제거함
+        },
+      },
+    },
+  },
   colors: {
     gray: {
       100: "#000",
