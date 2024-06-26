@@ -1,8 +1,7 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import styled from "@emotion/styled";
-
-import IconButton from "../../shared/ui/icon-button";
+import IconButton from "@/shared/ui/icon-button";
 import EmojiSvg from "@/assets/icons/sidebar-smail.svg?react";
 
 const EmojiPanel = () => {

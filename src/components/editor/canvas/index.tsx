@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Konva from "konva";
 import useHistoryStore from "@/shared/store/history-store";
 import useSelectStore from "@/shared/store/select-store";
-import CanvasLayer from "@/components/canvas/canvas-layer";
+import CanvasLayer from "@/components/editor/canvas/canvas-layer";
 import useMouseEventHandler from "@/shared/hooks/use-mouse-event-handler";
 import useImageUpload from "@/shared/hooks/use-image-upload";
 import useToolbarStore from "@/shared/store/toolbar-store";

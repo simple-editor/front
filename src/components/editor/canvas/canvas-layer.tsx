@@ -1,7 +1,7 @@
-import EditableText from "@/components/canvas/editable-text";
-import FreeDrawing from "@/components/canvas/free-drawing";
+import EditableText from "@/components/editor/canvas/editable-text";
+import FreeDrawing from "@/components/editor/canvas/free-drawing";
 import useSelectStore from "@/shared/store/select-store";
-import { ICanvasLayerProps } from "@/components/canvas/types";
+import { ICanvasLayerProps } from "@/components/editor/canvas/types";
 import UploadedImage from "./uploaded-image";
 
 const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
