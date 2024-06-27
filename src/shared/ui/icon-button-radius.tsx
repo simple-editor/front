@@ -8,7 +8,7 @@ interface ISizeProps {
 }
 
 interface IProps extends ISizeProps {
-  icon: React.ReactElement;
+  icon: React.ReactNode;
   onClick: () => void;
 }
 
