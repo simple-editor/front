@@ -1,12 +1,11 @@
-import { IShapeBase } from "@/components/canvas/types";
+import { IShapeBase } from "@/components/editor/canvas/types";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useCallback, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { ILineShape } from "../store/history-store";
 const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
-  const [currentLine, setCurrentLine] = useState<Konva.ShapeConfig | null>(
-    null
-  );
+  const [currentLine, setCurrentLine] = useState<ILineShape | null>(null);
   const { activeTool, line: lineTools } = useToolbarStore((state) => state);
 
   const isPaintRef = useRef(false);
@@ -24,7 +23,7 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
     const { type, strokeColor, strokeWidthValue } = lineTools;
     switch (activeTool) {
       case "그리기": {
-        const update = {
+        const update: ILineShape = {
           id,
           type: "line",
           x: 0,
@@ -47,17 +46,17 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
     const x = point?.x || 0;
     const y = point?.y || 0;
     const id = currentShapeRef.current;
-
-    switch (activeTool) {
-      case "그리기": {
-        const updatedLine = {
-          ...currentLine,
-          id,
-          points: [...currentLine!.points, x, y],
-        };
-        setCurrentLine(updatedLine);
+    if (id && currentLine)
+      switch (activeTool) {
+        case "그리기": {
+          const updatedLine: ILineShape = {
+            ...currentLine,
+            id,
+            points: [...currentLine!.points, x, y],
+          };
+          setCurrentLine(updatedLine);
+        }
       }
-    }
   };
 
   const handleMouseUp = useCallback(() => {

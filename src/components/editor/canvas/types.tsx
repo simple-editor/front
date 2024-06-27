@@ -1,5 +1,4 @@
-import { IShapeState } from "@/shared/store/history-store";
-import Konva from "konva";
+import { ILineShape, IShapeState } from "@/shared/store/history-store";
 
 export interface IShapeBase {
   shapes: IShapeState;
@@ -8,5 +7,4 @@ export interface IShapeBase {
 
 export interface ICanvasLayerProps {
   shapes: IShapeState;
-  currentLine: Konva.ShapeConfig | null;
 }

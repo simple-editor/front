@@ -1,7 +1,59 @@
-import Konva from "konva";
 import { create } from "zustand";
 
-export type IShapeState = Konva.ShapeConfig[];
+interface IBaseShape {
+  id: string;
+  type: "text" | "line" | "image" | "crop" | "emoji";
+  x: number;
+  y: number;
+  draggable?: boolean;
+}
+
+// Specific shape types
+export interface ITextShape extends IBaseShape {
+  type: "text";
+  text: string;
+  fontSize: number;
+  fontFamily?: string;
+  fill?: string;
+  width?: number;
+  height?: number;
+}
+
+export interface ILineShape extends IBaseShape {
+  type: "line";
+  points: number[];
+  stroke: string;
+  strokeWidth: number;
+}
+
+export interface IImageShape extends IBaseShape {
+  type: "image";
+  width: number;
+  height: number;
+  src: string;
+}
+
+export interface ICropShape extends IBaseShape {
+  type: "crop";
+  width: number;
+  height: number;
+}
+
+export interface IEmojiShape extends IBaseShape {
+  type: "emoji";
+  text: string;
+  fontSize: number;
+}
+
+// Union type for all shapes
+export type IShape =
+  | ITextShape
+  | ILineShape
+  | IImageShape
+  | ICropShape
+  | IEmojiShape;
+
+export type IShapeState = IShape[];
 
 interface IHistoryState {
   shapes: IShapeState;
@@ -11,7 +63,7 @@ interface IHistoryState {
 
 interface IHistoryAction {
   setShapes: (newShapes: IShapeState) => void;
-  updateShape: (updatedShape: Konva.ShapeConfig) => void;
+  updateShape: (updatedShape: IShape) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -28,7 +80,7 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
       return { shapes: newShapes, history: newHistroy, future: [] };
     }),
 
-  updateShape: (updatedShape: Konva.ShapeConfig) =>
+  updateShape: (updatedShape: IShape) =>
     set((state) => {
       const newShapes = state.shapes.map((shape) =>
         shape.id === updatedShape.id ? updatedShape : shape

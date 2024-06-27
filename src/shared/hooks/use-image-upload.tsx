@@ -1,4 +1,4 @@
-import { IShapeState } from "@/shared/store/history-store";
+import { IImageShape, IShapeState } from "@/shared/store/history-store";
 import { Stage } from "konva/lib/Stage";
 import { v4 as uuidv4 } from "uuid";
 
@@ -18,7 +18,7 @@ const useImageUpload = ({ stageRef, shapes, setShapes }: IProps) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     if (file) {
-      const locatedImage = await locateImageCenter(file);
+      const locatedImage = (await locateImageCenter(file)) as IImageShape;
       setShapes([...shapes, locatedImage]);
     }
   };

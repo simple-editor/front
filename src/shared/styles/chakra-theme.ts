@@ -1,4 +1,4 @@
-import { MenuButton, MenuItem, extendTheme } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 
 const chakraTheme = extendTheme({
   components: {

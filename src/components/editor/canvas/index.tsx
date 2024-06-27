@@ -1,7 +1,5 @@
 import styled from "@emotion/styled";
 import { Layer, Line, Stage } from "react-konva";
-import { useRef } from "react";
-import Konva from "konva";
 import useHistoryStore from "@/shared/store/history-store";
 import useSelectStore from "@/shared/store/select-store";
 import CanvasLayer from "@/components/editor/canvas/canvas-layer";
@@ -10,13 +8,14 @@ import useImageUpload from "@/shared/hooks/use-image-upload";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import CropRect from "./crop-rect";
 import useInitializeCrop from "@/shared/hooks/use-Initialize-crop";
+import useCanvasRefStore from "@/shared/store/canvas-ref-store";
+import { isCropShape, isImageShape } from "@/shared/store/canvas-ref.types";
 
 const Canvas = () => {
-  const stageRef = useRef<Konva.Stage>(null);
-  const layerRef = useRef<Konva.Layer>(null);
+  const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes } = useHistoryStore((state) => state);
-  const image = shapes.find((shapes) => shapes.type === "image");
-  const clips = shapes.filter((shape) => shape.type === "crop");
+  const image = shapes.find(isImageShape);
+  const clips = shapes.filter(isCropShape);
   const clip = clips[clips.length - 1];
 
   const activeTool = useToolbarStore((state) => state.activeTool);
@@ -59,7 +58,7 @@ const Canvas = () => {
           clipWidth={clip?.width || image?.width}
           clipHeight={clip?.height || image?.height}
         >
-          <CanvasLayer shapes={shapes} currentLine={currentLine} />
+          <CanvasLayer shapes={shapes} />
           {currentLine && <Line {...{ ...currentLine }} />}
           <CropRect
             imageBounds={clip || image}

@@ -45,14 +45,15 @@ const TextPanel = () => {
     const stageHeight = stage!.offsetHeight;
     const newText = {
       id: `text${shapes.length + 1}`,
-      type: "text",
+      type: "text" as "text",
       x: stageWidth / 2,
       y: stageHeight / 2,
       text: "Edit me!",
       fontSize: textTools.fontSizeValue,
+      fontFamily: "",
       draggable: true,
     };
-    setShapes([...shapes, newText]);
+    setShapes([...shapes, { ...newText }]);
   };
 
   return (
