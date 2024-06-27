@@ -1,7 +1,6 @@
 import { IShapeState } from "@/shared/store/history-store";
 import { Stage } from "konva/lib/Stage";
 import { v4 as uuidv4 } from "uuid";
-import useToolbarStore from "../store/toolbar-store";
 
 interface IProps {
   stageRef: React.RefObject<Stage>;

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import IconButtonRadius from "../../shared/ui/icon-button-radius";
+import IconButtonRadius from "@/shared/ui/icon-button-radius";
 import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import EraserSvg from "@/assets/icons/eraser.svg?react";
 import DropDown from "@/shared/ui/drop-down";

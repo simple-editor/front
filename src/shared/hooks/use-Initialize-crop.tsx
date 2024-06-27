@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useToolbarStore from "../store/toolbar-store";
 
-const useInitializeCrop = ({ imageShape }) => {
+const useInitializeCrop = ({ imageShape }: any) => {
   const setCropTools = useToolbarStore((state) => state.setCropTools);
 
   useEffect(() => {
@@ -22,4 +22,4 @@ const useInitializeCrop = ({ imageShape }) => {
   return;
 };
 
-export default useInitializeCrop
+export default useInitializeCrop;
