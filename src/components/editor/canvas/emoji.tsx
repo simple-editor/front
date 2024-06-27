@@ -1,5 +1,6 @@
 import { Text } from "react-konva";
-import useHistoryStore, { IEmojiShape } from "@/shared/store/history-store";
+import useHistoryStore from "@/shared/store/history-store";
+import { IEmojiShape } from "@/shared/store/canvas-ref.types";
 
 interface IProps {
   shape: IEmojiShape;

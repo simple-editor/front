@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Text } from "react-konva";
 import EditableTextInput from "./editable-text-Input";
-import useHistoryStore, { ITextShape } from "@/shared/store/history-store";
+import useHistoryStore from "@/shared/store/history-store";
+import { ITextShape } from "@/shared/store/canvas-ref.types";
 
 interface IProps {
   shape: ITextShape;
