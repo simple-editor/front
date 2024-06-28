@@ -2,7 +2,7 @@ import {
   ICropShape,
   IImageShape,
   IShape,
-} from "@/shared/store/canvas-ref.types";
+} from "@/shared/store/history-store.types";
 import Konva from "konva";
 
 export const isKonvaNode = <T extends Konva.Node>(

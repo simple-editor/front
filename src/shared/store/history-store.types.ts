@@ -1,3 +1,5 @@
+import { TextConfig } from "konva/lib/shapes/Text";
+
 interface IBaseShape {
   id: string;
   type: "text" | "line" | "image" | "crop" | "emoji";
@@ -6,15 +8,8 @@ interface IBaseShape {
   draggable?: boolean;
 }
 
-// Specific shape types
-export interface ITextShape extends IBaseShape {
+export interface ITextShape extends TextConfig {
   type: "text";
-  text: string;
-  fontSize: number;
-  fontFamily?: string;
-  fill?: string;
-  width?: number;
-  height?: number;
 }
 
 export interface ILineShape extends IBaseShape {
@@ -52,13 +47,3 @@ export type IShape =
   | IEmojiShape;
 
 export type IShapeState = IShape[];
-
-// Type guards
-export const isTextShape = (shape: IShape): shape is ITextShape =>
-  shape.type === "text";
-export const isLineShape = (shape: IShape): shape is ILineShape =>
-  shape.type === "line";
-export const isImageShape = (shape: IShape): shape is IImageShape =>
-  shape.type === "image";
-export const isCropShape = (shape: IShape): shape is ICropShape =>
-  shape.type === "crop";

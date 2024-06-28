@@ -3,7 +3,7 @@ import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useCallback, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ILineShape } from "@/shared/store/canvas-ref.types";
+import { ILineShape } from "../store/history-store.types";
 const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
   const [currentLine, setCurrentLine] = useState<ILineShape | null>(null);
   const { activeTool, line: lineTools } = useToolbarStore((state) => state);

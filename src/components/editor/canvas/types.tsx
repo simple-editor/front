@@ -1,4 +1,4 @@
-import { IShapeState } from "@/shared/store/canvas-ref.types";
+import { IShapeState } from "@/shared/store/history-store.types";
 
 export interface IShapeBase {
   shapes: IShapeState;

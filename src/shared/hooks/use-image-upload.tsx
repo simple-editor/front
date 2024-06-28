@@ -1,4 +1,4 @@
-import { IImageShape, IShapeState } from "@/shared/store/canvas-ref.types";
+import { IImageShape, IShapeState } from "@/shared/store/history-store.types";
 import { Stage } from "konva/lib/Stage";
 import { v4 as uuidv4 } from "uuid";
 

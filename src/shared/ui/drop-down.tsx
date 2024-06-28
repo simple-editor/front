@@ -94,6 +94,7 @@ const DropdownItem = styled.div`
 
 const ArrowIcon = styled(ArrowDownSvg)`
   position: absolute;
-  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   right: 16px;
 `;

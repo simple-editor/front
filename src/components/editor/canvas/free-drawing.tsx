@@ -1,4 +1,4 @@
-import { ILineShape } from "@/shared/store/canvas-ref.types";
+import { ILineShape } from "@/shared/store/history-store.types";
 import { Line } from "react-konva";
 
 interface IProps {

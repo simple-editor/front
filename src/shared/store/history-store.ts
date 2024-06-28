@@ -1,5 +1,5 @@
-import { IShape } from "./canvas-ref.types";
-import { IShapeState } from "@/shared/store/canvas-ref.types";
+import { IShape } from "./history-store.types";
+import { IShapeState } from "./history-store.types";
 import { create } from "zustand";
 
 interface IHistoryState {

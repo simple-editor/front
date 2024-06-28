@@ -4,6 +4,9 @@ import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import EraserSvg from "@/assets/icons/eraser.svg?react";
 import DropDown from "@/shared/ui/drop-down";
 import useToolbarStore from "@/shared/store/toolbar-store";
+import { useReducer, useState } from "react";
+import { ColorResult } from "react-color";
+import ColorPicker from "@/shared/ui/color-picker";
 
 const lineSizes = [
   { title: "Extra small", value: 1 },
@@ -13,8 +16,18 @@ const lineSizes = [
   { title: "Extra large", value: 16 },
 ];
 const DrawPanel = () => {
+  const [color, setColor] = useState("#000");
+  const [isOpen, toggleIsOpen] = useReducer((state) => {
+    return !state;
+  }, false);
   const setLineTools = useToolbarStore((state) => state.setLineTools);
   const lineTools = useToolbarStore((state) => state.line);
+
+  const handleChangeComplete = (color: ColorResult) => {
+    setColor(color.hex);
+    setLineTools({ strokeColor: color.hex });
+    toggleIsOpen();
+  };
 
   const handleSelectToolType = (type: "pen" | "eraser") => {
     setLineTools({ type: type });
@@ -31,10 +44,12 @@ const DrawPanel = () => {
 
   return (
     <>
-      <ColorPicker>
-        <SubTitle>색상</SubTitle>
-        <ColorCircle />
-      </ColorPicker>
+      <ColorPicker
+        color={color}
+        open={isOpen}
+        onToggle={toggleIsOpen}
+        onChange={handleChangeComplete}
+      />
       <ThicknessPicker>
         <SubTitle>두께</SubTitle>
         <DropDown
@@ -71,23 +86,6 @@ export default DrawPanel;
 
 const SubTitle = styled.span`
   ${(props) => props.theme.textStyles.smallText2}
-`;
-
-const ColorPicker = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.gray70};
-`;
-
-const ColorCircle = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: red;
-  border: 2px solid ${({ theme }) => theme.colors.white};
-  box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.gray30};
-  margin-bottom: 5px;
 `;
 
 const ThicknessPicker = styled.div`
