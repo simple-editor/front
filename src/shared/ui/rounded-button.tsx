@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 interface IProps {
   icon: React.ReactNode;
+  onClick?: () => void;
 }
 
-const RoundedButton = ({ icon }: IProps) => {
-  return <Wrapper>{icon}</Wrapper>;
+const RoundedButton = ({ icon, onClick }: IProps) => {
+  return <Wrapper onClick={onClick}>{icon}</Wrapper>;
 };
 
 export default RoundedButton;

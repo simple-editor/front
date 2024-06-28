@@ -5,9 +5,31 @@ import RedoUndoSvg from "@/assets/icons/arrow-rotate-left.svg?react";
 import useHistoryStore from "@/shared/store/history-store";
 import RoundedButton from "@/shared/ui/rounded-button";
 import IconButtonRadius from "@/shared/ui/icon-button-radius";
+import useCanvasRefStore from "@/shared/store/canvas-ref-store";
+import { isKonvaNode } from "../type-guards";
+import Konva from "konva";
+import useToolbarStore from "@/shared/store/toolbar-store";
 const Manager = () => {
   const undo = useHistoryStore((state) => state.undo);
   const redo = useHistoryStore((state) => state.redo);
+  const setActiveTool = useToolbarStore((state) => state.setActiveTool);
+  const layerRef = useCanvasRefStore((state) => state.layerRef);
+  const downloadImage = () => {
+    const layer = layerRef.current;
+    if (!isKonvaNode(layer, Konva.Layer)) return;
+    setActiveTool("");
+    setTimeout(() => {
+      const uri = layer.toDataURL();
+      const link = document.createElement("a");
+      link.download = "canvas.png";
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setActiveTool("자르기");
+    }, 100);
+  };
 
   return (
     <Wrapper>
@@ -25,7 +47,7 @@ const Manager = () => {
           />
         </RedoUndoButtonGroup>
         <RightButtonGroup>
-          <RoundedButton icon={<DownloadSvg />} />
+          <RoundedButton icon={<DownloadSvg />} onClick={downloadImage} />
           <RoundedButton icon={<FolderSvg />} />
         </RightButtonGroup>
       </TopToolBarContainer>
