@@ -1,8 +1,8 @@
-import Konva from "konva";
+import { ILineShape } from "@/shared/store/history-store.types";
 import { Line } from "react-konva";
 
 interface IProps {
-  line: Konva.ShapeConfig;
+  line: ILineShape;
 }
 
 const FreeDrawing = ({ line }: IProps) => {
@@ -20,4 +20,4 @@ const FreeDrawing = ({ line }: IProps) => {
   );
 };
 
-export default FreeDrawing
+export default FreeDrawing;

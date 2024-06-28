@@ -1,23 +1,22 @@
 import styled from "@emotion/styled";
 import { Layer, Line, Stage } from "react-konva";
-import { useRef } from "react";
-import Konva from "konva";
 import useHistoryStore from "@/shared/store/history-store";
 import useSelectStore from "@/shared/store/select-store";
-import CanvasLayer from "@/components/editor/canvas/canvas-layer";
 import useMouseEventHandler from "@/shared/hooks/use-mouse-event-handler";
 import useImageUpload from "@/shared/hooks/use-image-upload";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import CropRect from "./crop-rect";
 import useInitializeCrop from "@/shared/hooks/use-Initialize-crop";
+import useCanvasRefStore from "@/shared/store/canvas-ref-store";
+import ShapeList from "./shape-list";
+import { isCropShape, isImageShape } from "../type-guards";
 
 const Canvas = () => {
-  const stageRef = useRef<Konva.Stage>(null);
-  const layerRef = useRef<Konva.Layer>(null);
+  const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes } = useHistoryStore((state) => state);
-  const image = shapes.find((shapes) => shapes.type === "image");
-  const clips = shapes.filter((shape) => shape.type === "crop");
-  const clip = clips[clips.length - 1];
+  const image = shapes.find(isImageShape);
+  const cropedLayerFilter = shapes.filter(isCropShape);
+  const currentLayerSize = cropedLayerFilter[cropedLayerFilter.length - 1];
 
   const activeTool = useToolbarStore((state) => state.activeTool);
   const cancelSelection = useSelectStore((state) => state.cancelSelection);
@@ -54,15 +53,15 @@ const Canvas = () => {
       >
         <Layer
           ref={layerRef}
-          clipX={clip?.x || image?.x}
-          clipY={clip?.y || image?.y}
-          clipWidth={clip?.width || image?.width}
-          clipHeight={clip?.height || image?.height}
+          clipX={currentLayerSize?.x || image?.x}
+          clipY={currentLayerSize?.y || image?.y}
+          clipWidth={currentLayerSize?.width || image?.width}
+          clipHeight={currentLayerSize?.height || image?.height}
         >
-          <CanvasLayer shapes={shapes} currentLine={currentLine} />
-          {currentLine && <Line {...{ ...currentLine }} />}
+          <ShapeList shapes={shapes} />
+          {currentLine && <Line {...currentLine} />}
           <CropRect
-            imageBounds={clip || image}
+            imageBounds={currentLayerSize || image}
             isRender={image && activeTool === "자르기"}
           />
         </Layer>

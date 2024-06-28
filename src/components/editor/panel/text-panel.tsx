@@ -3,9 +3,10 @@ import IconButton from "@/shared/ui/icon-button";
 import styled from "@emotion/styled";
 import { useReducer, useState } from "react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
-import { ColorResult, SketchPicker } from "react-color";
+import { ColorResult } from "react-color";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import useHistoryStore from "@/shared/store/history-store";
+import ColorPicker from "@/shared/ui/color-picker";
 const fontSizes = [
   { title: "Extra small", value: 8 },
   { title: "Small", value: 12 },
@@ -28,6 +29,7 @@ const TextPanel = () => {
 
   const handleChangeComplete = (color: ColorResult) => {
     setColor(color.hex);
+    toggleIsOpen();
   };
 
   const handleDropDown = (item: { title: string; value: number | string }) => {
@@ -45,28 +47,25 @@ const TextPanel = () => {
     const stageHeight = stage!.offsetHeight;
     const newText = {
       id: `text${shapes.length + 1}`,
-      type: "text",
+      type: "text" as "text",
       x: stageWidth / 2,
       y: stageHeight / 2,
-      text: "Edit me!",
+      text: "Sample!",
       fontSize: textTools.fontSizeValue,
+      fill: color,
       draggable: true,
     };
-    setShapes([...shapes, newText]);
+    setShapes([...shapes, { ...newText }]);
   };
 
   return (
     <>
-      <ColorPickerWrapper>
-        <SubTitle>색상</SubTitle>
-        <ColorCircle onClick={toggleIsOpen} />
-        {isOpen && (
-          <CustomColorPicker
-            color={color}
-            onChangeComplete={handleChangeComplete}
-          />
-        )}
-      </ColorPickerWrapper>
+      <ColorPicker
+        color={color}
+        open={isOpen}
+        onToggle={toggleIsOpen}
+        onChange={handleChangeComplete}
+      />
       <ThicknessPicker>
         <SubTitle>사이즈</SubTitle>
         <DropDown
@@ -84,30 +83,6 @@ const TextPanel = () => {
 };
 
 export default TextPanel;
-
-const ColorPickerWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.gray70};
-`;
-
-const ColorCircle = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: red;
-  border: 2px solid ${({ theme }) => theme.colors.white};
-  box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.gray30};
-  margin-bottom: 5px;
-  cursor: pointer;
-`;
-
-const CustomColorPicker = styled(SketchPicker)`
-  position: absolute;
-  top: -300px;
-`;
 
 const SubTitle = styled.span`
   ${(props) => props.theme.textStyles.smallText2}

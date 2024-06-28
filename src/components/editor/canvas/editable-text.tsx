@@ -1,11 +1,11 @@
-import Konva from "konva";
 import { useCallback, useEffect, useState } from "react";
 import { Text } from "react-konva";
 import EditableTextInput from "./editable-text-Input";
 import useHistoryStore from "@/shared/store/history-store";
+import { ITextShape } from "@/shared/store/history-store.types";
 
 interface IProps {
-  shape: Konva.ShapeConfig;
+  shape: ITextShape;
   isSelected: boolean;
   onSelect: () => void;
 }
@@ -16,7 +16,7 @@ const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
     x: shape.x,
     y: shape.y,
   });
-  const [textValue, setTextValue] = useState(shape.text);
+  const [textValue, setTextValue] = useState(shape.text || "");
   const updateShape = useHistoryStore((state) => state.updateShape);
   const { id } = shape;
 
@@ -36,7 +36,7 @@ const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
     if (typeof id === "string") {
       setIsEdit(true);
       onSelect();
-      setTextValue(shape.text);
+      setTextValue(textValue);
     }
   };
 
@@ -44,8 +44,8 @@ const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
     setIsEdit(false);
     updateShape({
       ...shape,
-      x: points.x,
-      y: points.y,
+      x: points.x as number,
+      y: points.y as number,
       text: textValue,
     });
   }, [points.x, points.y, shape, textValue, updateShape]);

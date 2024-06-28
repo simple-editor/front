@@ -3,8 +3,9 @@ import FreeDrawing from "@/components/editor/canvas/free-drawing";
 import useSelectStore from "@/shared/store/select-store";
 import { ICanvasLayerProps } from "@/components/editor/canvas/types";
 import UploadedImage from "./uploaded-image";
+import Emoji from "./emoji";
 
-const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
+const ShapeList = ({ shapes }: ICanvasLayerProps) => {
   const { selectedId, setSelectedId } = useSelectStore((state) => state);
 
   return (
@@ -31,6 +32,8 @@ const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
                 onSelect={() => setSelectedId(String(shape.id))}
               />
             );
+          case "emoji":
+            return <Emoji key={shape.id} shape={shape} />;
           // 다른 shape 타입도 추가 가능
           default:
             return null;
@@ -40,4 +43,4 @@ const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
   );
 };
 
-export default CanvasLayer;
+export default ShapeList;

@@ -1,7 +1,6 @@
-import Konva from "konva";
+import { IShape } from "./history-store.types";
+import { IShapeState } from "./history-store.types";
 import { create } from "zustand";
-
-export type IShapeState = Konva.ShapeConfig[];
 
 interface IHistoryState {
   shapes: IShapeState;
@@ -11,7 +10,7 @@ interface IHistoryState {
 
 interface IHistoryAction {
   setShapes: (newShapes: IShapeState) => void;
-  updateShape: (updatedShape: Konva.ShapeConfig) => void;
+  updateShape: (updatedShape: IShape) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -28,7 +27,7 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
       return { shapes: newShapes, history: newHistroy, future: [] };
     }),
 
-  updateShape: (updatedShape: Konva.ShapeConfig) =>
+  updateShape: (updatedShape: IShape) =>
     set((state) => {
       const newShapes = state.shapes.map((shape) =>
         shape.id === updatedShape.id ? updatedShape : shape

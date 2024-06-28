@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
-import downloadSvg from "@/assets/icons/download.svg";
-import folderSvg from "@/assets/icons/folder-down.svg";
-import redoUndoSvg from "@/assets/icons/arrow-rotate-left.svg";
+import DownloadSvg from "@/assets/icons/download.svg?react";
+import FolderSvg from "@/assets/icons/folder-down.svg?react";
+import RedoUndoSvg from "@/assets/icons/arrow-rotate-left.svg?react";
 import useHistoryStore from "@/shared/store/history-store";
+import RoundedButton from "@/shared/ui/rounded-button";
+import IconButtonRadius from "@/shared/ui/icon-button-radius";
 const Manager = () => {
   const undo = useHistoryStore((state) => state.undo);
   const redo = useHistoryStore((state) => state.redo);
@@ -11,12 +13,20 @@ const Manager = () => {
     <Wrapper>
       <TopToolBarContainer>
         <RedoUndoButtonGroup>
-          <UndoButton onClick={undo} />
-          <RedoButton onClick={redo} />
+          <IconButtonRadius
+            icon={<RedoUndoSvg />}
+            onClick={undo}
+            size={"large"}
+          />
+          <IconButtonRadius
+            icon={<RedoUndoSvg />}
+            onClick={redo}
+            size={"large"}
+          />
         </RedoUndoButtonGroup>
         <RightButtonGroup>
-          <FileIconButton />
-          <LibrayIconButton />
+          <RoundedButton icon={<DownloadSvg />} />
+          <RoundedButton icon={<FolderSvg />} />
         </RightButtonGroup>
       </TopToolBarContainer>
     </Wrapper>
@@ -49,67 +59,14 @@ const RedoUndoButtonGroup = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-`;
-
-const RedoUndoIconBase = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 72px;
-  height: 72px;
-  background-color: ${({ theme }) => theme.colors.white};
-  border: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.gray100};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray10};
-  }
-  &:first-of-type {
+  & > button:last-of-type {
+    transform: scaleX(-1);
     border-right: 1px solid ${({ theme }) => theme.colors.gray30}; /* 버튼 사이의 경계선 */
   }
-  background-repeat: no-repeat;
-  background-size: 32px 32px;
-  background-position: center;
-`;
-
-const UndoButton = styled(RedoUndoIconBase)`
-  background-image: url(${redoUndoSvg});
-`;
-const RedoButton = styled(RedoUndoIconBase)`
-  background-image: url(${redoUndoSvg});
-  transform: scaleX(-1);
 `;
 
 const RightButtonGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 10px; /* 버튼 사이의 간격 */
-`;
-
-const RightBaseIcon = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.white};
-  border: 1px solid ${({ theme }) => theme.colors.gray30};
-  cursor: pointer;
-  font-size: 1.5rem; /* 아이콘 크기 조정 */
-  color: ${({ theme }) => theme.colors.gray100};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray10};
-  }
-
-  background-repeat: no-repeat;
-  background-size: 32px 32px;
-  background-position: center;
-`;
-
-const FileIconButton = styled(RightBaseIcon)`
-  background-image: url(${downloadSvg});
-`;
-const LibrayIconButton = styled(RightBaseIcon)`
-  background-image: url(${folderSvg});
 `;
