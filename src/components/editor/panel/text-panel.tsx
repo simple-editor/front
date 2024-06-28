@@ -3,7 +3,7 @@ import IconButton from "@/shared/ui/icon-button";
 import styled from "@emotion/styled";
 import { useReducer, useState } from "react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
-import { ColorResult, SketchPicker } from "react-color";
+import { ColorResult } from "react-color";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import useHistoryStore from "@/shared/store/history-store";
 import ColorPicker from "@/shared/ui/color-picker";
