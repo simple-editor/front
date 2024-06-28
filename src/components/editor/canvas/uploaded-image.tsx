@@ -2,6 +2,7 @@ import Konva from "konva";
 import { useEffect, useRef } from "react";
 import { Image } from "react-konva";
 import useImage from "use-image";
+import { isKonvaNode } from "../type-guards";
 
 interface IProps {
   image: Konva.ShapeConfig;
@@ -15,10 +16,15 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
   const trRef = useRef<Konva.Transformer>(null);
 
   useEffect(() => {
-    if (isSelected && trRef.current && shapeRef.current) {
-      // we need to attach transformer manually
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer()!.batchDraw();
+    const transformer = trRef.current;
+    const image = shapeRef.current;
+    const isRender =
+      isSelected &&
+      isKonvaNode(transformer, Konva.Transformer) &&
+      isKonvaNode(image, Konva.Image);
+    if (isRender) {
+      transformer.nodes([image]);
+      transformer.getLayer()?.batchDraw();
     }
   }, [isSelected]);
 

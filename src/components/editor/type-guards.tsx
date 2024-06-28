@@ -1,21 +1,18 @@
+import {
+  ICropShape,
+  IImageShape,
+  IShape,
+} from "@/shared/store/canvas-ref.types";
 import Konva from "konva";
 
-export const isKonvaNode = (node: Konva.Node | null): node is Konva.Node => {
-  return node !== null && node instanceof Konva.Node;
+export const isKonvaNode = <T extends Konva.Node>(
+  node: Konva.Node | null,
+  constructor: new (...args: any[]) => T
+): node is T => {
+  return node !== null && node instanceof constructor;
 };
 
-export const isKonvaLayer = (
-  layer: Konva.Layer | null
-): layer is Konva.Layer => {
-  return layer !== null && layer instanceof Konva.Layer;
-};
-
-export const isKonvaTransformer = (
-  transformer: Konva.Transformer | null
-): transformer is Konva.Transformer => {
-  return transformer !== null && transformer instanceof Konva.Transformer;
-};
-
-export const isKonvaRect = (rect: Konva.Rect | null): rect is Konva.Rect => {
-  return rect !== null && rect instanceof Konva.Rect;
-};
+export const isImageShape = (shape: IShape): shape is IImageShape =>
+  shape.type === "image";
+export const isCropShape = (shape: IShape): shape is ICropShape =>
+  shape.type === "crop";

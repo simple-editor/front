@@ -5,7 +5,7 @@ import { ICanvasLayerProps } from "@/components/editor/canvas/types";
 import UploadedImage from "./uploaded-image";
 import Emoji from "./emoji";
 
-const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
+const ShapeList = ({ shapes }: ICanvasLayerProps) => {
   const { selectedId, setSelectedId } = useSelectStore((state) => state);
 
   return (
@@ -43,4 +43,4 @@ const CanvasLayer = ({ shapes }: ICanvasLayerProps) => {
   );
 };
 
-export default CanvasLayer;
+export default ShapeList;
