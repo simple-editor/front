@@ -96,8 +96,8 @@ const CropRect = ({ imageBounds, isRender }: any) => {
         height={crop.height}
         stroke="blue"
         strokeWidth={2}
-        fill="#000"
-        opacity={0.3}
+        fill=""
+        opacity={0}
         draggable
         dragBoundFunc={dragBoundFunc}
         onDragMove={handleDragMove}
@@ -105,6 +105,34 @@ const CropRect = ({ imageBounds, isRender }: any) => {
         onDblClick={handleDoubleClick}
       />
       <Transformer ref={trRef} boundBoxFunc={(_oldbox, newBox) => newBox} />
+      <Rect
+        x={0}
+        y={0}
+        width={window.innerWidth}
+        height={crop.y}
+        fill="rgba(0, 0, 0, 0.5)"
+      />
+      <Rect
+        x={0}
+        y={crop.y + crop.height}
+        width={window.innerWidth}
+        height={window.innerHeight - (crop.y + crop.height)}
+        fill="rgba(0, 0, 0, 0.5)"
+      />
+      <Rect
+        x={0}
+        y={crop.y}
+        width={crop.x}
+        height={crop.height}
+        fill="rgba(0, 0, 0, 0.5)"
+      />
+      <Rect
+        x={crop.x + crop.width}
+        y={crop.y}
+        width={window.innerWidth - (crop.x + crop.width)}
+        height={crop.height}
+        fill="rgba(0, 0, 0, 0.5)"
+      />
     </Group>
   );
 };
