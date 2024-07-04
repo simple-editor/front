@@ -12,10 +12,11 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import fetchClient from "@/shared/api/instance";
 
 // 유효성 검사 스키마 정의
 const schema = yup.object().shape({
-  username: yup
+  userId: yup
     .string()
     .required("아이디를 입력하세요.")
     .min(4, "아이디는 최소 4자 이상이어야 합니다."),
@@ -42,9 +43,11 @@ const SignInModal = ({
 
   if (!open) return null;
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // 회원가입 로직 추가
+  const onSubmit = async (data: any) => {
+    await fetchClient("/api/user/signin", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   };
 
   return (
@@ -58,9 +61,9 @@ const SignInModal = ({
           <ContentSection onSubmit={handleSubmit(onSubmit)}>
             <FormInputSection>
               <InputLabel>아이디</InputLabel>
-              <Input {...register("username")} />
-              {errors.username && (
-                <ErrorMessage>{errors.username.message}</ErrorMessage>
+              <Input {...register("userId")} />
+              {errors.userId && (
+                <ErrorMessage>{errors.userId.message}</ErrorMessage>
               )}
             </FormInputSection>
             <FormInputSection>

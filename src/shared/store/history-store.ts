@@ -1,3 +1,4 @@
+import { saveToLocalStorage } from "../services/storage";
 import { IShape } from "./history-store.types";
 import { IShapeState } from "./history-store.types";
 import { create } from "zustand";
@@ -21,20 +22,26 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
   history: [],
   future: [],
 
-  setShapes: (newShapes: IShapeState) =>
+  setShapes: (newShapes: IShape[]) => {
     set((state) => {
-      const newHistroy = [...state.history, state.shapes];
-      return { shapes: newShapes, history: newHistroy, future: [] };
-    }),
+      const newHistory = [...state.history, state.shapes];
+      const newState = { shapes: newShapes, history: newHistory, future: [] };
+      saveToLocalStorage("simple-shapes", newShapes);
+      return newState;
+    });
+  },
 
-  updateShape: (updatedShape: IShape) =>
+  updateShape: (updatedShape: IShape) => {
     set((state) => {
       const newShapes = state.shapes.map((shape) =>
         shape.id === updatedShape.id ? updatedShape : shape
       );
       const newHistory = [...state.history, state.shapes];
-      return { shapes: newShapes, history: newHistory, future: [] };
-    }),
+      const newState = { shapes: newShapes, history: newHistory, future: [] };
+      saveToLocalStorage("simple-shapes", newShapes);
+      return newState;
+    });
+  },
 
   undo: () =>
     set((state) => {
@@ -43,7 +50,7 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
       const prevState = state.history[state.history.length - 1];
       const newHistory = state.history.slice(0, -1);
       const newFuture = [state.shapes, ...state.future];
-
+      saveToLocalStorage("simple-shapes", prevState);
       return { shapes: prevState, history: newHistory, future: newFuture };
     }),
 
@@ -54,7 +61,7 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
       const nextState = state.future[0];
       const newFutrue = state.future.slice(1); //1부터 끝까지 자른다.
       const newHistroy = [...state.history, state.shapes];
-
+      saveToLocalStorage("simple-shapes", nextState);
       return { shapes: nextState, history: newHistroy, future: newFutrue };
     }),
 

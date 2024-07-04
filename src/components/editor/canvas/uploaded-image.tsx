@@ -1,8 +1,11 @@
 import Konva from "konva";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image } from "react-konva";
-import useImage from "use-image";
 import { isKonvaNode } from "../type-guards";
+import {
+  initializeIndexedDB,
+  loadImageFromIndexedDB,
+} from "@/shared/services/storage";
 
 interface IProps {
   image: Konva.ShapeConfig;
@@ -11,10 +14,21 @@ interface IProps {
 }
 
 const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
-  const [img] = useImage(image.src);
+  const [imageFile, setImageFile] = useState<HTMLImageElement | null>(null);
   const shapeRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const db = await initializeIndexedDB();
+      const dataURL = await loadImageFromIndexedDB(db, image.id);
+      const img = new window.Image();
+      img.src = dataURL as string;
+      img.onload = () => {
+        setImageFile(img);
+      };
+    };
+    fetchData();
+  }, [image.src]);
   useEffect(() => {
     const transformer = trRef.current;
     const image = shapeRef.current;
@@ -31,7 +45,7 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
   return (
     <>
       <Image
-        image={img}
+        image={imageFile}
         {...image}
         x={image.x}
         y={image.y}

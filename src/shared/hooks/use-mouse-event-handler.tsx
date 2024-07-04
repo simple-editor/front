@@ -62,7 +62,10 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
   const handleMouseUp = useCallback(() => {
     isPaintRef.current = false;
 
-    if (currentLine) setShapes([...shapes, currentLine]);
+    if (currentLine) {
+      setShapes([...shapes, currentLine]);
+      setCurrentLine(null);
+    }
   }, [currentLine, setShapes, shapes]);
 
   return { handleMouseDown, handleMouseMove, handleMouseUp, currentLine };
