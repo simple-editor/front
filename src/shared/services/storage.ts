@@ -67,7 +67,7 @@ export const loadImageFromIndexedDB: (
       }
     };
 
-    request.onerror = (event) => {
+    request.onerror = () => {
       reject("Failed to load image from IndexedDB");
     };
   });
