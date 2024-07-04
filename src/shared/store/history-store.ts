@@ -1,4 +1,8 @@
-import { saveToLocalStorage } from "../services/storage";
+import {
+  resetIndexedDB,
+  resetLocalStorage,
+  saveToLocalStorage,
+} from "../services/storage";
 import { IShape } from "./history-store.types";
 import { IShapeState } from "./history-store.types";
 import { create } from "zustand";
@@ -65,6 +69,10 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
       return { shapes: nextState, history: newHistroy, future: newFutrue };
     }),
 
-  reset: () => set(() => ({ shapes: [], history: [], future: [] })),
+  reset: async () => {
+    await resetLocalStorage();
+    await resetIndexedDB();
+    set(() => ({ shapes: [], history: [], future: [] }));
+  },
 }));
 export default useHistoryStore;
