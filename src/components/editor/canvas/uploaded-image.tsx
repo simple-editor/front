@@ -20,7 +20,7 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
   useEffect(() => {
     const fetchData = async () => {
       const db = await initializeIndexedDB();
-      const dataURL = await loadImageFromIndexedDB(db, image.id);
+      const dataURL = await loadImageFromIndexedDB(db, image.id as string);
       const img = new window.Image();
       img.src = dataURL as string;
       img.onload = () => {
@@ -44,16 +44,18 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
 
   return (
     <>
-      <Image
-        image={imageFile}
-        {...image}
-        x={image.x}
-        y={image.y}
-        draggable={false}
-        onClick={onSelect}
-        onTap={onSelect}
-        ref={shapeRef}
-      />
+      {imageFile && (
+        <Image
+          image={imageFile}
+          {...image}
+          x={image.x}
+          y={image.y}
+          draggable={false}
+          onClick={onSelect}
+          onTap={onSelect}
+          ref={shapeRef}
+        />
+      )}
     </>
   );
 };
