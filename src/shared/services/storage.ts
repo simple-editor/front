@@ -117,3 +117,19 @@ export const readFileAndSaveToIndexedDB: (
   await saveImageToIndexedDB(db, imageId, dataURL, mimeType);
   return dataURL;
 };
+
+export const resetLocalStorage = (): void => {
+  localStorage.removeItem("simple-shapes");
+};
+
+export const resetIndexedDB = async (): Promise<void> => {
+  const db = await initializeIndexedDB();
+  const transaction = db.transaction("files-store", "readwrite");
+  const store = transaction.objectStore("files-store");
+  const request = store.clear();
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject("Failed to reset IndexedDB");
+  });
+};

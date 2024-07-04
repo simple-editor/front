@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import DownloadSvg from "@/assets/icons/download.svg?react";
 import FolderSvg from "@/assets/icons/folder-down.svg?react";
 import RedoUndoSvg from "@/assets/icons/arrow-rotate-left.svg?react";
+import DeleteSvg from "@/assets/icons/delete.svg?react";
 import useHistoryStore from "@/shared/store/history-store";
 import RoundedButton from "@/shared/ui/rounded-button";
 import IconButtonRadius from "@/shared/ui/icon-button-radius";
@@ -9,9 +10,11 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import { isKonvaNode } from "../type-guards";
 import Konva from "konva";
 import useToolbarStore from "@/shared/store/toolbar-store";
+
 const Manager = () => {
   const undo = useHistoryStore((state) => state.undo);
   const redo = useHistoryStore((state) => state.redo);
+  const reset = useHistoryStore((state) => state.reset);
   const setActiveTool = useToolbarStore((state) => state.setActiveTool);
   const layerRef = useCanvasRefStore((state) => state.layerRef);
   const downloadImage = () => {
@@ -46,7 +49,12 @@ const Manager = () => {
             size={"large"}
           />
         </RedoUndoButtonGroup>
+
         <RightButtonGroup>
+          <RoundedButton
+            icon={<DeleteSvg width={25} height={25} />}
+            onClick={reset}
+          />
           <RoundedButton icon={<DownloadSvg />} onClick={downloadImage} />
           <RoundedButton icon={<FolderSvg />} />
         </RightButtonGroup>
@@ -58,7 +66,6 @@ const Manager = () => {
 export default Manager;
 
 const Wrapper = styled.div`
-  height: 72px;
   max-width: 1440px;
   margin: auto;
   margin-top: 68px;
