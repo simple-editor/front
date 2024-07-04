@@ -29,7 +29,7 @@ const Canvas = () => {
     setShapes,
     stageRef,
   }); //이미지 드래그 업로드
-
+  console.log(shapes, "shapes");
   useInitializeCrop({ imageShape: image });
 
   return (

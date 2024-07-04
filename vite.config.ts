@@ -18,10 +18,11 @@ export default defineConfig({
   },
   server: {
     host: "localhost",
-    port: 8080,
+    port: 3000,
     proxy: {
       "/api": {
-        target: "http://localhost:8080/",
+        target:
+          "http://ec2-3-37-192-116.ap-northeast-2.compute.amazonaws.com:8080",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
