@@ -11,14 +11,15 @@ import {
 
 const Editor = () => {
   useEffect(() => {
-    initializeIndexedDB().then((db) => {
+    initializeIndexedDB().then(() => {
       const localShapes = loadFromLocalStorage("simple-shapes");
-
-      useHistoryStore.setState({
-        shapes: localShapes,
-        history: [],
-        future: [],
-      });
+      if (localShapes) {
+        useHistoryStore.setState({
+          shapes: localShapes,
+          history: [],
+          future: [],
+        });
+      } else return;
     });
   }, []);
 

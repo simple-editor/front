@@ -1,3 +1,5 @@
+import { IShapeState } from "../store/history-store.types";
+
 interface IDB {
   transaction: (storeName: string, mode: IDBTransactionMode) => IDBTransaction;
 }
@@ -75,7 +77,9 @@ export const saveToLocalStorage = (key: string, data: unknown): void => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
-export const loadFromLocalStorage = (key: string): unknown => {
+export const loadFromLocalStorage: (key: string) => IShapeState | undefined = (
+  key
+) => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 };
