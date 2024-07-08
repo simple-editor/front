@@ -6,7 +6,6 @@ import {
   initializeIndexedDB,
   loadImageFromIndexedDB,
 } from "@/shared/services/storage";
-import useToolbarStore from "@/shared/store/toolbar-store";
 import useImageFilter from "@/shared/hooks/use-image-filter";
 
 interface IProps {
@@ -32,6 +31,7 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
     };
     fetchData();
   }, [image.src]);
+
   useEffect(() => {
     const transformer = trRef.current;
     const image = imageRef.current;
