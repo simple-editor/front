@@ -5,8 +5,8 @@ import { isCropShape, isImageShape } from "@/components/editor/type-guards";
 const useInitializeCropPos = ({ shapes }: any) => {
   const setCropTools = useToolbarStore((state) => state.setCropTools);
   const imageShape = shapes.find(isImageShape);
-  const cropedLayers = shapes.filter(isCropShape);
-  const cropedLayerSize = cropedLayers[cropedLayers.length - 1];
+  const cropedLayerFilter = shapes.filter(isCropShape);
+  const currentLayerSize = cropedLayerFilter[cropedLayerFilter.length - 1];
 
   useEffect(() => {
     const initializeCrop = () => {
@@ -24,7 +24,7 @@ const useInitializeCropPos = ({ shapes }: any) => {
     }
   }, [imageShape, setCropTools]);
 
-  return { cropedLayerSize, imageShape };
+  return { currentLayerSize, imageShape };
 };
 
 export default useInitializeCropPos;

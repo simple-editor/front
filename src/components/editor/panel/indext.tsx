@@ -4,6 +4,7 @@ import TextPanel from "./text-panel";
 import CropPanel from "./crop-panel";
 import EmojiPanel from "./emoji-panel";
 import useToolbarStore from "@/shared/store/toolbar-store";
+import FilterPanel from "@/components/editor/panel/filter-panel";
 
 const Panel = () => {
   const activeTool = useToolbarStore((state) => state.activeTool);
@@ -18,6 +19,8 @@ const Panel = () => {
         return <EmojiPanel />;
       case "자르기":
         return <CropPanel />;
+      case "필터":
+        return <FilterPanel />;
       default:
         return null;
     }

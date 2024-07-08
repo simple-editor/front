@@ -4,7 +4,7 @@ import useHistoryStore from "@/shared/store/history-store";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useRef, useEffect } from "react";
-import { Rect, Transformer, Group } from "react-konva";
+import { Rect, Transformer } from "react-konva";
 import { v4 as uuidv4 } from "uuid";
 
 const CropRect = ({ imageShape, isRender }: any) => {
@@ -30,20 +30,19 @@ const CropRect = ({ imageShape, isRender }: any) => {
 
   const handleDoubleClick = () => {
     if (crop && imageShape) {
-      setShapes([
-        ...shapes,
-        {
-          id: uuidv4(),
-          type: "crop",
-          ...crop,
-        },
-      ]);
+      const newShape = {
+        id: uuidv4(),
+        type: "crop" as "crop",
+        ...crop,
+      };
+
+      setShapes([...shapes, newShape]);
     }
   };
 
   return (
     isRender && (
-      <Group>
+      <>
         <Rect
           ref={shapeRef}
           x={crop.x}
@@ -52,8 +51,8 @@ const CropRect = ({ imageShape, isRender }: any) => {
           height={crop.height}
           stroke="blue"
           strokeWidth={2}
-          fill=""
-          opacity={0}
+          fill="black"
+          opacity={0.3}
           draggable
           dragBoundFunc={handledragBoundFunc}
           onDragMove={handleDragMove}
@@ -61,35 +60,7 @@ const CropRect = ({ imageShape, isRender }: any) => {
           onDblClick={handleDoubleClick}
         />
         <Transformer ref={trRef} boundBoxFunc={(_oldbox, newBox) => newBox} />
-        <Rect
-          x={0}
-          y={0}
-          width={window.innerWidth}
-          height={crop.y}
-          fill="rgba(0, 0, 0, 0.5)"
-        />
-        <Rect
-          x={0}
-          y={crop.y + crop.height}
-          width={window.innerWidth}
-          height={window.innerHeight - (crop.y + crop.height)}
-          fill="rgba(0, 0, 0, 0.5)"
-        />
-        <Rect
-          x={0}
-          y={crop.y}
-          width={crop.x}
-          height={crop.height}
-          fill="rgba(0, 0, 0, 0.5)"
-        />
-        <Rect
-          x={crop.x + crop.width}
-          y={crop.y}
-          width={window.innerWidth - (crop.x + crop.width)}
-          height={crop.height}
-          fill="rgba(0, 0, 0, 0.5)"
-        />
-      </Group>
+      </>
     )
   );
 };

@@ -28,7 +28,14 @@ const Canvas = () => {
     stageRef,
   }); //이미지 드래그 업로드
 
-  const { cropedLayerSize, imageShape } = useInitializeCropPos({ shapes });
+  const { currentLayerSize, imageShape } = useInitializeCropPos({ shapes });
+
+  // const clipValues = {
+  //   clipX: cropedLayerSize?.x || imageShape?.x,
+  //   ciipY: cropedLayerSize?.y || imageShape?.y,
+  //   clipWidth: cropedLayerSize?.width || imageShape?.width,
+  //   clipHeight: cropedLayerSize?.height || imageShape?.height,
+  // };
 
   return (
     <CanvasWrapper
@@ -56,15 +63,15 @@ const Canvas = () => {
       >
         <Layer
           ref={layerRef}
-          clipX={cropedLayerSize?.x || imageShape?.x}
-          clipY={cropedLayerSize?.y || imageShape?.y}
-          clipWidth={cropedLayerSize?.width || imageShape?.width}
-          clipHeight={cropedLayerSize?.height || imageShape?.height}
+          clipX={currentLayerSize?.x || imageShape?.x}
+          clipY={currentLayerSize?.y || imageShape?.y}
+          clipWidth={currentLayerSize?.width || imageShape?.width}
+          clipHeight={currentLayerSize?.height || imageShape?.height}
         >
           <ShapeList shapes={shapes} />
           {currentLine && <Line {...currentLine} />}
           <CropRect
-            imageShape={cropedLayerSize || imageShape}
+            imageShape={currentLayerSize || imageShape}
             isRender={imageShape && activeTool === "자르기"}
           />
         </Layer>

@@ -23,15 +23,18 @@ const Manager = () => {
     if (!isKonvaNode(layer, Konva.Layer)) return;
     setActiveTool("");
     setTimeout(() => {
-      const uri = layer.toDataURL();
+      const uri = layer.toDataURL({
+        x: layer.clipX(),
+        y: layer.clipY(),
+        width: layer.clipWidth(),
+        height: layer.clipHeight(),
+      });
       const link = document.createElement("a");
       link.download = "canvas.png";
       link.href = uri;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      setActiveTool("자르기");
     }, 100);
   };
 

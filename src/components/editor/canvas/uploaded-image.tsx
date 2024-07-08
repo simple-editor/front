@@ -6,6 +6,7 @@ import {
   initializeIndexedDB,
   loadImageFromIndexedDB,
 } from "@/shared/services/storage";
+import useImageFilter from "@/shared/hooks/use-image-filter";
 
 interface IProps {
   image: Konva.ShapeConfig;
@@ -15,7 +16,8 @@ interface IProps {
 
 const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
   const [imageFile, setImageFile] = useState<HTMLImageElement | null>(null);
-  const shapeRef = useRef<Konva.Image>(null);
+
+  const imageRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -29,9 +31,10 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
     };
     fetchData();
   }, [image.src]);
+
   useEffect(() => {
     const transformer = trRef.current;
-    const image = shapeRef.current;
+    const image = imageRef.current;
     const isRender =
       isSelected &&
       isKonvaNode(transformer, Konva.Transformer) &&
@@ -41,6 +44,8 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
       transformer.getLayer()?.batchDraw();
     }
   }, [isSelected]);
+
+  useImageFilter({ imageRef });
 
   return (
     <>
@@ -53,7 +58,7 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
           draggable={false}
           onClick={onSelect}
           onTap={onSelect}
-          ref={shapeRef}
+          ref={imageRef}
         />
       )}
     </>
