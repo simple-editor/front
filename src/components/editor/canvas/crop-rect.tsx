@@ -30,14 +30,13 @@ const CropRect = ({ imageShape, isRender }: any) => {
 
   const handleDoubleClick = () => {
     if (crop && imageShape) {
-      setShapes([
-        ...shapes,
-        {
-          id: uuidv4(),
-          type: "crop",
-          ...crop,
-        },
-      ]);
+      const newShape = {
+        id: uuidv4(),
+        type: "crop" as "crop",
+        ...crop,
+      };
+
+      setShapes([...shapes, newShape]);
     }
   };
 

@@ -30,6 +30,13 @@ const Canvas = () => {
 
   const { cropedLayerSize, imageShape } = useInitializeCropPos({ shapes });
 
+  const clipValues = {
+    clipX: cropedLayerSize?.x || imageShape?.x,
+    ciipY: cropedLayerSize?.y || imageShape?.y,
+    clipWidth: cropedLayerSize?.width || imageShape?.width,
+    clipHeight: cropedLayerSize?.height || imageShape?.height,
+  };
+
   return (
     <CanvasWrapper
       onDragOver={handleDragUploadStart}
@@ -54,13 +61,7 @@ const Canvas = () => {
         onMouseUp={handleMouseUp}
         onWheel={handleZoom}
       >
-        <Layer
-          ref={layerRef}
-          clipX={cropedLayerSize?.x || imageShape?.x}
-          clipY={cropedLayerSize?.y || imageShape?.y}
-          clipWidth={cropedLayerSize?.width || imageShape?.width}
-          clipHeight={cropedLayerSize?.height || imageShape?.height}
-        >
+        <Layer ref={layerRef} {...clipValues}>
           <ShapeList shapes={shapes} />
           {currentLine && <Line {...currentLine} />}
           <CropRect
