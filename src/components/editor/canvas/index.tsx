@@ -10,10 +10,12 @@ import useInitializeCrop from "@/shared/hooks/use-Initialize-crop";
 import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import ShapeList from "./shape-list";
 import { isCropShape, isImageShape } from "../type-guards";
+import useZoom from "@/shared/hooks/use-zoom";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes } = useHistoryStore((state) => state);
+  const { handleZoom, zoom } = useZoom();
   const image = shapes.find(isImageShape);
   const cropedLayerFilter = shapes.filter(isCropShape);
   const currentLayerSize = cropedLayerFilter[cropedLayerFilter.length - 1];
@@ -42,6 +44,10 @@ const Canvas = () => {
         ref={stageRef}
         width={1440}
         height={704}
+        scaleX={zoom.stageScale}
+        scaleY={zoom.stageScale}
+        x={zoom.stageX}
+        y={zoom.stageY}
         onClick={(e) => {
           if (e.currentTarget._id === e.target._id) {
             cancelSelection();
@@ -50,6 +56,7 @@ const Canvas = () => {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onWheel={handleZoom}
       >
         <Layer
           ref={layerRef}

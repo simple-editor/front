@@ -70,7 +70,7 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
     }),
 
   reset: async () => {
-    await resetLocalStorage();
+    resetLocalStorage();
     await resetIndexedDB();
     set(() => ({ shapes: [], history: [], future: [] }));
   },
