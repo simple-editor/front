@@ -13,14 +13,7 @@ const ShapeList = ({ shapes }: ICanvasLayerProps) => {
       {shapes.map((shape) => {
         switch (shape.type) {
           case "image":
-            return (
-              <UploadedImage
-                key={shape.id}
-                image={shape}
-                isSelected={shape.id === selectedId}
-                onSelect={() => setSelectedId(String(shape.id))}
-              />
-            );
+            return <UploadedImage key={shape.id} image={shape} />;
           case "line":
             return <FreeDrawing line={shape} key={shape.id} />;
           case "text":

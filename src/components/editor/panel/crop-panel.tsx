@@ -26,12 +26,12 @@ const CropPanel = () => {
 
   return (
     <Panel>
-      {frameDatas.map((frame, index) => (
+      {frameDatas.map((frame) => (
         <div onClick={() => hanldeUpdateCropSizes(frame.width, frame.height)}>
           <FrameName>{frame.name}</FrameName>
           <Frame
             onClick={() => handleFrameActive(frame.name)}
-            key={index}
+            key={frame.name}
             selected={isFrame === frame.name}
           >
             <FrameContent>{frame.content}</FrameContent>
