@@ -1,18 +1,18 @@
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 
-const useCrop = ({ imageBounds, shapeRef }: any) => {
+const useCrop = ({ imageShape, shapeRef }: any) => {
   const { crop, setCropTools } = useToolbarStore((state) => state);
 
   const handleDragMove = (e: any) => {
     const { x, y } = e.target.position();
     const newX = Math.max(
-      imageBounds.x,
-      Math.min(x, imageBounds.x + imageBounds.width - crop.width)
+      imageShape.x,
+      Math.min(x, imageShape.x + imageShape.width - crop.width)
     );
     const newY = Math.max(
-      imageBounds.y,
-      Math.min(y, imageBounds.y + imageBounds.height - crop.height)
+      imageShape.y,
+      Math.min(y, imageShape.y + imageShape.height - crop.height)
     );
     setCropTools({ ...crop, x: newX, y: newY });
   };
@@ -27,12 +27,12 @@ const useCrop = ({ imageBounds, shapeRef }: any) => {
     const newHeight = Math.max(5, node.height() * scaleY);
 
     const newX = Math.max(
-      imageBounds.x,
-      Math.min(node.x(), imageBounds.x + imageBounds.width - newWidth)
+      imageShape.x,
+      Math.min(node.x(), imageShape.x + imageShape.width - newWidth)
     );
     const newY = Math.max(
-      imageBounds.y,
-      Math.min(node.y(), imageBounds.y + imageBounds.height - newHeight)
+      imageShape.y,
+      Math.min(node.y(), imageShape.y + imageShape.height - newHeight)
     );
 
     setCropTools({
@@ -45,12 +45,12 @@ const useCrop = ({ imageBounds, shapeRef }: any) => {
 
   const handledragBoundFunc = (pos: any) => {
     const newX = Math.max(
-      imageBounds.x,
-      Math.min(pos.x, imageBounds.x + imageBounds.width - crop.width)
+      imageShape.x,
+      Math.min(pos.x, imageShape.x + imageShape.width - crop.width)
     );
     const newY = Math.max(
-      imageBounds.y,
-      Math.min(pos.y, imageBounds.y + imageBounds.height - crop.height)
+      imageShape.y,
+      Math.min(pos.y, imageShape.y + imageShape.height - crop.height)
     );
     return { x: newX, y: newY };
   };

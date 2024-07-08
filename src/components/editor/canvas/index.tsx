@@ -6,33 +6,29 @@ import useMouseEventHandler from "@/shared/hooks/use-mouse-event-handler";
 import useImageUpload from "@/shared/hooks/use-image-upload";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import CropRect from "./crop-rect";
-import useInitializeCrop from "@/shared/hooks/use-Initialize-crop";
+import useInitializeCropPos from "@/shared/hooks/use-Initialize-crop-pos";
 import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import ShapeList from "./shape-list";
-import { isCropShape, isImageShape } from "../type-guards";
 import useZoom from "@/shared/hooks/use-zoom";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes } = useHistoryStore((state) => state);
-  const { handleZoom, zoom } = useZoom();
-  const image = shapes.find(isImageShape);
-  const cropedLayerFilter = shapes.filter(isCropShape);
-  const currentLayerSize = cropedLayerFilter[cropedLayerFilter.length - 1];
-
   const activeTool = useToolbarStore((state) => state.activeTool);
   const cancelSelection = useSelectStore((state) => state.cancelSelection);
 
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
     useMouseEventHandler({ shapes, setShapes });
 
+  const { handleZoom, zoom } = useZoom();
+
   const { handleDragUploadEnd, handleDragUploadStart } = useImageUpload({
     shapes,
     setShapes,
     stageRef,
   }); //이미지 드래그 업로드
-  console.log(shapes, "shapes");
-  useInitializeCrop({ imageShape: image });
+
+  const { cropedLayerSize, imageShape } = useInitializeCropPos({ shapes });
 
   return (
     <CanvasWrapper
@@ -60,16 +56,16 @@ const Canvas = () => {
       >
         <Layer
           ref={layerRef}
-          clipX={currentLayerSize?.x || image?.x}
-          clipY={currentLayerSize?.y || image?.y}
-          clipWidth={currentLayerSize?.width || image?.width}
-          clipHeight={currentLayerSize?.height || image?.height}
+          clipX={cropedLayerSize?.x || imageShape?.x}
+          clipY={cropedLayerSize?.y || imageShape?.y}
+          clipWidth={cropedLayerSize?.width || imageShape?.width}
+          clipHeight={cropedLayerSize?.height || imageShape?.height}
         >
           <ShapeList shapes={shapes} />
           {currentLine && <Line {...currentLine} />}
           <CropRect
-            imageBounds={currentLayerSize || image}
-            isRender={image && activeTool === "자르기"}
+            imageShape={cropedLayerSize || imageShape}
+            isRender={imageShape && activeTool === "자르기"}
           />
         </Layer>
       </CustomStage>

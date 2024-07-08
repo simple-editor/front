@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import useToolbarStore from "../store/toolbar-store";
+import { isCropShape, isImageShape } from "@/components/editor/type-guards";
 
-const useInitializeCrop = ({ imageShape }: any) => {
+const useInitializeCropPos = ({ shapes }: any) => {
   const setCropTools = useToolbarStore((state) => state.setCropTools);
+  const imageShape = shapes.find(isImageShape);
+  const cropedLayers = shapes.filter(isCropShape);
+  const cropedLayerSize = cropedLayers[cropedLayers.length - 1];
 
   useEffect(() => {
     const initializeCrop = () => {
@@ -19,7 +23,8 @@ const useInitializeCrop = ({ imageShape }: any) => {
       initializeCrop();
     }
   }, [imageShape, setCropTools]);
-  return;
+
+  return { cropedLayerSize, imageShape };
 };
 
-export default useInitializeCrop;
+export default useInitializeCropPos;

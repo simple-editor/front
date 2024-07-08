@@ -7,14 +7,14 @@ import { useRef, useEffect } from "react";
 import { Rect, Transformer, Group } from "react-konva";
 import { v4 as uuidv4 } from "uuid";
 
-const CropRect = ({ imageBounds, isRender }: any) => {
+const CropRect = ({ imageShape, isRender }: any) => {
   const crop = useToolbarStore((state) => state.crop);
   const { shapes, setShapes } = useHistoryStore((state) => state);
   const shapeRef = useRef<Konva.Rect>(null);
   const trRef = useRef<Konva.Transformer>(null);
 
   const { handleDragMove, handleTransform, handledragBoundFunc } = useCrop({
-    imageBounds,
+    imageShape,
     shapeRef,
   });
 
@@ -29,7 +29,7 @@ const CropRect = ({ imageBounds, isRender }: any) => {
   }, []);
 
   const handleDoubleClick = () => {
-    if (crop && imageBounds) {
+    if (crop && imageShape) {
       setShapes([
         ...shapes,
         {
