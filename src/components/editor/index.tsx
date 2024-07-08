@@ -4,10 +4,7 @@ import Toolbar from "@/components/editor/toolbar";
 import Panel from "@/components/editor/panel/indext";
 import { useEffect } from "react";
 import useHistoryStore from "@/shared/store/history-store";
-import {
-  initializeIndexedDB,
-  loadFromLocalStorage,
-} from "@/shared/services/storage";
+import { loadFromLocalStorage } from "@/shared/services/storage";
 
 const Editor = () => {
   useEffect(() => {

@@ -17,6 +17,7 @@ const Manager = () => {
   const reset = useHistoryStore((state) => state.reset);
   const setActiveTool = useToolbarStore((state) => state.setActiveTool);
   const layerRef = useCanvasRefStore((state) => state.layerRef);
+
   const downloadImage = () => {
     const layer = layerRef.current;
     if (!isKonvaNode(layer, Konva.Layer)) return;
