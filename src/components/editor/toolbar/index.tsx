@@ -40,4 +40,8 @@ const list = [
     title: "자르기",
     icon: <CropSvg />,
   },
+  {
+    title: "필터",
+    icon: <CropSvg />,
+  },
 ];
