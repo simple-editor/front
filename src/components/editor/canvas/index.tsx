@@ -71,6 +71,7 @@ const Canvas = () => {
           <ShapeList shapes={shapes} />
           {currentLine && <Line {...currentLine} />}
           <CropRect
+            cropShape={currentLayerSize}
             imageShape={currentLayerSize || imageShape}
             isRender={imageShape && activeTool === "자르기"}
           />

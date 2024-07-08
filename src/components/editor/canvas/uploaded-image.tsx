@@ -1,7 +1,6 @@
 import Konva from "konva";
 import { useEffect, useRef, useState } from "react";
 import { Image } from "react-konva";
-import { isKonvaNode } from "../type-guards";
 import {
   initializeIndexedDB,
   loadImageFromIndexedDB,
@@ -10,15 +9,15 @@ import useImageFilter from "@/shared/hooks/use-image-filter";
 
 interface IProps {
   image: Konva.ShapeConfig;
-  isSelected: boolean;
-  onSelect: () => void;
+  // isSelected: boolean;
+  // onSelect: () => void;
 }
 
-const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
+const UploadedImage = ({ image }: IProps) => {
   const [imageFile, setImageFile] = useState<HTMLImageElement | null>(null);
 
   const imageRef = useRef<Konva.Image>(null);
-  const trRef = useRef<Konva.Transformer>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       const db = await initializeIndexedDB();
@@ -32,19 +31,6 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
     fetchData();
   }, [image.src]);
 
-  useEffect(() => {
-    const transformer = trRef.current;
-    const image = imageRef.current;
-    const isRender =
-      isSelected &&
-      isKonvaNode(transformer, Konva.Transformer) &&
-      isKonvaNode(image, Konva.Image);
-    if (isRender) {
-      transformer.nodes([image]);
-      transformer.getLayer()?.batchDraw();
-    }
-  }, [isSelected]);
-
   useImageFilter({ imageRef });
 
   return (
@@ -56,8 +42,8 @@ const UploadedImage = ({ image, isSelected, onSelect }: IProps) => {
           x={image.x}
           y={image.y}
           draggable={false}
-          onClick={onSelect}
-          onTap={onSelect}
+          // onClick={onSelect}
+          // onTap={onSelect}
           ref={imageRef}
         />
       )}
