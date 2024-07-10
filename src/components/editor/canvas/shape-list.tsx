@@ -26,7 +26,13 @@ const ShapeList = ({ shapes }: ICanvasLayerProps) => {
               />
             );
           case "emoji":
-            return <Emoji key={shape.id} shape={shape} />;
+            return (
+              <Emoji
+                key={shape.id}
+                shape={shape}
+                onSelect={() => setSelectedId(String(shape.id))}
+              />
+            );
           // 다른 shape 타입도 추가 가능
           default:
             return null;
