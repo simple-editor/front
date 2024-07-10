@@ -1,11 +1,13 @@
 import { Text } from "react-konva";
 import useHistoryStore from "@/shared/store/history-store";
 import { IEmojiShape } from "@/shared/store/history-store.types";
+
 interface IProps {
   shape: IEmojiShape;
+  onSelect: () => void;
 }
 
-const Emoji = ({ shape }: IProps) => {
+const Emoji = ({ shape, onSelect }: IProps) => {
   const updateShape = useHistoryStore((state) => state.updateShape);
 
   return (
@@ -13,6 +15,8 @@ const Emoji = ({ shape }: IProps) => {
       <Text
         {...shape}
         draggable
+        onClick={onSelect}
+        onTab={onSelect}
         onDragEnd={(e) => {
           updateShape({
             ...shape,

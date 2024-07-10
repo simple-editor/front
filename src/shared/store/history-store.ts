@@ -16,6 +16,7 @@ interface IHistoryState {
 interface IHistoryAction {
   setShapes: (newShapes: IShapeState) => void;
   updateShape: (updatedShape: IShape) => void;
+  deleteShape: (deleteShapeId: string) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -41,6 +42,19 @@ const useHistoryStore = create<IHistoryState & IHistoryAction>()((set) => ({
         shape.id === updatedShape.id ? updatedShape : shape
       );
       const newHistory = [...state.history, state.shapes];
+      const newState = { shapes: newShapes, history: newHistory, future: [] };
+      saveToLocalStorage("simple-shapes", newShapes);
+      return newState;
+    });
+  },
+
+  deleteShape: (deleteShapeId: string) => {
+    set((state) => {
+      const newShapes = state.shapes.filter(
+        (shape) => shape.id !== deleteShapeId
+      );
+
+      const newHistory = [...state.history];
       const newState = { shapes: newShapes, history: newHistory, future: [] };
       saveToLocalStorage("simple-shapes", newShapes);
       return newState;
