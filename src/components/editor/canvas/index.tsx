@@ -14,12 +14,12 @@ import useKeybordAction from "@/shared/hooks/use-keybord-action";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
-  const { shapes, setShapes } = useHistoryStore((state) => state);
+  const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
   const activeTool = useToolbarStore((state) => state.activeTool);
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
 
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useMouseEventHandler({ shapes, setShapes });
+    useMouseEventHandler({ shapes, setShapes,updateShape  });
 
   const { handleZoom, zoom } = useZoom();
 

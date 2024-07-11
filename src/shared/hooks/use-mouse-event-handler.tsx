@@ -1,18 +1,19 @@
-import { IShapeBase } from "@/components/editor/canvas/types";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useCallback, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ILineShape } from "../store/history-store.types";
-const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
+const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
   const [currentLine, setCurrentLine] = useState<ILineShape | null>(null);
   const { activeTool, line: lineTools } = useToolbarStore((state) => state);
 
-  const isPaintRef = useRef(false);
+  const isDrawingRef = useRef(false);
   const currentShapeRef = useRef<string>();
 
   const handleMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    isPaintRef.current = true;
+    if (!(activeTool === "그리기")) return;
+
+    isDrawingRef.current = true;
     const stage = event.target.getStage();
     const point = stage?.getPointerPosition();
     const x = point?.x || 0;
@@ -21,52 +22,42 @@ const useMouseEventHandler = ({ shapes, setShapes }: IShapeBase) => {
     currentShapeRef.current = id;
 
     const { type, strokeColor, strokeWidthValue } = lineTools;
-    switch (activeTool) {
-      case "그리기": {
-        const update: ILineShape = {
-          id,
-          type: "line",
-          x: 0,
-          y: 0,
-          points: [x, y],
-          stroke: type === "eraser" ? "white" : strokeColor,
-          strokeWidth: strokeWidthValue,
-        };
-        setCurrentLine(update);
-      }
-    }
 
-    // if (activeTool === "그리기") handleDrawStart(event);
+    const update: ILineShape = {
+      id,
+      type: "line",
+      x: 0,
+      y: 0,
+      points: [x, y],
+      stroke: type === "eraser" ? "white" : strokeColor,
+      strokeWidth: strokeWidthValue,
+    };
+    setShapes([...shapes, update]);
+    setCurrentLine(update);
   };
   const handleMouseMove = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    // if (activeTool === "그리기") handleDrawiong(event);
-    if (!isPaintRef.current) return;
+    if (!isDrawingRef.current || !currentLine) return;
     const stage = event.target.getStage();
     const point = stage?.getPointerPosition();
     const x = point?.x || 0;
     const y = point?.y || 0;
-    const id = currentShapeRef.current;
-    if (id && currentLine)
-      switch (activeTool) {
-        case "그리기": {
-          const updatedLine: ILineShape = {
-            ...currentLine,
-            id,
-            points: [...currentLine!.points, x, y],
-          };
-          setCurrentLine(updatedLine);
-        }
-      }
+
+    const updatedLine: ILineShape = {
+      ...currentLine,
+      points: [...currentLine!.points, x, y],
+    };
+
+    setCurrentLine(updatedLine);
   };
 
   const handleMouseUp = useCallback(() => {
-    isPaintRef.current = false;
+    isDrawingRef.current = false;
 
     if (currentLine) {
-      setShapes([...shapes, currentLine]);
+      updateShape(currentLine);
       setCurrentLine(null);
     }
-  }, [currentLine, setShapes, shapes]);
+  }, [isDrawingRef.current, currentLine]);
 
   return { handleMouseDown, handleMouseMove, handleMouseUp, currentLine };
 };
