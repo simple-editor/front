@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type DrawAction =
+export type DrawAction =
   | "그리기"
   | "텍스트"
   | "이모지"

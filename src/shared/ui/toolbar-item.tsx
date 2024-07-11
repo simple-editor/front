@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import useToolbarStore from "@/shared/store/toolbar-store";
+import useToolbarStore, { DrawAction } from "@/shared/store/toolbar-store";
 
 interface IProps extends IIconProps {
   title: string;
@@ -18,7 +18,7 @@ const ToolbarItem = ({ title, icon }: IProps) => {
   const isSelected = activeTool === title;
 
   const handleClick = () => {
-    setActvieTool(title);
+    setActvieTool(title as DrawAction);
   };
 
   return (
