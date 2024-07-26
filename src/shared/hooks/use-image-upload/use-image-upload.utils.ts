@@ -28,14 +28,10 @@ export const createImageShape = async (
   const stageHeight = stageRef.current!.height();
   const imgWidth = img.width;
   const imgHeight = img.height;
-  const x = (stageWidth - imgWidth) / 2;
-  const y = (stageHeight - imgHeight) / 2;
 
   const newImage = {
     id: imageId,
     type: "image" as "image",
-    x,
-    y,
     width: imgWidth,
     height: imgHeight,
   };

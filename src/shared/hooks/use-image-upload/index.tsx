@@ -28,6 +28,7 @@ const useImageUpload = ({ stageRef, shapes, setShapes }: IProps) => {
         imageDataURL,
         stageRef
       ); //이미지 데이터를 가공한다.
+
       setShapes([...shapes, newImageShape]);
     } catch (error) {
       console.error("Failed to upload image:", error);

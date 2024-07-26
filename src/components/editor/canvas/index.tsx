@@ -11,6 +11,7 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import ShapeList from "./shape-list";
 import useZoom from "@/shared/hooks/use-zoom";
 import useKeybordAction from "@/shared/hooks/use-keybord-action";
+import useLayoutSize from "@/shared/hooks/use-layout-size";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
@@ -19,7 +20,7 @@ const Canvas = () => {
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
 
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useMouseEventHandler({ shapes, setShapes,updateShape  });
+    useMouseEventHandler({ shapes, setShapes, updateShape });
 
   const { handleZoom, zoom } = useZoom();
 
@@ -33,16 +34,19 @@ const Canvas = () => {
 
   useKeybordAction({ selectedId, cancelSelection });
 
+  const { layoutSize, parentRef } = useLayoutSize();
+
   return (
     <CanvasWrapper
       onDragOver={handleDragUploadStart}
       onDrop={handleDragUploadEnd}
+      ref={parentRef}
     >
       <CustomStage
         id="stage"
         ref={stageRef}
-        width={1440}
-        height={704}
+        width={layoutSize.w}
+        height={layoutSize.h}
         scaleX={zoom.stageScale}
         scaleY={zoom.stageScale}
         x={zoom.stageX}
@@ -59,10 +63,16 @@ const Canvas = () => {
       >
         <Layer
           ref={layerRef}
-          clipX={currentLayerSize?.x || imageShape?.x}
-          clipY={currentLayerSize?.y || imageShape?.y}
-          clipWidth={currentLayerSize?.width || imageShape?.width}
-          clipHeight={currentLayerSize?.height || imageShape?.height}
+          // clipX={
+          //   currentLayerSize?.x ||
+          //   (imageShape.width - stageRef.current?.width()) / 2
+          // }
+          // clipY={
+          //   currentLayerSize?.y ||
+          //   (imageShape.width - stageRef.current?.height()) / 2
+          // }
+          // clipWidth={currentLayerSize?.width || imageShape?.width}
+          // clipHeight={currentLayerSize?.height || imageShape?.height}
         >
           <ShapeList shapes={shapes} />
           {currentLine && <Line {...currentLine} />}

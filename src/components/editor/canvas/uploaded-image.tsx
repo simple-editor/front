@@ -6,6 +6,7 @@ import {
   loadImageFromIndexedDB,
 } from "@/shared/services/storage";
 import useImageFilter from "@/shared/hooks/use-image-filter";
+import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 
 interface IProps {
   image: Konva.ShapeConfig;
@@ -15,7 +16,7 @@ interface IProps {
 
 const UploadedImage = ({ image }: IProps) => {
   const [imageFile, setImageFile] = useState<HTMLImageElement | null>(null);
-
+  const stageRef = useCanvasRefStore((state) => state.stageRef);
   const imageRef = useRef<Konva.Image>(null);
 
   useEffect(() => {
@@ -39,8 +40,8 @@ const UploadedImage = ({ image }: IProps) => {
         <Image
           image={imageFile}
           {...image}
-          x={image.x}
-          y={image.y}
+          x={(stageRef.current?.width() - image.width) / 2}
+          y={(stageRef.current?.height() - image.height) / 2}
           draggable={false}
           // onClick={onSelect}
           // onTap={onSelect}
