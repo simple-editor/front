@@ -100,6 +100,7 @@ const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
           value={textValue}
           onChange={handleTextChange}
           onKeyDown={handleEscapeKeys}
+          onToggle={toggleEdit}
         />
       )}
     </>
