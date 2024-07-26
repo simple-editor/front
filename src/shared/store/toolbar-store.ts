@@ -1,6 +1,13 @@
 import { create } from "zustand";
 
-type DrawAction = "그리기" | "텍스트" | "이모지" | "프레임" | "필터" | "자르기";
+export type DrawAction =
+  | "그리기"
+  | "텍스트"
+  | "이모지"
+  | "프레임"
+  | "필터"
+  | "자르기"
+  | "";
 
 interface ILineTools {
   type: string;
@@ -27,8 +34,8 @@ interface IFilter {
 }
 
 interface IToolbar {
-  activeTool: DrawAction | string;
-  setActiveTool: (tool: DrawAction | string) => void;
+  activeTool: DrawAction;
+  setActiveTool: (tool: DrawAction) => void;
   line: ILineTools;
   text: ITextTools;
   crop: ICrop;
