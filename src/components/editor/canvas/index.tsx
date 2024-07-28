@@ -11,38 +11,43 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import ShapeList from "./shape-list";
 import useZoom from "@/shared/hooks/use-zoom";
 import useKeybordAction from "@/shared/hooks/use-keybord-action";
+import useLayoutResize from "./use-layout-resize";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
   const activeTool = useToolbarStore((state) => state.activeTool);
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
-
+  // 선 그리기
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useMouseEventHandler({ shapes, setShapes,updateShape  });
-
+    useMouseEventHandler({ shapes, setShapes, updateShape });
+  //줌
   const { handleZoom, zoom } = useZoom();
-
+  // 이미지 업로드
   const { handleDragUploadEnd, handleDragUploadStart } = useImageUpload({
     shapes,
     setShapes,
-    stageRef,
-  }); //이미지 드래그 업로드
-
+  });
+  // 이미지 위치 조정
   const { currentLayerSize, imageShape } = useInitializeCropPos({ shapes });
-
+  // 키보드 액션
   useKeybordAction({ selectedId, cancelSelection });
+
+  //캔버스 반응형 레이아웃 조정
+  const { width, height, parentRef } = useLayoutResize();
 
   return (
     <CanvasWrapper
       onDragOver={handleDragUploadStart}
       onDrop={handleDragUploadEnd}
+      ref={parentRef}
     >
+      <input value={width}></input>
       <CustomStage
         id="stage"
         ref={stageRef}
-        width={1440}
-        height={704}
+        width={width}
+        height={height}
         scaleX={zoom.stageScale}
         scaleY={zoom.stageScale}
         x={zoom.stageX}
@@ -59,10 +64,16 @@ const Canvas = () => {
       >
         <Layer
           ref={layerRef}
-          clipX={currentLayerSize?.x || imageShape?.x}
-          clipY={currentLayerSize?.y || imageShape?.y}
-          clipWidth={currentLayerSize?.width || imageShape?.width}
-          clipHeight={currentLayerSize?.height || imageShape?.height}
+          // clipX={
+          //   currentLayerSize?.x ||
+          //   (imageShape.width - stageRef.current?.width()) / 2
+          // }
+          // clipY={
+          //   currentLayerSize?.y ||
+          //   (imageShape.width - stageRef.current?.height()) / 2
+          // }
+          // clipWidth={currentLayerSize?.width || imageShape?.width}
+          // clipHeight={currentLayerSize?.height || imageShape?.height}
         >
           <ShapeList shapes={shapes} />
           {currentLine && <Line {...currentLine} />}

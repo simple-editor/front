@@ -1,5 +1,4 @@
 import { readFileAndSaveToIndexedDB } from "@/shared/services/storage";
-import { Stage } from "konva/lib/Stage";
 
 export const loadImage = (dataURL: string) => {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -18,26 +17,18 @@ export const updateIndexedDB: (
   return dataURL;
 };
 
-export const createImageShape = async (
-  imageId: string,
-  dataURL: string,
-  stageRef: React.RefObject<Stage>
-) => {
+export const createImageShape = async (imageId: string, dataURL: string) => {
   const img = await loadImage(dataURL);
-  const stageWidth = stageRef.current!.width();
-  const stageHeight = stageRef.current!.height();
   const imgWidth = img.width;
   const imgHeight = img.height;
-  const x = (stageWidth - imgWidth) / 2;
-  const y = (stageHeight - imgHeight) / 2;
 
   const newImage = {
     id: imageId,
     type: "image" as "image",
-    x,
-    y,
     width: imgWidth,
     height: imgHeight,
+    x: 0,
+    y: 0,
   };
   return newImage;
 };

@@ -13,7 +13,7 @@ export default defineConfig({
       { find: "@/hooks", replacement: "/src/hooks" },
       { find: "@/layouts", replacement: "/src/layouts" },
       { find: "@/assets", replacement: "/src/assets" },
-      { find: "node_modules", replacement: "/node_modules" },
+      // { find: "node_modules", replacement: "/node_modules" },
     ],
   },
   server: {
