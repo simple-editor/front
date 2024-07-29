@@ -16,11 +16,12 @@ import useLayoutResize from "./use-layout-resize";
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
+  const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
+    useMouseEventHandler({ shapes, setShapes, updateShape });
   const activeTool = useToolbarStore((state) => state.activeTool);
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
   // 선 그리기
-  const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useMouseEventHandler({ shapes, setShapes, updateShape });
+
   //줌
   const { handleZoom, zoom } = useZoom();
   // 이미지 업로드
@@ -36,13 +37,15 @@ const Canvas = () => {
   //캔버스 반응형 레이아웃 조정
   const { width, height, parentRef } = useLayoutResize();
 
+  const groupX = (width - imageShape?.width) / 2 || 0;
+  const groupY = (height - imageShape?.height) / 2 || 0;
+
   return (
     <CanvasWrapper
       onDragOver={handleDragUploadStart}
       onDrop={handleDragUploadEnd}
       ref={parentRef}
     >
-      <input value={width}></input>
       <CustomStage
         id="stage"
         ref={stageRef}
@@ -57,32 +60,41 @@ const Canvas = () => {
             cancelSelection();
           }
         }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
         onWheel={handleZoom}
       >
-        <Layer
-          ref={layerRef}
-          // clipX={
-          //   currentLayerSize?.x ||
-          //   (imageShape.width - stageRef.current?.width()) / 2
-          // }
-          // clipY={
-          //   currentLayerSize?.y ||
-          //   (imageShape.width - stageRef.current?.height()) / 2
-          // }
-          // clipWidth={currentLayerSize?.width || imageShape?.width}
-          // clipHeight={currentLayerSize?.height || imageShape?.height}
-        >
-          <ShapeList shapes={shapes} />
-          {currentLine && <Line {...currentLine} />}
-          <CropRect
-            cropShape={currentLayerSize}
-            imageShape={currentLayerSize || imageShape}
-            isRender={imageShape && activeTool === "자르기"}
-          />
-        </Layer>
+        {imageShape && (
+          <Layer
+            ref={layerRef}
+            x={groupX}
+            y={groupY}
+            width={imageShape.width || 0}
+            height={imageShape.height || 0}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            clipFunc={
+              currentLayerSize
+                ? (ctx) => {
+                    ctx.rect(
+                      currentLayerSize.x,
+                      currentLayerSize.y,
+                      currentLayerSize.width,
+                      currentLayerSize.height
+                    );
+                    ctx.clip();
+                  }
+                : undefined
+            }
+          >
+            <ShapeList shapes={shapes} />
+
+            <CropRect
+              imageShape={imageShape}
+              isRender={imageShape && activeTool === "자르기"}
+            />
+            {currentLine && <Line {...currentLine} />}
+          </Layer>
+        )}
       </CustomStage>
     </CanvasWrapper>
   );

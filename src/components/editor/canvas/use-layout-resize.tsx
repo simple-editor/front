@@ -1,19 +1,19 @@
-import useLayoutStore from "@/shared/store/layout-store";
 import throttle from "lodash/throttle";
 import { useEffect, useRef } from "react";
+import useLayoutStore from "@/shared/store/layout-store";
 
 const useLayoutResize = () => {
+  const parentRef = useRef<HTMLDivElement>(null);
   const { setWidth, setHeight, width, height } = useLayoutStore(
     (state) => state
   );
-  const parentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleResize = throttle(() => {
       if (parentRef.current) {
         setWidth(parentRef.current.offsetWidth);
         setHeight(parentRef.current.offsetHeight);
       }
-    }, 1000);
+    }, 100);
 
     handleResize(); // 초기 사이즈 설정
 

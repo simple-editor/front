@@ -6,7 +6,6 @@ import {
   loadImageFromIndexedDB,
 } from "@/shared/services/storage";
 import useImageFilter from "@/shared/hooks/use-image-filter";
-import useLayoutStore from "@/shared/store/layout-store";
 
 interface IProps {
   image: Konva.ShapeConfig;
@@ -16,7 +15,7 @@ interface IProps {
 
 const UploadedImage = ({ image }: IProps) => {
   const [imageFile, setImageFile] = useState<HTMLImageElement | null>(null);
-  const { width, height } = useLayoutStore((state) => state);
+
   const imageRef = useRef<Konva.Image>(null);
 
   useEffect(() => {
@@ -37,16 +36,7 @@ const UploadedImage = ({ image }: IProps) => {
   return (
     <>
       {imageFile && (
-        <Image
-          image={imageFile}
-          {...image}
-          x={(width - (image.width as number)) / 2}
-          y={(height - (image.height as number)) / 2}
-          draggable={false}
-          // onClick={onSelect}
-          // onTap={onSelect}
-          ref={imageRef}
-        />
+        <Image image={imageFile} {...image} draggable={false} ref={imageRef} />
       )}
     </>
   );

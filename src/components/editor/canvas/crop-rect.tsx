@@ -13,10 +13,7 @@ const CropRect = ({ imageShape, isRender }: any) => {
   const shapeRef = useRef<Konva.Rect>(null);
   const trRef = useRef<Konva.Transformer>(null);
 
-  const { handleDragMove, handleTransform, handledragBoundFunc } = useCrop({
-    imageShape,
-    shapeRef,
-  });
+  const { handleDragMove, handleTransform } = useCrop();
 
   useTransformer({
     isSelected: true,
@@ -52,9 +49,9 @@ const CropRect = ({ imageShape, isRender }: any) => {
           fill="black"
           opacity={0.3}
           draggable
-          dragBoundFunc={handledragBoundFunc}
-          onDragMove={handleDragMove}
+          onDragEnd={handleDragMove}
           onTransformEnd={handleTransform}
+          onTransform={handleTransform}
           onDblClick={handleDoubleClick}
         />
         <Transformer ref={trRef} boundBoxFunc={(_oldbox, newBox) => newBox} />

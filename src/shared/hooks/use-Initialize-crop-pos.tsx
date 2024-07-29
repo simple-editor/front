@@ -12,8 +12,8 @@ const useInitializeCropPos = ({ shapes }: any) => {
     const initializeCrop = () => {
       if (imageShape) {
         setCropTools({
-          x: imageShape.x,
-          y: imageShape.y,
+          x: 0,
+          y: 0,
           width: imageShape.width / 2,
           height: imageShape.height / 2,
         });
