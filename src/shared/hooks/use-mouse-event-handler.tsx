@@ -14,8 +14,8 @@ const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
     if (!(activeTool === "그리기")) return;
 
     isDrawingRef.current = true;
-    const stage = event.target.getStage();
-    const point = stage?.getPointerPosition();
+    const stage = event.target.getLayer();
+    const point = stage?.getRelativePointerPosition();
     const x = point?.x || 0;
     const y = point?.y || 0;
     const id = uuidv4();
@@ -37,8 +37,8 @@ const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
   };
   const handleMouseMove = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (!isDrawingRef.current || !currentLine) return;
-    const stage = event.target.getStage();
-    const point = stage?.getPointerPosition();
+    const stage = event.target.getLayer();
+    const point = stage?.getRelativePointerPosition();
     const x = point?.x || 0;
     const y = point?.y || 0;
 
