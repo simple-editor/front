@@ -27,7 +27,7 @@
 
 ```bash
 # 1. 레포지토리 클론
-git clone [https://github.com/yourusername/edit-photo.git](https://github.com/simple-editor/front.git)
+git clone https://github.com/simple-editor/front.git
 
 # 2. 의존성 설치
 cd simple-editor
