@@ -1,23 +1,75 @@
-
 ## Photo Editor - The Free Online Photo Editor In Your Browser
-### 프로젝트 소개
-- 본 프로젝트는  손쉽게 고품질 이미지 편집을 지원하는 온라인 포토 에디터입니다.    
-- 사용자 친화적인 UI와 다양한 편집 도구로 누구나 간단히 이미지 수정, 필터 적용, 색상 조정 등을 할 수 있습니다.    
-- 어디서든 웹에서 바로 사용할 수 있어 설치 없이 간편하게 편집 작업을 수행할 수 있습니다.    
 
+### 프로젝트 소개
+
+- 고품질 이미지 편집을 지원하는 온라인 포토 에디터  
+- 사용자 친화적 UI와 다양한 편집 도구 제공  
+- 웹에서 바로 사용 가능, 설치 없이 간편한 편집  
 
 <p align="center">
-<img width="800" height="400" align="center" alt="스크린샷 2024-07-30 오후 3 31 39" src="https://github.com/user-attachments/assets/e79f7cb0-173e-4889-b0b0-3d4b52e29e6c">
+  <img src="https://github.com/user-attachments/assets/e79f7cb0-173e-4889-b0b0-3d4b52e29e6c" width="800px" height="400px" alt="Photo Editor 화면" />  
+  <br>
+  <em>Photo Editor 메인 화면</em>
 </p>
 
-### 주요 기능 (Features)
+### 핵심 개발 기능 (Features)
 
-- **간편한 이미지 자르기 및 회전**: 원하는 크기로 자르고 회전하여 이미지 구성을 조정합니다.
-- **밝기 및 대비 조절**: 이미지의 밝기, 대비, 색조를 미세하게 조정하여 원하는 느낌을 표현할 수 있습니다.
-- **필터 효과**: 다양한 필터 효과를 통해 사진을 한층 돋보이게 만듭니다.
-- **레이어 및 텍스트 추가**: 이미지에 레이어를 추가하거나 텍스트를 삽입하여 더욱 창의적인 편집이 가능합니다.
-- **Undo/Redo 기능**: 실수한 작업을 되돌리거나 다시 적용할 수 있어 작업이 원활합니다.
-- **자동 저장 및 편집 복원**: LocalStorage와 IndexedDB를 이용해 클라이언트에서 자동 저장을 지원하며, 편집 중이던 작업을 나중에 복원할 수 있습니다.
+#### 1. 그리기
+
+- Canvas로 이미지에 선 그리기 
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/e1dd9496-ce51-40d0-b692-b2851376b7bd" alt="이미지 자르기 및 회전" width="300">
+  <br>
+  <em>이미지 자르기</em>
+</p>
+
+---
+#### 2. 이미지 자르기 및 회전
+
+- 사용자가 원하는 크기로 이미지를 자르고 회전 가능  
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/62ad03c8-182d-4e61-8747-706cc5c184b9" alt="이미지 자르기 및 회전" width="300">
+  <br>
+  <em>이미지 자르기</em>
+</p>
+
+---
+
+#### 3. 로컬 스토리지를 활용한 이미지 편집 데이터 보존
+
+- 새로고침이나 사이트 재접속 시 서버의 도움 필요 없이 이미지 편집 데이터 보존 기능
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/c1e282eb-440e-4c07-b790-2b03d4c9ada3" alt="이미지 자르기 및 회전" width="300">
+  <br>
+  <em>이미지 자르기</em>
+</p>
+
+---
+#### 4. 줌 확대 축소
+
+- 사용자가 원하는 줌으로 조절 가능 
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/b14d538c-12e2-456b-967c-f9ea5c33a454" alt="이미지 자르기 및 회전" width="300">
+  <br>
+  <em>이미지 자르기</em>
+</p>
+
+
+#### 5. 필터 및 효과 적용
+
+- 다양한 필터와 효과를 선택해 이미지 스타일링  
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/58ae7ce1-1cd3-4efa-83a8-0d183e47eab5" alt="필터 및 효과" width="300">
+  <br>
+  <em>필터 및 효과 적용 화면</em>
+</p>
+
+---
 
 ### 기술 스택 (Built With)
 - Frontend: React, Typesciprt, Canvas API, Zustand
