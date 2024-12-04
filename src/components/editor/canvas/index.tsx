@@ -12,6 +12,7 @@ import ShapeList from "./shape-list";
 import useZoom from "@/shared/hooks/use-zoom";
 import useKeybordAction from "@/shared/hooks/use-keybord-action";
 import useLayoutResize from "./use-layout-resize";
+import { useState } from "react";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
@@ -25,10 +26,11 @@ const Canvas = () => {
   //줌
   const { handleZoom, zoom } = useZoom();
   // 이미지 업로드
-  const { handleDragUploadEnd, handleDragUploadStart } = useImageUpload({
-    shapes,
-    setShapes,
-  });
+  const { handleDragUploadEnd, handleDragUploadStart, handleButtonUpload } =
+    useImageUpload({
+      shapes,
+      setShapes,
+    });
   // 이미지 위치 조정
   const { currentLayerSize, imageShape } = useInitializeCropPos({ shapes });
   // 키보드 액션
@@ -46,6 +48,17 @@ const Canvas = () => {
       onDrop={handleDragUploadEnd}
       ref={parentRef}
     >
+      {!imageShape && (
+        <ImageUploadButton style={{}}>
+          Upload Image
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleButtonUpload}
+          />
+        </ImageUploadButton>
+      )}
       <CustomStage
         id="stage"
         ref={stageRef}
@@ -117,4 +130,24 @@ const CustomStage = styled(Stage)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); */
+`;
+
+const ImageUploadButton = styled.label`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  display: inline-flex;
+  padding: 0px 20px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border: 1px solid;
+  background-color: ${({ theme }) => theme.colors.gray100};
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  height: 48px;
+  z-index: 10;
 `;

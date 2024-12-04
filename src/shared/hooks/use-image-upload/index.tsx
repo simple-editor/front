@@ -29,7 +29,24 @@ const useImageUpload = ({ shapes, setShapes }: IProps) => {
     }
   };
 
-  return { handleDragUploadStart, handleDragUploadEnd };
+  const handleButtonUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    event.preventDefault();
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const imageId = uuidv4();
+      const imageDataURL = await updateIndexedDB(file, imageId); // IndexedDB에 이미지를 업로드
+      const newImageShape = await createImageShape(imageId, imageDataURL); // 이미지 데이터를 가공
+      setShapes([...shapes, newImageShape]);
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+    }
+  };
+
+  return { handleDragUploadStart, handleDragUploadEnd, handleButtonUpload };
 };
 
 export default useImageUpload;

@@ -3,6 +3,7 @@ import PencilSvg from "@/assets/icons/sidebar-pencil.svg?react";
 import TextSvg from "@/assets/icons/sidebar-text.svg?react";
 import SmailSvg from "@/assets/icons/sidebar-smail.svg?react";
 import CropSvg from "@/assets/icons/sidebar-crop.svg?react";
+import FilterSvg from "@/assets/icons/color-swatch.svg?react";
 import ToolbarItem from "@/shared/ui/toolbar-item";
 
 const Toolbar = () => {
@@ -42,6 +43,6 @@ const list = [
   },
   {
     title: "필터",
-    icon: <CropSvg />,
+    icon: <FilterSvg />,
   },
 ];
