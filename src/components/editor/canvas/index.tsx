@@ -12,7 +12,6 @@ import ShapeList from "./shape-list";
 import useZoom from "@/shared/hooks/use-zoom";
 import useKeybordAction from "@/shared/hooks/use-keybord-action";
 import useLayoutResize from "./use-layout-resize";
-import { useState } from "react";
 
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
