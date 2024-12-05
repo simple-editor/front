@@ -8,12 +8,15 @@ module.exports = {
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "@typescript-eslint/eslint-plugin"],
   rules: {
-    "@typescript-eslint/no-unused-vars": false,
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": 0,
+    "react-hooks/exhaustive-deps": 1,
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
     ],
+    "react-hooks/exhaustive-deps": "warn", // useEffect 의존성 배열 체크
   },
 };

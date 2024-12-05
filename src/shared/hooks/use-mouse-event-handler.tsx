@@ -1,6 +1,6 @@
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ILineShape } from "../store/history-store.types";
 const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
@@ -10,45 +10,51 @@ const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
   const isDrawingRef = useRef(false);
   const currentShapeRef = useRef<string>();
 
-  const handleMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    if (!(activeTool === "그리기")) return;
+  const handleMouseDown = useCallback(
+    (event: Konva.KonvaEventObject<MouseEvent>) => {
+      if (!(activeTool === "그리기")) return;
 
-    isDrawingRef.current = true;
-    const stage = event.target.getLayer();
-    const point = stage?.getRelativePointerPosition();
-    const x = point?.x || 0;
-    const y = point?.y || 0;
-    const id = uuidv4();
-    currentShapeRef.current = id;
+      isDrawingRef.current = true;
+      const stage = event.target.getLayer();
+      const point = stage?.getRelativePointerPosition();
+      const x = point?.x || 0;
+      const y = point?.y || 0;
+      const id = uuidv4();
+      currentShapeRef.current = id;
 
-    const { type, strokeColor, strokeWidthValue } = lineTools;
+      const { type, strokeColor, strokeWidthValue } = lineTools;
 
-    const update: ILineShape = {
-      id,
-      type: "line",
-      x: 0,
-      y: 0,
-      points: [x, y],
-      stroke: type === "eraser" ? "white" : strokeColor,
-      strokeWidth: strokeWidthValue,
-    };
-    setShapes([...shapes, update]);
-    setCurrentLine(update);
-  };
-  const handleMouseMove = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    if (!isDrawingRef.current || !currentLine) return;
-    const stage = event.target.getLayer();
-    const point = stage?.getRelativePointerPosition();
-    const x = point?.x || 0;
-    const y = point?.y || 0;
+      const update: ILineShape = {
+        id,
+        type: "line",
+        x: 0,
+        y: 0,
+        points: [x, y],
+        stroke: type === "eraser" ? "white" : strokeColor,
+        strokeWidth: strokeWidthValue,
+      };
+      setShapes([...shapes, update]);
+      setCurrentLine(update);
+    },
+    [activeTool, lineTools, setShapes, shapes]
+  );
+  const handleMouseMove = useCallback(
+    (event: Konva.KonvaEventObject<MouseEvent>) => {
+      if (!isDrawingRef.current || !currentLine) return;
+      const stage = event.target.getLayer();
+      const point = stage?.getRelativePointerPosition();
+      const x = point?.x || 0;
+      const y = point?.y || 0;
 
-    const updatedLine: ILineShape = {
-      ...currentLine,
-      points: [...currentLine!.points, x, y],
-    };
+      const updatedLine: ILineShape = {
+        ...currentLine,
+        points: [...currentLine!.points, x, y],
+      };
 
-    setCurrentLine(updatedLine);
-  };
+      setCurrentLine(updatedLine);
+    },
+    [currentLine]
+  );
 
   const handleMouseUp = useCallback(() => {
     isDrawingRef.current = false;
@@ -57,9 +63,13 @@ const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
       updateShape(currentLine);
       setCurrentLine(null);
     }
-  }, [isDrawingRef.current, currentLine]);
+  }, [currentLine, updateShape]);
 
-  return { handleMouseDown, handleMouseMove, handleMouseUp, currentLine };
+  const currentLineMemo = useMemo(() => {
+    return currentLine;
+  }, [currentLine]);
+
+  return { handleMouseDown, handleMouseMove, handleMouseUp, currentLineMemo };
 };
 
 export default useMouseEventHandler;

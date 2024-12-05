@@ -10,6 +10,7 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import { isKonvaNode } from "../type-guards";
 import Konva from "konva";
 import useToolbarStore from "@/shared/store/toolbar-store";
+import { useCallback } from "react";
 
 const Manager = () => {
   const undo = useHistoryStore((state) => state.undo);
@@ -18,7 +19,7 @@ const Manager = () => {
   const setActiveTool = useToolbarStore((state) => state.setActiveTool);
   const layerRef = useCanvasRefStore((state) => state.layerRef);
 
-  const downloadImage = () => {
+  const downloadImage = useCallback(() => {
     const layer = layerRef.current;
     if (!isKonvaNode(layer, Konva.Layer)) return;
     setActiveTool("");
@@ -36,7 +37,7 @@ const Manager = () => {
       link.click();
       document.body.removeChild(link);
     }, 100);
-  };
+  }, [layerRef, setActiveTool]);
 
   return (
     <Wrapper>

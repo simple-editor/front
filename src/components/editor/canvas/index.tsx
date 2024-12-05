@@ -16,7 +16,7 @@ import useLayoutResize from "./use-layout-resize";
 const Canvas = () => {
   const { layerRef, stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
-  const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
+  const { currentLineMemo, handleMouseDown, handleMouseMove, handleMouseUp } =
     useMouseEventHandler({ shapes, setShapes, updateShape });
   const activeTool = useToolbarStore((state) => state.activeTool);
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
@@ -104,7 +104,7 @@ const Canvas = () => {
               imageShape={imageShape}
               isRender={imageShape && activeTool === "자르기"}
             />
-            {currentLine && <Line {...currentLine} />}
+            {currentLineMemo && <Line {...currentLineMemo} />}
           </Layer>
         )}
       </CustomStage>

@@ -3,11 +3,11 @@ import { useTransformer } from "@/shared/hooks/use-transformer";
 import useHistoryStore from "@/shared/store/history-store";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { Rect, Transformer } from "react-konva";
 import { v4 as uuidv4 } from "uuid";
 
-const CropRect = ({ imageShape, isRender }: any) => {
+const CropRect = memo(({ imageShape, isRender }: any) => {
   const crop = useToolbarStore((state) => state.crop);
   const { shapes, setShapes } = useHistoryStore((state) => state);
   const shapeRef = useRef<Konva.Rect>(null);
@@ -27,7 +27,7 @@ const CropRect = ({ imageShape, isRender }: any) => {
     if (crop && imageShape) {
       const newShape = {
         id: uuidv4(),
-        type: "crop" as "crop",
+        type: "crop" as const,
         ...crop,
       };
 
@@ -58,6 +58,6 @@ const CropRect = ({ imageShape, isRender }: any) => {
       </>
     )
   );
-};
+});
 
 export default CropRect;

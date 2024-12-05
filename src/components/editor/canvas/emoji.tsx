@@ -1,13 +1,14 @@
 import { Text } from "react-konva";
 import useHistoryStore from "@/shared/store/history-store";
 import { IEmojiShape } from "@/shared/store/history-store.types";
+import { memo } from "react";
 
 interface IProps {
   shape: IEmojiShape;
   onSelect: () => void;
 }
 
-const Emoji = ({ shape, onSelect }: IProps) => {
+const Emoji = memo(({ shape, onSelect }: IProps) => {
   const updateShape = useHistoryStore((state) => state.updateShape);
 
   return (
@@ -29,6 +30,6 @@ const Emoji = ({ shape, onSelect }: IProps) => {
       />
     </>
   );
-};
+});
 
 export default Emoji;

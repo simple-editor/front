@@ -1,11 +1,12 @@
 import { ILineShape } from "@/shared/store/history-store.types";
+import { memo } from "react";
 import { Line } from "react-konva";
 
 interface IProps {
   line: ILineShape;
 }
 
-const FreeDrawing = ({ line }: IProps) => {
+const FreeDrawing = memo(({ line }: IProps) => {
   return (
     <>
       <Line
@@ -18,6 +19,6 @@ const FreeDrawing = ({ line }: IProps) => {
       />
     </>
   );
-};
+});
 
 export default FreeDrawing;

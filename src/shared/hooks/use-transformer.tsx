@@ -23,5 +23,5 @@ export const useTransformer = <T extends Konva.Shape>({
       transfomrer.nodes([shape]);
       layer?.batchDraw();
     }
-  }, [shape, transfomrer]);
+  }, [isSelected, shape, transfomrer]);
 };

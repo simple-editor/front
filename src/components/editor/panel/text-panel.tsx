@@ -47,7 +47,7 @@ const TextPanel = () => {
     const stageHeight = stage!.offsetHeight;
     const newText = {
       id: `text${shapes.length + 1}`,
-      type: "text" as "text",
+      type: "text" as const,
       x: stageWidth / 2,
       y: stageHeight / 2,
       text: "Sample!",

@@ -23,7 +23,7 @@ const useKeybordAction = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [deleteShape, selectedId]);
+  }, [cancelSelection, deleteShape, selectedId]);
 };
 
 export default useKeybordAction;

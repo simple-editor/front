@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Text } from "react-konva";
 import EditableTextInput from "./editable-text-Input";
 import useHistoryStore from "@/shared/store/history-store";
@@ -10,7 +10,7 @@ interface IProps {
   onSelect: () => void;
 }
 
-const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
+const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [points, setPoints] = useState({
     x: shape.x,
@@ -105,6 +105,6 @@ const EditableText = ({ isSelected, onSelect, shape }: IProps) => {
       )}
     </>
   );
-};
+});
 
 export default EditableText;

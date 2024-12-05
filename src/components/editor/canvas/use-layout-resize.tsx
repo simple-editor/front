@@ -22,7 +22,7 @@ const useLayoutResize = () => {
     return () => {
       window.removeEventListener("resize", handleResize); // 클린업
     };
-  }, []);
+  }, [setHeight, setWidth]);
   return {
     width,
     height,
