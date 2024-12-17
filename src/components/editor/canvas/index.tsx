@@ -11,19 +11,23 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import ShapeList from "./shape-list";
 import useZoom from "@/shared/hooks/use-zoom";
 import useKeybordAction from "@/shared/hooks/use-keybord-action";
-import useLayoutResize from "./use-layout-resize";
+import { useLayoutEffect, useRef, useState } from "react";
+import useLayoutResize from "@/components/editor/canvas/use-layout-resize";
 
 const Canvas = () => {
-  const { layerRef, stageRef } = useCanvasRefStore((state) => state);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const { stageRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
-  const { currentLineMemo, handleMouseDown, handleMouseMove, handleMouseUp } =
+  const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
     useMouseEventHandler({ shapes, setShapes, updateShape });
   const activeTool = useToolbarStore((state) => state.activeTool);
+
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
   // 선 그리기
-
+  // const { width, height } = useLayoutResize(parentRef);
   //줌
-  const { handleZoom, zoom } = useZoom();
+  const { handleZoom } = useZoom();
   // 이미지 업로드
   const { handleDragUploadEnd, handleDragUploadStart, handleButtonUpload } =
     useImageUpload({
@@ -34,18 +38,32 @@ const Canvas = () => {
   const { currentLayerSize, imageShape } = useInitializeCropPos({ shapes });
   // 키보드 액션
   useKeybordAction({ selectedId, cancelSelection });
+  const { xOffset, yOffset, ratio } = useLayoutResize(shapes);
 
-  //캔버스 반응형 레이아웃 조정
-  const { width, height, parentRef } = useLayoutResize();
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      if (parentRef.current) {
+        setWidth(parentRef.current.offsetWidth);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize); // 윈도우 리사이즈 이벤트에 핸들러 등록
 
-  const groupX = (width - imageShape?.width) / 2 || 0;
-  const groupY = (height - imageShape?.height) / 2 || 0;
+    return () => {
+      window.removeEventListener("resize", handleResize); // 클린업
+    };
+  }, [stageRef]);
+
+  // 드래그 및 사이즈 조절 이벤트
+
+  // Crop 기능
 
   return (
     <CanvasWrapper
       onDragOver={handleDragUploadStart}
       onDrop={handleDragUploadEnd}
       ref={parentRef}
+      id="parent"
     >
       {!imageShape && (
         <ImageUploadButton style={{}}>
@@ -58,15 +76,18 @@ const Canvas = () => {
           />
         </ImageUploadButton>
       )}
+
       <CustomStage
         id="stage"
-        ref={stageRef}
         width={width}
-        height={height}
-        scaleX={zoom.stageScale}
-        scaleY={zoom.stageScale}
-        x={zoom.stageX}
-        y={zoom.stageY}
+        height={500}
+        ref={stageRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        // scaleX={parentRef.current.offsetWidth / imageShape?.width}
+        // scaleY={parentRef.current.offsetWidth / imageShape?.width}
+
         onClick={(e) => {
           if (e.currentTarget._id === e.target._id) {
             cancelSelection();
@@ -76,14 +97,10 @@ const Canvas = () => {
       >
         {imageShape && (
           <Layer
-            ref={layerRef}
-            x={groupX}
-            y={groupY}
-            width={imageShape.width || 0}
-            height={imageShape.height || 0}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
+            scaleX={ratio}
+            scaleY={ratio}
+            x={xOffset}
+            y={yOffset}
             clipFunc={
               currentLayerSize
                 ? (ctx) => {
@@ -104,7 +121,7 @@ const Canvas = () => {
               imageShape={imageShape}
               isRender={imageShape && activeTool === "자르기"}
             />
-            {currentLineMemo && <Line {...currentLineMemo} />}
+            {currentLine && <Line {...currentLine} />}
           </Layer>
         )}
       </CustomStage>
@@ -118,13 +135,23 @@ const CanvasWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.gray10};
   border: 1px solid ${({ theme }) => theme.colors.gray30};
   border-radius: 8px;
-  max-width: 1440px;
-  height: 704px;
-  margin: 0 auto;
+  grid-row: 2;
+  grid-column: 2;
+  height: 500px;
+  display: grid;
+  grid-template-columns: 1fr;
   box-sizing: border-box;
 `;
 
 const CustomStage = styled(Stage)`
+  width: 100%;
+  & > .konvajs-content {
+    width: 100% !important;
+  }
+  & .konvajs-content > canvas {
+    width: calc(100% - 2px) !important;
+    height: 100% !important;
+  }
   /* position: absolute;
   top: 50%;
   left: 50%;

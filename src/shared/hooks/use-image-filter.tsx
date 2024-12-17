@@ -1,12 +1,12 @@
 import { isKonvaNode } from "@/components/editor/type-guards";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 const useImageFilter = ({ imageRef }: any) => {
   const { filter } = useToolbarStore((state) => state);
 
-  const applyFilter = useCallback((image: Konva.Image, filterType: string) => {
+  const applyFilter = (image: Konva.Image, filterType: string) => {
     switch (filterType) {
       case "sepia":
         image.filters([Konva.Filters.Sepia]);
@@ -39,7 +39,7 @@ const useImageFilter = ({ imageRef }: any) => {
         image.filters([]);
         break;
     }
-  }, []);
+  };
 
   useEffect(() => {
     const image = imageRef.current;
@@ -48,7 +48,7 @@ const useImageFilter = ({ imageRef }: any) => {
       image.cache();
       image?.getLayer()?.batchDraw();
     }
-  }, [applyFilter, filter.filterTitle, imageRef]);
+  }, [filter.filterTitle, imageRef]);
 
   return;
 };

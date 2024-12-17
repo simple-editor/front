@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import DownloadSvg from "@/assets/icons/download.svg?react";
-import FolderSvg from "@/assets/icons/folder-down.svg?react";
 import RedoUndoSvg from "@/assets/icons/arrow-rotate-left.svg?react";
 import DeleteSvg from "@/assets/icons/delete.svg?react";
 import useHistoryStore from "@/shared/store/history-store";
@@ -10,18 +9,17 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import { isKonvaNode } from "../type-guards";
 import Konva from "konva";
 import useToolbarStore from "@/shared/store/toolbar-store";
-import { useCallback } from "react";
 
 const Manager = () => {
   const undo = useHistoryStore((state) => state.undo);
   const redo = useHistoryStore((state) => state.redo);
   const reset = useHistoryStore((state) => state.reset);
   const setActiveTool = useToolbarStore((state) => state.setActiveTool);
-  const layerRef = useCanvasRefStore((state) => state.layerRef);
+  const stageRef = useCanvasRefStore((state) => state.stageRef);
 
-  const downloadImage = useCallback(() => {
-    const layer = layerRef.current;
-    if (!isKonvaNode(layer, Konva.Layer)) return;
+  const downloadImage = () => {
+    const layer = stageRef.current;
+    if (!isKonvaNode(layer, Konva.Stage)) return;
     setActiveTool("");
     setTimeout(() => {
       const uri = layer.toDataURL({
@@ -37,31 +35,33 @@ const Manager = () => {
       link.click();
       document.body.removeChild(link);
     }, 100);
-  }, [layerRef, setActiveTool]);
+  };
 
   return (
     <Wrapper>
       <TopToolBarContainer>
         <RedoUndoButtonGroup>
           <IconButtonRadius
-            icon={<RedoUndoSvg />}
+            icon={<RedoUndoSvg width={15} height={15} />}
             onClick={undo}
-            size={"large"}
+            size={"small"}
           />
           <IconButtonRadius
-            icon={<RedoUndoSvg />}
+            icon={<RedoUndoSvg width={15} height={15} />}
             onClick={redo}
-            size={"large"}
+            size={"small"}
           />
         </RedoUndoButtonGroup>
 
         <RightButtonGroup>
           <RoundedButton
-            icon={<DeleteSvg width={25} height={25} />}
+            icon={<DeleteSvg width={15} height={15} />}
             onClick={reset}
           />
-          <RoundedButton icon={<DownloadSvg />} onClick={downloadImage} />
-          <RoundedButton icon={<FolderSvg />} />
+          <RoundedButton
+            icon={<DownloadSvg width={15} height={15} />}
+            onClick={downloadImage}
+          />
         </RightButtonGroup>
       </TopToolBarContainer>
     </Wrapper>
@@ -71,9 +71,9 @@ const Manager = () => {
 export default Manager;
 
 const Wrapper = styled.div`
-  max-width: 1440px;
-  margin: auto;
-  margin-top: 68px;
+  grid-row: 1;
+  grid-column: 1 / span 2;
+  padding: 15px 0;
 `;
 
 const TopToolBarContainer = styled.div`

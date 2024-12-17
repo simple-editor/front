@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { memo, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Html } from "react-konva-utils";
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
   onToggle: any;
 }
 
-const EditableTextInput = memo(({ style, ...props }: IProps) => {
+const EditableTextInput = ({ style, ...props }: IProps) => {
   const { x, y, onChange, value, onKeyDown, onToggle } = props;
   const textAreaRef = useRef<HTMLDivElement>(null);
 
@@ -50,7 +50,7 @@ const EditableTextInput = memo(({ style, ...props }: IProps) => {
       </div>
     </Html>
   );
-});
+};
 
 export default EditableTextInput;
 

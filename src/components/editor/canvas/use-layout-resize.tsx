@@ -1,32 +1,35 @@
-import throttle from "lodash/throttle";
-import { useEffect, useRef } from "react";
-import useLayoutStore from "@/shared/store/layout-store";
+import useCanvasRefStore from "@/shared/store/canvas-ref-store";
+import { isImageShape } from "@/components/editor/type-guards";
 
-const useLayoutResize = () => {
-  const parentRef = useRef<HTMLDivElement>(null);
-  const { setWidth, setHeight, width, height } = useLayoutStore(
-    (state) => state
-  );
-  useEffect(() => {
-    const handleResize = throttle(() => {
-      if (parentRef.current) {
-        setWidth(parentRef.current.offsetWidth);
-        setHeight(parentRef.current.offsetHeight);
-      }
-    }, 100);
+const useLayoutResize = (shapes: any) => {
+  const imageShape = shapes.find(isImageShape);
+  const { stageRef } = useCanvasRefStore((state) => state);
 
-    handleResize(); // 초기 사이즈 설정
+  if (!stageRef?.current) {
+    return { width: 0, height: 0, xOffset: 0, yOffset: 0 };
+  }
 
-    window.addEventListener("resize", handleResize); // 윈도우 리사이즈 이벤트에 핸들러 등록
+  if (!imageShape) {
+    return { width: 0, height: 0, xOffset: 0, yOffset: 0 };
+  }
 
-    return () => {
-      window.removeEventListener("resize", handleResize); // 클린업
-    };
-  }, [setHeight, setWidth]);
+  // 비율 계산
+  const hRatio = stageRef.current.width() / imageShape.width;
+  const vRatio = stageRef.current.height() / imageShape.height;
+  const ratio = Math.min(hRatio, vRatio);
+
+  // 이미지 크기 및 Offset 계산
+  const imageWidth = imageShape.width * ratio;
+  const imageHeight = imageShape.height * ratio;
+  const xOffset = (stageRef.current.width() - imageWidth) / 2;
+  const yOffset = (stageRef.current.height() - imageHeight) / 2;
+
   return {
-    width,
-    height,
-    parentRef,
+    imageWidth,
+    imageHeight,
+    xOffset,
+    yOffset,
+    ratio,
   };
 };
 

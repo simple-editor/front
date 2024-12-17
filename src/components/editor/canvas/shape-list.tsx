@@ -4,9 +4,8 @@ import useSelectStore from "@/shared/store/select-store";
 import { ICanvasLayerProps } from "@/components/editor/canvas/types";
 import UploadedImage from "./uploaded-image";
 import Emoji from "./emoji";
-import { memo } from "react";
 
-const ShapeList = memo(({ shapes }: ICanvasLayerProps) => {
+const ShapeList = ({ shapes }: ICanvasLayerProps) => {
   const { selectedId, setSelectedId } = useSelectStore((state) => state);
 
   return (
@@ -41,6 +40,6 @@ const ShapeList = memo(({ shapes }: ICanvasLayerProps) => {
       })}
     </>
   );
-});
+};
 
 export default ShapeList;

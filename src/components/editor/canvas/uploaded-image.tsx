@@ -1,5 +1,5 @@
 import Konva from "konva";
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image } from "react-konva";
 import {
   initializeIndexedDB,
@@ -13,7 +13,7 @@ interface IProps {
   // onSelect: () => void;
 }
 
-const UploadedImage = memo(({ image }: IProps) => {
+const UploadedImage = ({ image }: IProps) => {
   const [imageFile, setImageFile] = useState<HTMLImageElement | null>(null);
 
   const imageRef = useRef<Konva.Image>(null);
@@ -33,13 +33,29 @@ const UploadedImage = memo(({ image }: IProps) => {
 
   useImageFilter({ imageRef });
 
+  // const hRatio = stageRef.current?.width() / image.width;
+  // const vRatio = stageRef.current?.height() / image.height;
+  // const ratio = Math.min(hRatio, vRatio);
+  // const imageWidth = image.width * ratio;
+  // const imageHeight = image.height * ratio;
+  // const xOffset = (stageRef.current?.width() - imageWidth) / 2;
+  // const yOffset = (stageRef.current?.height() - imageHeight) / 2;
+
   return (
     <>
       {imageFile && (
-        <Image image={imageFile} {...image} draggable={false} ref={imageRef} />
+        <Image
+          ref={imageRef}
+          image={imageFile}
+          draggable={false}
+          // width={imageWidth}
+          // height={imageHeight}
+          // x={xOffset}
+          // y={yOffset}
+        />
       )}
     </>
   );
-});
+};
 
 export default UploadedImage;

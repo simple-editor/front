@@ -18,11 +18,7 @@ const Toolbar = () => {
 
 export default Toolbar;
 
-const Wrapper = styled.nav`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-`;
+const Wrapper = styled.nav``;
 
 const list = [
   {

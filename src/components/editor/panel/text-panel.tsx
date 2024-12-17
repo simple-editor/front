@@ -55,6 +55,7 @@ const TextPanel = () => {
       fill: color,
       draggable: true,
     };
+
     setShapes([...shapes, { ...newText }]);
   };
 

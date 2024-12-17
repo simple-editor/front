@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Text } from "react-konva";
 import EditableTextInput from "./editable-text-Input";
 import useHistoryStore from "@/shared/store/history-store";
@@ -10,7 +10,7 @@ interface IProps {
   onSelect: () => void;
 }
 
-const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
+const EditableText = ({ onSelect, shape }: IProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [points, setPoints] = useState({
     x: shape.x,
@@ -21,9 +21,7 @@ const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
   const { id } = shape;
 
   //텍스트가 편집을 on/Off가 필요한 이벤트가 필요함.
-  const toggleEdit = () => {
-    setIsEdit(!isEdit);
-  };
+
   //텍스트를 업데이트 할 수 있는 함수가 필요함.
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(e.target.value);
@@ -36,12 +34,14 @@ const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
     if (typeof id === "string") {
       setIsEdit(true);
       onSelect();
+
       setTextValue(textValue);
     }
   };
 
   const handleTextSave = useCallback(() => {
     setIsEdit(false);
+    console.log(textValue, "textValue");
     updateShape({
       ...shape,
       x: points.x as number,
@@ -62,16 +62,17 @@ const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
     }
   }
 
-  useEffect(() => {
-    if (!isSelected && isEdit) {
-      handleTextSave();
-    }
-  }, [handleTextSave, isEdit, isSelected]);
-
   const style = {
     width: shape.width as number,
     height: shape.height as number,
     fontSize: shape.fontSize as number,
+  };
+
+  const toggleEdit = () => {
+    setIsEdit(!isEdit);
+    if (isEdit) {
+      handleTextSave();
+    }
   };
 
   return (
@@ -89,8 +90,6 @@ const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
               y: e.target.y(),
             });
           }}
-          // onDblClick={handleTextClick}
-          // onDblTap={handleTextClick}
         />
       ) : (
         <EditableTextInput
@@ -105,6 +104,6 @@ const EditableText = memo(({ isSelected, onSelect, shape }: IProps) => {
       )}
     </>
   );
-});
+};
 
 export default EditableText;
