@@ -36,6 +36,7 @@ const Manager = () => {
       document.body.removeChild(link);
     }, 100);
   };
+  
 
   return (
     <Wrapper>

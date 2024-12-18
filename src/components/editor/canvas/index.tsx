@@ -11,22 +11,23 @@ import useCanvasRefStore from "@/shared/store/canvas-ref-store";
 import ShapeList from "./shape-list";
 import useZoom from "@/shared/hooks/use-zoom";
 import useKeybordAction from "@/shared/hooks/use-keybord-action";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import useLayoutResize from "@/components/editor/canvas/use-layout-resize";
+import useClip from "@/shared/hooks/use-clip";
 
 const Canvas = () => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
-  const { stageRef } = useCanvasRefStore((state) => state);
+  const { stageRef, layerRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
     useMouseEventHandler({ shapes, setShapes, updateShape });
   const activeTool = useToolbarStore((state) => state.activeTool);
 
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
-  // 선 그리기
-  // const { width, height } = useLayoutResize(parentRef);
-  //줌
+
+  useClip(layerRef.current, shapes);
+
   const { handleZoom } = useZoom();
   // 이미지 업로드
   const { handleDragUploadEnd, handleDragUploadStart, handleButtonUpload } =
@@ -35,7 +36,7 @@ const Canvas = () => {
       setShapes,
     });
   // 이미지 위치 조정
-  const { currentLayerSize, imageShape } = useInitializeCropPos({ shapes });
+  const { imageShape } = useInitializeCropPos({ shapes });
   // 키보드 액션
   useKeybordAction({ selectedId, cancelSelection });
   const { xOffset, yOffset, ratio } = useLayoutResize(shapes);
@@ -57,6 +58,12 @@ const Canvas = () => {
   // 드래그 및 사이즈 조절 이벤트
 
   // Crop 기능
+
+  useEffect(() => {
+    if (imageShape) {
+      stageRef.current?.batchDraw();
+    }
+  }, [imageShape, stageRef]);
 
   return (
     <CanvasWrapper
@@ -97,23 +104,11 @@ const Canvas = () => {
       >
         {imageShape && (
           <Layer
+            ref={layerRef}
             scaleX={ratio}
             scaleY={ratio}
             x={xOffset}
             y={yOffset}
-            clipFunc={
-              currentLayerSize
-                ? (ctx) => {
-                    ctx.rect(
-                      currentLayerSize.x,
-                      currentLayerSize.y,
-                      currentLayerSize.width,
-                      currentLayerSize.height
-                    );
-                    ctx.clip();
-                  }
-                : undefined
-            }
           >
             <ShapeList shapes={shapes} />
 
