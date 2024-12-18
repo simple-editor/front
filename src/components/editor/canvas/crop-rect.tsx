@@ -1,6 +1,5 @@
 import useCrop from "@/shared/hooks/use-crop";
 import { useTransformer } from "@/shared/hooks/use-transformer";
-import useHistoryStore from "@/shared/store/history-store";
 import useToolbarStore from "@/shared/store/toolbar-store";
 import Konva from "konva";
 import { useRef } from "react";
