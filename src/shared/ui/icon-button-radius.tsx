@@ -57,10 +57,10 @@ const Wrapper = styled.button<ISizeProps>`
 `;
 
 const smallSizes = css`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `;
 const largeSizes = css`
-  width: 72px;
-  height: 72px;
+  width: 62px;
+  height: 62px;
 `;

@@ -26,8 +26,8 @@ const Wrapper = styled.div`
 `;
 
 const ColorCircle = styled.div<{ color: string }>`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: ${(props) => props.color};
   border: 2px solid ${({ theme }) => theme.colors.white};

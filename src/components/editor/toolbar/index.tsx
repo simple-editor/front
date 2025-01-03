@@ -23,22 +23,22 @@ const Wrapper = styled.nav``;
 const list = [
   {
     title: "그리기",
-    icon: <PencilSvg />,
+    icon: <PencilSvg width={15} height={15} />,
   },
   {
     title: "텍스트",
-    icon: <TextSvg />,
+    icon: <TextSvg width={15} height={15} />,
   },
   {
     title: "이모지",
-    icon: <SmailSvg />,
+    icon: <SmailSvg width={15} height={15} />,
   },
   {
     title: "자르기",
-    icon: <CropSvg />,
+    icon: <CropSvg width={15} height={15} />,
   },
   {
     title: "필터",
-    icon: <FilterSvg />,
+    icon: <FilterSvg width={15} height={15} />,
   },
 ];

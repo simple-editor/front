@@ -62,7 +62,7 @@ const DropdownButton = styled.button`
   padding: 0px 16px;
   border: none;
   cursor: pointer;
-  height: 40px;
+  height: 30px;
   border-radius: 100px;
   background-color: #fff;
   border: 1px solid ${(props) => props.theme.colors.gray30};
@@ -84,7 +84,7 @@ const DropdownMenu = styled.div`
 
 const DropdownItem = styled.div`
   width: 100%;
-  height: 40px;
+  height: 30px;
   padding: 12px 16px;
   cursor: pointer;
   &:hover {

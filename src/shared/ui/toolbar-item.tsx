@@ -33,8 +33,8 @@ export default ToolbarItem;
 
 const Wrapper = styled.div<IActiveProps>`
   display: flex;
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

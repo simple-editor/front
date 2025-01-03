@@ -109,16 +109,16 @@ const ToolButtonGroup = styled.div`
   overflow: hidden;
 `;
 const CustomPencilSvg = styled(PencilSvg)`
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   & path {
     fill: black;
   }
 `;
 
 const CustomEraserSvg = styled(EraserSvg)`
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   & path {
     fill: black;
   }
