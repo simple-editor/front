@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import useHistoryStore from "@/shared/store/history-store";
 import { loadFromLocalStorage } from "@/shared/services/storage";
 import styled from "@emotion/styled";
+import Upload from "./upload";
+
 const Editor = () => {
   useEffect(() => {
     const localShapes = loadFromLocalStorage("simple-shapes");
@@ -20,6 +22,7 @@ const Editor = () => {
 
   return (
     <Main id="main">
+      <Upload />
       <Body>
         <Manager />
         <Toolbar />
@@ -45,4 +48,7 @@ const Body = styled.section`
   position: relative;
   grid-template-columns: 6em auto;
   grid-template-rows: min-content auto;
+  @media (max-width: 624px) {
+    display: none;
+  }
 `;

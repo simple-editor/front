@@ -3,7 +3,7 @@ import Konva from "konva";
 import { useCallback, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ILineShape } from "../store/history-store.types";
-const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
+const useMouseEventHandler = ({ shapes, setShapes }: any) => {
   const [currentLine, setCurrentLine] = useState<ILineShape | null>(null);
   const { activeTool, line: lineTools } = useToolbarStore((state) => state);
 
@@ -63,10 +63,10 @@ const useMouseEventHandler = ({ shapes, setShapes, updateShape }: any) => {
     isDrawingRef.current = false;
 
     if (currentLine) {
-      updateShape(currentLine);
+      setShapes([...shapes, currentLine]);
       setCurrentLine(null);
     }
-  }, [currentLine, updateShape]);
+  }, [currentLine, setShapes, shapes]);
 
   return { handleMouseDown, handleMouseMove, handleMouseUp, currentLine };
 };

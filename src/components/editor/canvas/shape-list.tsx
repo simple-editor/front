@@ -15,7 +15,7 @@ const ShapeList = ({ shapes }: ICanvasLayerProps) => {
           case "image":
             return <UploadedImage key={shape.id} image={shape} />;
           case "line":
-            return <FreeDrawing line={shape} key={shape.id} />;
+            return <FreeDrawing key={shape.id} line={shape} />;
           case "text":
             return (
               <EditableText

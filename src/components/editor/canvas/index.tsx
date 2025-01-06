@@ -19,9 +19,9 @@ const Canvas = () => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const { stageRef, layerRef } = useCanvasRefStore((state) => state);
-  const { shapes, setShapes, updateShape } = useHistoryStore((state) => state);
+  const { shapes, setShapes } = useHistoryStore((state) => state);
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useMouseEventHandler({ shapes, setShapes, updateShape });
+    useMouseEventHandler({ shapes, setShapes });
   const activeTool = useToolbarStore((state) => state.activeTool);
 
   const { cancelSelection, selectedId } = useSelectStore((state) => state);
@@ -30,11 +30,10 @@ const Canvas = () => {
 
   const { handleZoom } = useZoom();
   // 이미지 업로드
-  const { handleDragUploadEnd, handleDragUploadStart, handleButtonUpload } =
-    useImageUpload({
-      shapes,
-      setShapes,
-    });
+  const { handleDragUploadEnd, handleDragUploadStart } = useImageUpload({
+    shapes,
+    setShapes,
+  });
   // 이미지 위치 조정
   const { imageShape } = useInitializeCropPos({ shapes });
   // 키보드 액션
@@ -72,18 +71,6 @@ const Canvas = () => {
       ref={parentRef}
       id="parent"
     >
-      {!imageShape && (
-        <ImageUploadButton style={{}}>
-          Upload Image
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleButtonUpload}
-          />
-        </ImageUploadButton>
-      )}
-
       <CustomStage
         id="stage"
         width={width}
@@ -151,24 +138,4 @@ const CustomStage = styled(Stage)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); */
-`;
-
-const ImageUploadButton = styled.label`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  display: inline-flex;
-  padding: 0px 20px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border: 1px solid;
-  background-color: ${({ theme }) => theme.colors.gray100};
-  border-radius: 8px;
-  color: #fff;
-  font-size: 16px;
-  height: 48px;
-  z-index: 10;
 `;
