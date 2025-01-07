@@ -3,7 +3,7 @@ import { Stage } from "konva/lib/Stage";
 import { createRef } from "react";
 import { create } from "zustand";
 
-interface IState {
+export interface IState {
   stageRef: React.RefObject<Stage>;
   layerRef: React.RefObject<Layer>;
 }

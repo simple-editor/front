@@ -7,6 +7,7 @@ const Upload = () => {
     shapes,
     setShapes,
   });
+  
   return (
     <Wrapper>
       <ImageUploadButton>

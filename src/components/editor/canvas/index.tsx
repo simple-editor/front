@@ -16,8 +16,8 @@ import useLayoutResize from "@/components/editor/canvas/use-layout-resize";
 import useClip from "@/shared/hooks/use-clip";
 
 const Canvas = () => {
-  const parentRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+  const parentRef = useRef<HTMLDivElement>(null);
   const { stageRef, layerRef } = useCanvasRefStore((state) => state);
   const { shapes, setShapes } = useHistoryStore((state) => state);
   const { currentLine, handleMouseDown, handleMouseMove, handleMouseUp } =
