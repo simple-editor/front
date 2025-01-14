@@ -7,10 +7,13 @@ import useHistoryStore from "@/shared/store/history-store";
 import { loadFromLocalStorage } from "@/shared/services/storage";
 import styled from "@emotion/styled";
 import Upload from "./upload";
+import Mobile from "./mobile";
+import useViewport from "@/shared/hooks/use-viewport";
 
 const Editor = () => {
+  const { isMobile } = useViewport();
+  const localShapes = loadFromLocalStorage("simple-shapes");
   useEffect(() => {
-    const localShapes = loadFromLocalStorage("simple-shapes");
     if (localShapes) {
       useHistoryStore.setState({
         shapes: localShapes,
@@ -18,17 +21,23 @@ const Editor = () => {
         future: [],
       });
     } else return;
-  }, []);
+  }, [localShapes]);
 
   return (
     <Main id="main">
       <Upload />
-      <Body>
-        <Manager />
-        <Toolbar />
-        <Canvas />
-      </Body>
-      <Panel />
+
+      {isMobile && <Mobile />}
+      {!isMobile && (
+        <>
+          <Body>
+            <Manager />
+            <Toolbar />
+            <Canvas />
+          </Body>
+          <Panel />
+        </>
+      )}
     </Main>
   );
 };

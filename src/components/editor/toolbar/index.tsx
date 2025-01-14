@@ -8,11 +8,13 @@ import ToolbarItem from "@/shared/ui/toolbar-item";
 
 const Toolbar = () => {
   return (
-    <Wrapper>
-      {list.map((item) => (
-        <ToolbarItem title={item.title} key={item.title} icon={item.icon} />
-      ))}
-    </Wrapper>
+    <>
+      <Wrapper>
+        {list.map((item) => (
+          <ToolbarItem title={item.title} key={item.title} icon={item.icon} />
+        ))}
+      </Wrapper>
+    </>
   );
 };
 
