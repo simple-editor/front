@@ -4,13 +4,21 @@ import EditableTextInput from "./editable-text-Input";
 import useHistoryStore from "@/shared/store/history-store";
 import { ITextShape } from "@/shared/store/history-store.types";
 
-interface IProps {
+interface EditableTextProps {
+  fontSize: number;
+  onSelect?: (id: string) => void;
+  isSelected?: boolean;
+  id: string;
   shape: ITextShape;
-  isSelected: boolean;
-  onSelect: () => void;
 }
 
-const EditableText = ({ onSelect, shape }: IProps) => {
+const EditableText: React.FC<EditableTextProps> = ({
+  fontSize,
+  onSelect,
+  isSelected,
+  id,
+  shape,
+}) => {
   const [isEdit, setIsEdit] = useState(false);
   const [points, setPoints] = useState({
     x: shape.x,
@@ -18,24 +26,15 @@ const EditableText = ({ onSelect, shape }: IProps) => {
   });
   const [textValue, setTextValue] = useState(shape.text || "");
   const updateShape = useHistoryStore((state) => state.updateShape);
-  const { id } = shape;
 
-  //텍스트가 편집을 on/Off가 필요한 이벤트가 필요함.
-
-  //텍스트를 업데이트 할 수 있는 함수가 필요함.
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(e.target.value);
   };
 
-  //바깥을 클릭 시 shape에 텍스트를 저장할 수 있는 이벤트가 필요함
-  //enter를 클릭 시 shape에 텍스트를 저장할 수 있는 이벤트가 필요함.
-
   const handleTextEdit = () => {
-    console.log("실행");
-    if (typeof id === "string") {
-      setIsEdit(true);
-      onSelect();
-      setTextValue(textValue);
+    setIsEdit(true);
+    if (onSelect) {
+      onSelect(id);
     }
   };
 
@@ -50,14 +49,8 @@ const EditableText = ({ onSelect, shape }: IProps) => {
     });
   }, [points.x, points.y, shape, textValue, updateShape]);
 
-  // const handleKeyDown = (e) => {
-  //   if (e.key === "Enter") {
-  //     handleTextSave();
-  //   }
-  // };
-
   function handleEscapeKeys(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "enter") {
+    if (e.key === "Enter") {
       toggleEdit();
     }
   }
@@ -65,7 +58,7 @@ const EditableText = ({ onSelect, shape }: IProps) => {
   const style = {
     width: shape.width as number,
     height: shape.height as number,
-    fontSize: shape.fontSize as number,
+    fontSize: fontSize,
   };
 
   const toggleEdit = () => {
@@ -82,6 +75,12 @@ const EditableText = ({ onSelect, shape }: IProps) => {
     });
   };
 
+  const handleClick = () => {
+    if (onSelect) {
+      onSelect(id);
+    }
+  };
+  console.log(`EditableText ID: ${id}, fontSize: ${fontSize}`);
   return (
     <>
       {!isEdit ? (
@@ -91,7 +90,11 @@ const EditableText = ({ onSelect, shape }: IProps) => {
           y={points.y}
           draggable
           onDblClick={handleTextEdit}
-          onDragEnd={handleDragEnd} // 드래그 종료 시 좌표 업데이트
+          onDragEnd={handleDragEnd}
+          fontSize={fontSize}
+          onClick={handleClick}
+          stroke={isSelected ? "#0096FF" : "transparent"}
+          strokeWidth={1}
         />
       ) : (
         <EditableTextInput

@@ -4,6 +4,7 @@ import useSelectStore from "@/shared/store/select-store";
 import { ICanvasLayerProps } from "@/components/editor/canvas/types";
 import UploadedImage from "./uploaded-image";
 import Emoji from "./emoji";
+import { ITextShape } from "@/shared/store/history-store.types";
 
 const ShapeList = ({ shapes }: ICanvasLayerProps) => {
   const { selectedId, setSelectedId } = useSelectStore((state) => state);
@@ -20,7 +21,9 @@ const ShapeList = ({ shapes }: ICanvasLayerProps) => {
             return (
               <EditableText
                 key={shape.id}
-                shape={shape}
+                shape={shape as ITextShape}
+                fontSize={(shape as ITextShape).fontSize}
+                id={shape.id}
                 isSelected={shape.id === selectedId}
                 onSelect={() => setSelectedId(String(shape.id))}
               />

@@ -98,7 +98,6 @@ const Canvas = () => {
             y={yOffset}
           >
             <ShapeList shapes={shapes} />
-
             <CropRect
               imageShape={imageShape}
               isRender={imageShape && activeTool === "자르기"}
