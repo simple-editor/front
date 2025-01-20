@@ -56,8 +56,8 @@ const useToolbarStore = create<IToolbar>()((set) => ({
     strokeColor: "black",
   },
   text: {
-    fontSizeTitle: "Medium",
-    fontSizeValue: 16,
+    fontSizeTitle: "Extra large",
+    fontSizeValue: 32,
     strokeColor: "#000000",
   },
   crop: {

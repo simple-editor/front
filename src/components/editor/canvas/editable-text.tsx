@@ -31,10 +31,10 @@ const EditableText = ({ onSelect, shape }: IProps) => {
   //enter를 클릭 시 shape에 텍스트를 저장할 수 있는 이벤트가 필요함.
 
   const handleTextEdit = () => {
+    console.log("실행");
     if (typeof id === "string") {
       setIsEdit(true);
       onSelect();
-
       setTextValue(textValue);
     }
   };
@@ -75,6 +75,13 @@ const EditableText = ({ onSelect, shape }: IProps) => {
     }
   };
 
+  const handleDragEnd = (e: any) => {
+    setPoints({
+      x: e.target.x(),
+      y: e.target.y(),
+    });
+  };
+
   return (
     <>
       {!isEdit ? (
@@ -83,13 +90,8 @@ const EditableText = ({ onSelect, shape }: IProps) => {
           x={points.x}
           y={points.y}
           draggable
-          onClick={handleTextEdit}
-          onDragEnd={(e) => {
-            setPoints({
-              x: e.target.x(),
-              y: e.target.y(),
-            });
-          }}
+          onDblClick={handleTextEdit}
+          onDragEnd={handleDragEnd} // 드래그 종료 시 좌표 업데이트
         />
       ) : (
         <EditableTextInput
