@@ -7,9 +7,16 @@ interface IProps {
 
 const FreeDrawing = ({ line }: IProps) => {
   return (
-    <>
-      <Line {...line} tension={0.5} lineCap="round" lineJoin="round" />
-    </>
+    <Line
+      {...line}
+      tension={0.4}
+      lineCap="round"
+      lineJoin="round"
+      shadowColor="rgba(0,0,0,0.05)"
+      shadowBlur={1}
+      shadowOffsetX={0.5}
+      shadowOffsetY={0.5}
+    />
   );
 };
 
