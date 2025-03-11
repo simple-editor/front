@@ -18,16 +18,31 @@ const ManagerForMobile = () => {
   const stageRef = useCanvasRefStore((state) => state.stageRef);
 
   const downloadImage = () => {
-    const layer = stageRef.current;
-    if (!isKonvaNode(layer, Konva.Stage)) return;
+    const stage = stageRef.current;
+    if (!isKonvaNode(stage, Konva.Stage)) return;
     setActiveTool("");
+
     setTimeout(() => {
-      const uri = layer.toDataURL({
-        x: layer.clipX(),
-        y: layer.clipY(),
-        width: layer.clipWidth(),
-        height: layer.clipHeight(),
+      const layer = stage.findOne("Layer");
+      if (!layer) return;
+
+      // Stage의 현재 크기와 스케일 정보 가져오기
+      const scale = layer.scaleX();
+      const stageWidth = stage.width();
+      const stageHeight = stage.height();
+
+      // 실제 보이는 영역만큼의 크기 계산
+      const visibleWidth = stageWidth / scale;
+      const visibleHeight = stageHeight / scale;
+
+      const uri = stage.toDataURL({
+        x: 0,
+        y: 0,
+        width: visibleWidth,
+        height: visibleHeight,
+        pixelRatio: 2,
       });
+
       const link = document.createElement("a");
       link.download = "canvas.png";
       link.href = uri;

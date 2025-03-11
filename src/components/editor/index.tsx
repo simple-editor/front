@@ -7,12 +7,13 @@ import useHistoryStore from "@/shared/store/history-store";
 import { loadFromLocalStorage } from "@/shared/services/storage";
 import styled from "@emotion/styled";
 import Upload from "./upload";
-import Mobile from "./mobile";
+import MobileCanvas from "./mobile/mobile-canvas";
 import useViewport from "@/shared/hooks/use-viewport";
 
 const Editor = () => {
   const { isMobile } = useViewport();
   const localShapes = loadFromLocalStorage("simple-shapes");
+
   useEffect(() => {
     if (localShapes) {
       useHistoryStore.setState({
@@ -20,15 +21,18 @@ const Editor = () => {
         history: [],
         future: [],
       });
-    } else return;
+    }
   }, [localShapes]);
 
   return (
-    <Main id="main">
+    <Main id="main" isMobile={isMobile}>
       <Upload />
 
-      {isMobile && <Mobile />}
-      {!isMobile && (
+      {isMobile ? (
+        <MobileWrapper>
+          <MobileCanvas />
+        </MobileWrapper>
+      ) : (
         <>
           <Body>
             <Manager />
@@ -42,14 +46,18 @@ const Editor = () => {
   );
 };
 
-export default Editor;
-
-const Main = styled.main`
-  width: calc(100% - 2rem);
-  max-width: 90rem;
-  max-height: 50rem;
-  min-height: 44rem;
+const Main = styled.main<{ isMobile: boolean }>`
+  width: ${({ isMobile }) => (isMobile ? "100%" : "calc(100% - 2rem)")};
+  max-width: ${({ isMobile }) => (isMobile ? "none" : "90rem")};
+  max-height: ${({ isMobile }) => (isMobile ? "none" : "50rem")};
+  min-height: ${({ isMobile }) => (isMobile ? "100vh" : "44rem")};
   margin: auto;
+  background: ${({ isMobile }) => (isMobile ? "#f8fafc" : "transparent")};
+`;
+
+const MobileWrapper = styled.div`
+  padding: 16px;
+  height: calc(100vh - 32px);
 `;
 
 const Body = styled.section`
@@ -61,3 +69,5 @@ const Body = styled.section`
     display: none;
   }
 `;
+
+export default Editor;

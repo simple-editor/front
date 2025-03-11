@@ -18,16 +18,32 @@ const Manager = () => {
   const stageRef = useCanvasRefStore((state) => state.stageRef);
 
   const downloadImage = () => {
-    const layer = stageRef.current;
-    if (!isKonvaNode(layer, Konva.Stage)) return;
+    const stage = stageRef.current;
+    if (!isKonvaNode(stage, Konva.Stage)) return;
     setActiveTool("");
+
     setTimeout(() => {
-      const uri = layer.toDataURL({
-        x: layer.clipX(),
-        y: layer.clipY(),
-        width: layer.clipWidth(),
-        height: layer.clipHeight(),
+      const layer = stage.findOne("Layer");
+      if (!layer) return;
+
+      // Layer의 clip 정보 가져오기
+      const clipConfig = (layer as Konva.Layer).getAttr("clip");
+      if (!clipConfig) return;
+
+      // Layer의 transform 상태
+      const scale = layer.scaleX();
+      const offsetX = layer.x();
+      const offsetY = layer.y();
+
+      // clip 영역 기준으로 캡처
+      const uri = stage.toDataURL({
+        x: clipConfig.x * scale + offsetX,
+        y: clipConfig.y * scale + offsetY,
+        width: clipConfig.width * scale,
+        height: clipConfig.height * scale,
+        pixelRatio: 2,
       });
+
       const link = document.createElement("a");
       link.download = "canvas.png";
       link.href = uri;
@@ -36,7 +52,6 @@ const Manager = () => {
       document.body.removeChild(link);
     }, 100);
   };
-  
 
   return (
     <Wrapper>

@@ -46,14 +46,6 @@ interface IToolbar {
   setFilterTools: (settings: Partial<IFilter>) => void;
 }
 
-const lineSizes = [
-  { title: "XS", value: 0.5 },
-  { title: "S", value: 1 },
-  { title: "M", value: 2 },
-  { title: "L", value: 4 },
-  { title: "XL", value: 8 },
-] as const;
-
 const useToolbarStore = create<IToolbar>()((set) => ({
   activeTool: "",
   setActiveTool: (tool) => set({ activeTool: tool }),
