@@ -50,24 +50,23 @@ const EditableTextInput = ({ style, ...props }: IProps) => {
     textarea.style.width = "auto";
 
     const contentWidth = Math.max(
-      textarea.scrollWidth,
-      textarea.value
-        .split("\n")
-        .reduce((max, line) => Math.max(max, line.length * style.fontSize), 0)
+      200,
+      textarea.value ? textarea.value.length * style.fontSize * 1.2 : 200
     );
 
-    const finalWidth = Math.max(200, contentWidth + style.fontSize);
-    const maxWidth = Math.min(finalWidth, window.innerWidth * 0.9);
+    const maxWidth = Math.min(contentWidth, window.innerWidth * 0.9);
 
-    const finalHeight = Math.max(50, textarea.scrollHeight + style.fontSize);
+    textarea.style.width = `${maxWidth}px`;
+    const finalHeight = Math.max(50, textarea.scrollHeight);
 
     Object.assign(textarea.style, {
       width: `${maxWidth}px`,
       height: `${finalHeight}px`,
       fontSize: `${style.fontSize}px`,
-      lineHeight: "1.2",
+      lineHeight: "1.5",
       whiteSpace: "pre-wrap",
-      wordBreak: "break-word",
+      wordBreak: "keep-all",
+      wordWrap: "break-word",
       background: "transparent",
       backgroundColor: "transparent",
     });
@@ -167,7 +166,7 @@ const EditableTextInput = ({ style, ...props }: IProps) => {
           value={value}
           onChange={handleChange}
           onKeyDown={(e) => {
-            e.stopPropagation(); // 이벤트 전파 중단
+            e.stopPropagation();
             if (e.key === "Escape") {
               e.preventDefault();
               onToggle();
@@ -188,6 +187,7 @@ const EditableTextInput = ({ style, ...props }: IProps) => {
             fontFamily: "inherit",
             textAlign: style.textAlign || "left",
             fontStyle: style.fontStyle || "normal",
+            fontWeight: "bold",
             padding: "8px",
             margin: 0,
             background: "transparent",
@@ -201,10 +201,11 @@ const EditableTextInput = ({ style, ...props }: IProps) => {
             zIndex: 1000,
             boxShadow: "none",
             caretColor: "#0096ff",
-            lineHeight: "1.2",
+            lineHeight: "1.5",
             overflowY: "hidden",
             overflowX: "hidden",
-            wordBreak: "break-word",
+            wordBreak: "keep-all",
+            wordWrap: "break-word",
             whiteSpace: "pre-wrap",
             boxSizing: "border-box",
             cursor: "text",

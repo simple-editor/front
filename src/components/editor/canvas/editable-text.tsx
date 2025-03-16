@@ -25,7 +25,6 @@ const EditableText: React.FC<EditableTextProps> = ({
     y: shape.y || 0,
   });
   const [text, setText] = useState(shape.text || "");
-  const [originalText, setOriginalText] = useState(shape.text || "");
   const updateShape = useHistoryStore((state) => state.updateShape);
 
   const textRef = useRef<any>(null);
@@ -57,23 +56,22 @@ const EditableText: React.FC<EditableTextProps> = ({
 
   const handleTextDblClick = useCallback(() => {
     setIsEdit(true);
-    setOriginalText(text);
+
     if (onSelect) {
       onSelect(id);
     }
-  }, [id, onSelect, text]);
+  }, [id, onSelect]);
 
   const handleTextSave = useCallback(() => {
     const finalText = text;
     setText(finalText);
-    setOriginalText(finalText);
+
     setIsEdit(false);
 
     const node = textRef.current;
     if (!node) return;
 
-    const scaleX = node.scaleX();
-    const width = Math.max(200, node.width() * (scaleX || 1));
+    const width = Math.max(200, finalText.length * fontSize * 1.2);
 
     updateShape({
       ...shape,
@@ -152,7 +150,7 @@ const EditableText: React.FC<EditableTextProps> = ({
   );
 
   const textStyle = {
-    width: Math.max(200, text.length * fontSize * 0.7),
+    width: Math.max(200, text ? text.length * fontSize * 1.2 : 200),
     height: Math.max(50, fontSize * 1.5),
     fontSize,
     fontFamily: shape.fontFamily || "Roboto",
@@ -192,7 +190,7 @@ const EditableText: React.FC<EditableTextProps> = ({
             <Transformer
               ref={transformerRef}
               enabledAnchors={["middle-left", "middle-right"]}
-              boundBoxFunc={(oldBox, newBox) => {
+              boundBoxFunc={(_oldBox, newBox) => {
                 newBox.width = Math.max(30, newBox.width);
                 return newBox;
               }}
