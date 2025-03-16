@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import EditableText from "@/components/editor/canvas/editable-text";
 import FreeDrawing from "@/components/editor/canvas/free-drawing";
 import useSelectStore from "@/shared/store/select-store";
@@ -5,35 +6,41 @@ import { ICanvasLayerProps } from "@/components/editor/canvas/types";
 import UploadedImage from "./uploaded-image";
 import Emoji from "./emoji";
 import { ITextShape } from "@/shared/store/history-store.types";
+import useToolbarStore from "@/shared/store/toolbar-store";
 
 const ShapeList = ({ shapes }: ICanvasLayerProps) => {
   const { selectedId, setSelectedId } = useSelectStore((state) => state);
+  const textTools = useToolbarStore((state) => state.text);
+
+  const handleSelect = useCallback(
+    (id: string) => {
+      setSelectedId(id);
+    },
+    [setSelectedId]
+  );
 
   return (
     <>
-      {shapes.map((shape) => {
+      {shapes.map((shape, i) => {
         switch (shape.type) {
           case "image":
-            return <UploadedImage key={shape.id} image={shape} />;
+            return <UploadedImage key={`image-${i}`} image={shape} />;
           case "line":
-            return <FreeDrawing key={shape.id} line={shape} />;
+            return <FreeDrawing key={`line-${i}`} line={shape} />;
           case "text": {
-            if (shape.id) {
-              const textShape: ITextShape = shape;
-              const fontSize = textShape.fontSize ?? 16;
+            const textShape = shape as ITextShape;
+            if (!textShape.id) return null;
 
-              return (
-                <EditableText
-                  key={textShape.id}
-                  shape={textShape}
-                  fontSize={fontSize}
-                  id={textShape.id as string}
-                  isSelected={textShape.id === selectedId}
-                  onSelect={(id: string) => setSelectedId(id)}
-                />
-              );
-            }
-            return null;
+            return (
+              <EditableText
+                key={textShape.id}
+                id={textShape.id}
+                shape={textShape}
+                fontSize={textTools.fontSizeValue}
+                isSelected={selectedId === textShape.id}
+                onSelect={handleSelect}
+              />
+            );
           }
           case "emoji":
             return (

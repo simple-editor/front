@@ -8,12 +8,12 @@ import ColorPicker from "@/shared/ui/color-picker";
 import { AiOutlineFontSize, AiOutlinePlus } from "react-icons/ai"; // React-Icons
 
 const fontSizes = [
-  { title: "Small", value: 14 }, // Small: 조금 더 큰 크기
-  { title: "Medium", value: 18 }, // Medium: 기본 텍스트 크기
-  { title: "Large", value: 24 }, // Large: 강조할 텍스트 크기
-  { title: "Extra large", value: 32 }, // Extra Large: 아주 큰 텍스트 크기
-  { title: "XXL", value: 40 }, // XXL: 매우 큰 텍스트 크기, 타이틀 등 사용
-  { title: "XXXL", value: 48 }, // XXXL: 가장 큰 크기, 특수 강조
+  { title: "Small", value: 24 }, // 최소 크기
+  { title: "Medium", value: 36 }, // 기본 크기
+  { title: "Large", value: 48 }, // 큰 크기
+  { title: "Extra large", value: 72 }, // 매우 큰 크기
+  { title: "XXL", value: 96 }, // 제목용 크기
+  { title: "XXXL", value: 120 }, // 특대 크기
 ];
 const TextPanel = () => {
   const [color, setColor] = useState("#000");
@@ -44,20 +44,30 @@ const TextPanel = () => {
 
   const handleAddText = () => {
     const stage = document.getElementById("stage");
-    const stageWidth = stage!.offsetWidth;
-    const stageHeight = stage!.offsetHeight;
+    if (!stage) return;
+
+    const stageWidth = stage.offsetWidth;
+    const stageHeight = stage.offsetHeight;
+
     const newText = {
-      id: `text${shapes.length + 1}`,
+      id: `text-${Date.now()}`,
       type: "text" as const,
       x: stageWidth / 2,
       y: stageHeight / 2,
-      text: "Sample!",
+      text: "텍스트를 입력하세요",
+      width: 300,
+      height: 60,
       fontSize: textTools.fontSizeValue,
+      fontFamily: textTools.fontFamily || "Roboto",
+      textAlign: textTools.textAlign || "left",
+      fontStyle: textTools.fontStyle || "normal",
       fill: color,
       draggable: true,
     };
 
-    setShapes([...shapes, { ...newText }]);
+    console.log("Creating new text:", newText); // 디버깅용
+    setShapes([...shapes, newText]);
+    useToolbarStore.getState().setActiveTool("텍스트");
   };
 
   return (

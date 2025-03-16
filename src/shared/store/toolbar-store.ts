@@ -20,6 +20,9 @@ interface ITextTools {
   fontSizeTitle: string;
   fontSizeValue: number;
   strokeColor: string;
+  fontFamily: string;
+  textAlign: "left" | "center" | "right";
+  fontStyle: "normal" | "bold" | "italic";
 }
 
 interface ICrop {
@@ -56,9 +59,12 @@ const useToolbarStore = create<IToolbar>()((set) => ({
     strokeColor: "#2563eb",
   },
   text: {
-    fontSizeTitle: "Extra large",
-    fontSizeValue: 32,
+    fontSizeTitle: "Large",
+    fontSizeValue: 48,
     strokeColor: "#000000",
+    fontFamily: "Roboto",
+    textAlign: "left",
+    fontStyle: "normal",
   },
   crop: {
     x: 0,
