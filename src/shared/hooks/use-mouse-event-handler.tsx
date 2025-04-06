@@ -35,6 +35,7 @@ const useMouseEventHandler = ({ shapes, setShapes }: any) => {
       strokeWidth: strokeWidthValue,
     };
 
+    setShapes([...shapes, update]);
     setCurrentLine(update);
   };
 

@@ -7,57 +7,40 @@ import useHistoryStore from "@/shared/store/history-store";
 import { loadFromLocalStorage } from "@/shared/services/storage";
 import styled from "@emotion/styled";
 import Upload from "./upload";
-import MobileCanvas from "./mobile/mobile-canvas";
-import useViewport from "@/shared/hooks/use-viewport";
 
 const Editor = () => {
-  const { isMobile } = useViewport();
-  const localShapes = loadFromLocalStorage("simple-shapes");
-
   useEffect(() => {
+    const localShapes = loadFromLocalStorage("simple-shapes");
     if (localShapes) {
       useHistoryStore.setState({
         shapes: localShapes,
         history: [],
         future: [],
       });
-    }
-  }, [localShapes]);
+    } else return;
+  }, []);
 
   return (
-    <Main id="main" isMobile={isMobile}>
+    <Main id="main">
       <Upload />
-
-      {isMobile ? (
-        <MobileWrapper>
-          <MobileCanvas />
-        </MobileWrapper>
-      ) : (
-        <>
-          <Body>
-            <Manager />
-            <Toolbar />
-            <Canvas />
-          </Body>
-          <Panel />
-        </>
-      )}
+      <Body>
+        <Manager />
+        <Toolbar />
+        <Canvas />
+      </Body>
+      <Panel />
     </Main>
   );
 };
 
-const Main = styled.main<{ isMobile: boolean }>`
-  width: ${({ isMobile }) => (isMobile ? "100%" : "calc(100% - 2rem)")};
-  max-width: ${({ isMobile }) => (isMobile ? "none" : "90rem")};
-  max-height: ${({ isMobile }) => (isMobile ? "none" : "50rem")};
-  min-height: ${({ isMobile }) => (isMobile ? "100vh" : "44rem")};
-  margin: auto;
-  background: ${({ isMobile }) => (isMobile ? "#f8fafc" : "transparent")};
-`;
+export default Editor;
 
-const MobileWrapper = styled.div`
-  padding: 16px;
-  height: calc(100vh - 32px);
+const Main = styled.main`
+  width: calc(100% - 2rem);
+  max-width: 90rem;
+  max-height: 50rem;
+  min-height: 44rem;
+  margin: auto;
 `;
 
 const Body = styled.section`
@@ -69,5 +52,3 @@ const Body = styled.section`
     display: none;
   }
 `;
-
-export default Editor;

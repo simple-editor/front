@@ -9,18 +9,17 @@ import { ColorResult } from "react-color";
 import ColorPicker from "@/shared/ui/color-picker";
 
 const lineSizes = [
-  { title: "XS", value: 0.5 },
-  { title: "S", value: 1 },
-  { title: "M", value: 2 },
-  { title: "L", value: 4 },
-  { title: "XL", value: 8 },
+  { title: "Extra small", value: 1 },
+  { title: "Small", value: 2 },
+  { title: "Medium", value: 4 },
+  { title: "Large", value: 8 },
+  { title: "Extra large", value: 16 },
 ];
-
 const DrawPanel = () => {
-  const [color, setColor] = useState(
-    () => useToolbarStore.getState().line.strokeColor
-  );
-  const [isOpen, toggleIsOpen] = useReducer((state) => !state, false);
+  const [color, setColor] = useState("#000");
+  const [isOpen, toggleIsOpen] = useReducer((state) => {
+    return !state;
+  }, false);
   const setLineTools = useToolbarStore((state) => state.setLineTools);
   const lineTools = useToolbarStore((state) => state.line);
 
@@ -44,18 +43,15 @@ const DrawPanel = () => {
   };
 
   return (
-    <DrawPanelContainer>
-      <Section>
-        <ColorPicker
-          color={color}
-          open={isOpen}
-          onToggle={toggleIsOpen}
-          onChange={handleChangeComplete}
-        />
-      </Section>
-
-      <Section>
-        <SubTitle>크기</SubTitle>
+    <>
+      <ColorPicker
+        color={color}
+        open={isOpen}
+        onToggle={toggleIsOpen}
+        onChange={handleChangeComplete}
+      />
+      <ThicknessPicker>
+        <SubTitle>두께</SubTitle>
         <DropDown
           data={lineSizes}
           selected={{
@@ -64,9 +60,8 @@ const DrawPanel = () => {
           }}
           onClick={handleDropDown}
         />
-      </Section>
-
-      <Section>
+      </ThicknessPicker>
+      <ToolPicker>
         <SubTitle>도구</SubTitle>
         <ToolButtonGroup>
           <IconButtonRadius
@@ -82,55 +77,49 @@ const DrawPanel = () => {
             icon={<CustomEraserSvg />}
           />
         </ToolButtonGroup>
-      </Section>
-    </DrawPanelContainer>
+      </ToolPicker>
+    </>
   );
 };
 
-const DrawPanelContainer = styled.div`
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  padding: 16px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-`;
-
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
+export default DrawPanel;
 
 const SubTitle = styled.span`
-  font-size: 12px;
-  font-weight: 500;
+  ${(props) => props.theme.textStyles.smallText2}
+`;
+
+const ThicknessPicker = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.gray70};
+`;
+
+const ToolPicker = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: ${({ theme }) => theme.colors.gray70};
 `;
 
 const ToolButtonGroup = styled.div`
   display: flex;
-  gap: 4px;
-  padding: 2px;
-  background: ${({ theme }) => theme.colors.gray10};
-  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.gray30};
+  border-radius: 20px;
+  overflow: hidden;
 `;
-
 const CustomPencilSvg = styled(PencilSvg)`
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   & path {
-    fill: currentColor;
+    fill: black;
   }
 `;
 
 const CustomEraserSvg = styled(EraserSvg)`
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   & path {
-    fill: currentColor;
+    fill: black;
   }
 `;
-
-export default DrawPanel;

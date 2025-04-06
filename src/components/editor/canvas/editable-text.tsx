@@ -1,212 +1,105 @@
-import { useCallback, useState, useRef, useEffect } from "react";
-import { Text, Transformer } from "react-konva";
+import { useCallback, useState } from "react";
+import { Text } from "react-konva";
 import EditableTextInput from "./editable-text-Input";
 import useHistoryStore from "@/shared/store/history-store";
 import { ITextShape } from "@/shared/store/history-store.types";
 
-interface EditableTextProps {
-  fontSize: number;
-  onSelect?: (id: string) => void;
-  isSelected?: boolean;
-  id: string;
+interface IProps {
   shape: ITextShape;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-const EditableText: React.FC<EditableTextProps> = ({
-  fontSize,
-  onSelect,
-  isSelected,
-  id,
-  shape,
-}) => {
+const EditableText = ({ onSelect, shape }: IProps) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [position, setPosition] = useState({
-    x: shape.x || 0,
-    y: shape.y || 0,
+  const [points, setPoints] = useState({
+    x: shape.x,
+    y: shape.y,
   });
-  const [text, setText] = useState(shape.text || "");
+  const [textValue, setTextValue] = useState(shape.text || "");
   const updateShape = useHistoryStore((state) => state.updateShape);
+  const { id } = shape;
 
-  const textRef = useRef<any>(null);
-  const transformerRef = useRef<any>(null);
+  //텍스트가 편집을 on/Off가 필요한 이벤트가 필요함.
 
-  useEffect(() => {
-    if (isSelected && textRef.current) {
-      transformerRef.current.nodes([textRef.current]);
-      transformerRef.current.getLayer().batchDraw();
+  //텍스트를 업데이트 할 수 있는 함수가 필요함.
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextValue(e.target.value);
+  };
+
+  //바깥을 클릭 시 shape에 텍스트를 저장할 수 있는 이벤트가 필요함
+  //enter를 클릭 시 shape에 텍스트를 저장할 수 있는 이벤트가 필요함.
+
+  const handleTextEdit = () => {
+    if (typeof id === "string") {
+      setIsEdit(true);
+      onSelect();
+
+      setTextValue(textValue);
     }
-
-    if (!isSelected && isEdit) {
-      handleTextSave();
-    }
-  }, [isSelected]);
-
-  const handleTextChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setText(e.target.value);
-    },
-    []
-  );
-
-  const handleTextClick = useCallback(() => {
-    if (onSelect) {
-      onSelect(id);
-    }
-  }, [id, onSelect]);
-
-  const handleTextDblClick = useCallback(() => {
-    setIsEdit(true);
-
-    if (onSelect) {
-      onSelect(id);
-    }
-  }, [id, onSelect]);
+  };
 
   const handleTextSave = useCallback(() => {
-    const finalText = text;
-    setText(finalText);
-
     setIsEdit(false);
-
-    const node = textRef.current;
-    if (!node) return;
-
-    const width = Math.max(200, finalText.length * fontSize * 1.2);
-
+    console.log(textValue, "textValue");
     updateShape({
       ...shape,
-      x: position.x,
-      y: position.y,
-      text: finalText,
-      fontStyle: "bold",
-      width,
-      height: Math.max(50, fontSize * 1.5),
+      x: points.x as number,
+      y: points.y as number,
+      text: textValue,
     });
-  }, [position.x, position.y, shape, text, updateShape, fontSize]);
+  }, [points.x, points.y, shape, textValue, updateShape]);
 
-  const handleTextCancel = useCallback(() => {
-    setIsEdit(false);
-  }, []);
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Enter") {
+  //     handleTextSave();
+  //   }
+  // };
 
-  const handleDragEnd = useCallback(
-    (e: any) => {
-      const node = e.target;
-      const newX = node.x();
-      const newY = node.y();
-      setPosition({ x: newX, y: newY });
+  function handleEscapeKeys(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "enter") {
+      toggleEdit();
+    }
+  }
 
-      const width = Math.max(200, node.width() * (node.scaleX() || 1));
+  const style = {
+    width: shape.width as number,
+    height: shape.height as number,
+    fontSize: shape.fontSize as number,
+  };
 
-      updateShape({
-        ...shape,
-        x: newX,
-        y: newY,
-        text: text,
-        fontStyle: "bold",
-        width,
-        height: Math.max(50, fontSize * 1.5),
-      });
-    },
-    [shape, text, updateShape, fontSize]
-  );
-
-  const handleTransformEnd = useCallback(() => {
-    const node = textRef.current;
-    if (!node) return;
-
-    const scaleX = node.scaleX();
-    const width = Math.max(200, node.width() * scaleX);
-
-    // 크기 조절 후 스케일 초기화
-    node.scaleX(1);
-    node.scaleY(1);
-
-    updateShape({
-      ...shape,
-      x: node.x(),
-      y: node.y(),
-      width,
-      height: Math.max(50, fontSize * 1.5),
-      rotation: node.rotation(),
-      fontStyle: "bold",
-    });
-  }, [shape, updateShape, fontSize]);
-
-  const handlePositionChange = useCallback((newX: number, newY: number) => {
-    setPosition({ x: newX, y: newY });
-  }, []);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        handleTextCancel();
-      } else if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleTextSave();
-      }
-    },
-    [handleTextSave, handleTextCancel]
-  );
-
-  const textStyle = {
-    width: Math.max(200, text ? text.length * fontSize * 1.2 : 200),
-    height: Math.max(50, fontSize * 1.5),
-    fontSize,
-    fontFamily: shape.fontFamily || "Roboto",
-    textAlign: (shape.textAlign || "left") as "left" | "center" | "right",
-    fontStyle: "bold" as "normal" | "bold" | "italic",
+  const toggleEdit = () => {
+    setIsEdit(!isEdit);
+    if (isEdit) {
+      handleTextSave();
+    }
   };
 
   return (
     <>
       {!isEdit ? (
-        <>
-          <Text
-            {...shape}
-            ref={textRef}
-            x={position.x}
-            y={position.y}
-            text={text}
-            fontSize={fontSize}
-            fontFamily={shape.fontFamily}
-            align={shape.textAlign}
-            fontStyle="bold"
-            draggable
-            onClick={handleTextClick}
-            onTap={handleTextClick}
-            onDblClick={handleTextDblClick}
-            onDblTap={handleTextDblClick}
-            onDragEnd={handleDragEnd}
-            onTransformEnd={handleTransformEnd}
-            stroke={isSelected ? "#0096FF" : "transparent"}
-            strokeWidth={1}
-            padding={8}
-            width={Math.max(200, textStyle.width)}
-            height={textStyle.height}
-            wrap="word"
-          />
-          {isSelected && (
-            <Transformer
-              ref={transformerRef}
-              enabledAnchors={["middle-left", "middle-right"]}
-              boundBoxFunc={(_oldBox, newBox) => {
-                newBox.width = Math.max(30, newBox.width);
-                return newBox;
-              }}
-            />
-          )}
-        </>
+        <Text
+          {...shape}
+          x={points.x}
+          y={points.y}
+          draggable
+          onClick={handleTextEdit}
+          onDragEnd={(e) => {
+            setPoints({
+              x: e.target.x(),
+              y: e.target.y(),
+            });
+          }}
+        />
       ) : (
         <EditableTextInput
-          x={position.x}
-          y={position.y}
-          style={textStyle}
-          value={text}
+          x={points.x as number}
+          y={points.y as number}
+          style={style}
+          value={textValue}
           onChange={handleTextChange}
-          onKeyDown={handleKeyDown}
-          onToggle={handleTextSave}
-          onPositionChange={handlePositionChange}
+          onKeyDown={handleEscapeKeys}
+          onToggle={toggleEdit}
         />
       )}
     </>

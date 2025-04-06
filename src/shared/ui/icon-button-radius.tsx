@@ -39,7 +39,6 @@ const Wrapper = styled.button<ISizeProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: all;
   background-color: ${({ theme }) => theme.colors.white};
   border: none;
   cursor: pointer;

@@ -20,9 +20,6 @@ interface ITextTools {
   fontSizeTitle: string;
   fontSizeValue: number;
   strokeColor: string;
-  fontFamily: string;
-  textAlign: "left" | "center" | "right";
-  fontStyle: "normal" | "bold" | "italic";
 }
 
 interface ICrop {
@@ -54,17 +51,14 @@ const useToolbarStore = create<IToolbar>()((set) => ({
   setActiveTool: (tool) => set({ activeTool: tool }),
   line: {
     type: "pen",
-    strokeWidthTitle: "M",
-    strokeWidthValue: 2,
-    strokeColor: "#2563eb",
+    strokeWidthTitle: "Medium",
+    strokeWidthValue: 4,
+    strokeColor: "black",
   },
   text: {
-    fontSizeTitle: "Large",
-    fontSizeValue: 48,
+    fontSizeTitle: "Medium",
+    fontSizeValue: 16,
     strokeColor: "#000000",
-    fontFamily: "Roboto",
-    textAlign: "left",
-    fontStyle: "normal",
   },
   crop: {
     x: 0,
